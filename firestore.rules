@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // BARBERS — public read, owner write
+    match /barbers/{barberId} {
+      allow read: if true;
+      allow create, update: if request.auth != null && request.auth.uid == barberId;
+      allow delete: if request.auth != null && request.auth.uid == barberId;
+    }
+
+    // CUSTOMERS — private
+    match /customers/{customerId} {
+      allow read, write: if request.auth != null && request.auth.uid == customerId;
+    }
+
+    // TOKENS — barber sees salon tokens; customer sees own tokens
+    match /tokens/{tokenId} {
+      allow read: if request.auth != null && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.salonId == request.auth.uid
+      );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.salonId == request.auth.uid
+      );
+      allow delete: if false;
+    }
+
+    // REVIEWS — public read, auth write
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+
+    // MESSAGES
+    match /messages/{msgId} {
+      allow read: if request.auth != null && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.salonId == request.auth.uid
+      );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && resource.data.salonId == request.auth.uid;
+      allow delete: if false;
+    }
+
+    // NOTIFICATIONS — user sees own only
+    match /notifications/{notifId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}
