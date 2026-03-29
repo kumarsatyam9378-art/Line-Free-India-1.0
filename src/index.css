@@ -471,3 +471,70 @@ input, textarea, select {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* ─── CATEGORY-SPECIFIC DESIGN STYLES ─── */
+/* Each business category gets its own color palette & typography */
+
+/* Healthcare: Clean, clinical, trust-inspiring */
+.theme-healthcare {
+  --cat-primary: #2196F3;
+  --cat-accent: #00BCD4;
+  --cat-bg: #E3F2FD;
+  font-family: var(--font-inter);
+}
+/* Food & Restaurant: Warm, appetizing, vibrant */
+.theme-food {
+  --cat-primary: #FF5722;
+  --cat-accent: #FFC107;
+  --cat-bg: #FFF3E0;
+  font-family: var(--font-outfit);
+}
+/* Beauty & Wellness: Elegant, luxe, feminine */
+.theme-beauty {
+  --cat-primary: #E91E63;
+  --cat-accent: #F06292;
+  --cat-bg: #FCE4EC;
+  font-family: var(--font-playfair);
+}
+/* Education: Intellectual, calm, structured */
+.theme-education {
+  --cat-primary: #3F51B5;
+  --cat-accent: #009688;
+  --cat-bg: #E8EAF6;
+  font-family: var(--font-space);
+}
+/* Fitness & Sports: Energetic, bold, dynamic */
+.theme-fitness {
+  --cat-primary: #FF6F00;
+  --cat-accent: #76FF03;
+  --cat-bg: #FFF8E1;
+  font-family: var(--font-poppins);
+}
+/* Retail & Shopping: Colorful, exciting, sale-focused */
+.theme-retail {
+  --cat-primary: #9C27B0;
+  --cat-accent: #FF4081;
+  --cat-bg: #F3E5F5;
+  font-family: var(--font-dm);
+}
+/* Technology: Modern, sharp, professional */
+.theme-tech {
+  --cat-primary: #00E5FF;
+  --cat-accent: #7C4DFF;
+  --cat-bg: #E0F7FA;
+  font-family: var(--font-space);
+}
+/* Real Estate: Premium, trustworthy, aspirational */
+.theme-realestate {
+  --cat-primary: #4CAF50;
+  --cat-accent: #8BC34A;
+  --cat-bg: #E8F5E9;
+  font-family: var(--font-inter);
+}
+/* Finance & Legal: Serious, authoritative, dark */
+.theme-finance {
+  --cat-primary: #1565C0;
+  --cat-accent: #FFD600;
+  --cat-bg: #E3F2FD;
+  font-family: var(--font-inter);
+}
