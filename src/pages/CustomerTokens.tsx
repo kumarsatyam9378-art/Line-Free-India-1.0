@@ -298,6 +298,8 @@ export default function CustomerTokens() {
                               {/* WhatsApp Reminder */}
                               <button
                                 onClick={() => handleWhatsAppReminder(token, e?.liveQueuePos ?? 1, e?.liveWaitMinutes ?? token.estimatedWaitMinutes)}
+                                aria-label="WhatsApp Reminder"
+                                title="WhatsApp Reminder"
                                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/20 text-xs font-semibold active:scale-95 transition-transform"
                               >
                                 <span>📲</span> Remind
@@ -305,6 +307,8 @@ export default function CustomerTokens() {
                               {/* Share */}
                               <button
                                 onClick={() => handleShareToken(token)}
+                                aria-label="Share token"
+                                title="Share token"
                                 className="w-9 h-9 rounded-xl bg-card-2 border border-border flex items-center justify-center active:scale-95 transition-transform"
                               >
                                 🔗
@@ -313,6 +317,8 @@ export default function CustomerTokens() {
                               {token.status === 'waiting' && token.id && (
                                 <button
                                   onClick={() => handleCancel(token.id!)}
+                                  aria-label="Cancel token"
+                                  title="Cancel token"
                                   className="w-9 h-9 rounded-xl bg-danger/10 text-danger border border-danger/20 flex items-center justify-center active:scale-95 transition-transform"
                                 >
                                   ✕
