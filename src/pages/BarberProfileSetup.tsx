@@ -2,71 +2,64 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp, ServiceItem, BusinessCategory } from '../store/AppContext';
 import BackButton from '../components/BackButton';
-import BusinessTypePicker from '../components/business/BusinessTypePicker';
+import BusinessTypeSetup from './setup/BusinessTypeSetup';
+import ServicesSetup from './setup/ServicesSetup';
+import HoursSetup, { WeeklyHours, DEFAULT_WEEKLY_HOURS } from './setup/HoursSetup';
+import SetupComplete from './setup/SetupComplete';
 import { BUSINESS_CATEGORIES_INFO } from '../constants/businessRegistry';
 
 export default function BarberProfileSetup() {
-  const { user, saveBarberProfile, barberProfile, t } = useApp();
+  const { user, saveBarberProfile, barberProfile, uploadPhoto, t } = useApp();
   const nav = useNavigate();
   
-  const [step, setStep] = useState(1);
+  // Try to resume from saved step, default to 1
+  const [step, setStep] = useState((barberProfile as any)?.setupStep || 1);
+  const totalSteps = 6;
+
+  // Basic Info (Step 1)
+  const [businessNameEn, setBusinessNameEn] = useState(barberProfile?.businessName || barberProfile?.salonName || '');
+  const [businessNameHi, setBusinessNameHi] = useState((barberProfile as any)?.businessNameHi || '');
+  const [name, setName] = useState(barberProfile?.name || user?.displayName || '');
+  const [phone, setPhone] = useState(barberProfile?.phone || '');
+  const [city, setCity] = useState((barberProfile as any)?.city || '');
+  const [state, setState] = useState((barberProfile as any)?.state || '');
+  const [address, setAddress] = useState(barberProfile?.location || '');
+
+  // Business Type (Step 2)
   const [businessType, setBusinessType] = useState<BusinessCategory>(barberProfile?.businessType || 'men_salon');
 
-  const [name, setName] = useState(barberProfile?.name || user?.displayName || '');
-  const [salonName, setSalonName] = useState(barberProfile?.salonName || '');
-  const [location, setLocation] = useState(barberProfile?.location || '');
-  const [phone, setPhone] = useState(barberProfile?.phone || '');
+  // Services (Step 3)
   const [services, setServices] = useState<ServiceItem[]>(barberProfile?.services || []);
-  const [newService, setNewService] = useState('');
-  const [newPrice, setNewPrice] = useState('');
-  const [newTime, setNewTime] = useState('');
-  const [showAddService, setShowAddService] = useState(false);
 
-  const handleBusinessTypeSelect = (typeId: BusinessCategory) => {
-    setBusinessType(typeId);
-    const categoryInfo = BUSINESS_CATEGORIES_INFO.find(c => c.id === typeId);
-    if (categoryInfo && services.length === 0) {
-      setServices(categoryInfo.defaultServices);
-    }
-    setStep(2);
-  };
+  // Photos (Step 4)
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState(barberProfile?.bannerImageURL || '');
+  const [logoPhotoUrl, setLogoPhotoUrl] = useState(barberProfile?.salonImageURL || '');
+  const [uploading, setUploading] = useState(false);
 
-  const addService = () => {
-    if (!newService.trim()) return;
-    const s: ServiceItem = {
-      id: Date.now().toString(),
-      name: newService.trim(),
-      price: parseInt(newPrice) || 0,
-      avgTime: parseInt(newTime) || 15,
-    };
-    setServices([...services, s]);
-    setNewService('');
-    setNewPrice('');
-    setNewTime('');
-    setShowAddService(false);
-  };
+  // Hours (Step 5)
+  const [hours, setHours] = useState<WeeklyHours>(
+    typeof barberProfile?.businessHours === 'string'
+      ? JSON.parse(barberProfile.businessHours)
+      : DEFAULT_WEEKLY_HOURS
+  );
 
-  const removeService = (id: string) => {
-    setServices(services.filter(s => s.id !== id));
-  };
-
-  const handleContinue = async () => {
-    if (step === 2) {
-      setStep(3);
-      return;
-    }
+  const saveProgress = async (nextStep: number) => {
     const profile = {
       uid: user?.uid || '',
       name: name || user?.displayName || 'Owner',
-      salonName: salonName || 'My Business',
-      businessName: salonName || 'My Business', // Alias for generic business name
+      salonName: businessNameEn || 'My Business',
+      businessName: businessNameEn || 'My Business',
+      businessNameHi: businessNameHi,
       businessType: businessType,
-      location: location || '',
+      location: address || '',
+      city,
+      state,
       phone: phone || '',
       photoURL: user?.photoURL || '',
-      salonImageURL: barberProfile?.salonImageURL || '',
-      bannerImageURL: barberProfile?.bannerImageURL || '',
+      salonImageURL: logoPhotoUrl,
+      bannerImageURL: coverPhotoUrl,
       services,
+      businessHours: JSON.stringify(hours),
       isOpen: barberProfile?.isOpen ?? true,
       isBreak: barberProfile?.isBreak ?? false,
       isStopped: barberProfile?.isStopped ?? false,
@@ -74,124 +67,244 @@ export default function BarberProfileSetup() {
       totalTokensToday: barberProfile?.totalTokensToday ?? 0,
       breakStartTime: barberProfile?.breakStartTime ?? null,
       createdAt: barberProfile?.createdAt || Date.now(),
+      setupStep: nextStep
     };
     await saveBarberProfile(profile);
-    nav('/barber/home', { replace: true });
   };
 
-  const handleSkip = async () => {
+  const handleNext = async () => {
+    const nextStep = step + 1;
+    setStep(nextStep);
+    await saveProgress(nextStep);
+  };
+
+  const handleBack = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
+  };
+
+  const handleBusinessTypeSelect = async (typeId: BusinessCategory) => {
+    setBusinessType(typeId);
+    let updatedServices = services;
+    if (services.length === 0) {
+      const categoryInfo = BUSINESS_CATEGORIES_INFO.find(c => c.id === typeId);
+      if (categoryInfo) {
+        updatedServices = categoryInfo.defaultServices;
+        setServices(updatedServices);
+      }
+    }
+    const nextStep = 3;
+    setStep(nextStep);
+
+    // Save state explicitly here since we just modified it
     const profile = {
+      ...barberProfile,
       uid: user?.uid || '',
-      name: user?.displayName || 'Owner',
-      salonName: 'My Business',
-      businessName: 'My Business',
-      businessType: businessType,
-      location: '',
-      phone: '',
-      photoURL: user?.photoURL || '',
-      salonImageURL: '',
-      bannerImageURL: '',
-      services: services.length > 0 ? services : [{ id: '1', name: 'General Service', price: 100, avgTime: 20 }],
-      isOpen: true,
-      isBreak: false,
-      isStopped: false,
-      currentToken: 0,
-      totalTokensToday: 0,
-      breakStartTime: null,
-      createdAt: Date.now(),
+      name: name || user?.displayName || 'Owner',
+      businessType: typeId,
+      services: updatedServices,
+      setupStep: nextStep
     };
-    await saveBarberProfile(profile);
-    nav('/barber/home', { replace: true });
+    await saveBarberProfile(profile as any);
   };
 
-  if (step === 1) {
-    return <BusinessTypePicker onSelect={handleBusinessTypeSelect} />;
+  const handlePhotoUpload = async (file: File, type: 'cover' | 'logo') => {
+    try {
+      setUploading(true);
+      const url = await uploadPhoto(file, 'business_photos');
+      if (type === 'cover') setCoverPhotoUrl(url);
+      else setLogoPhotoUrl(url);
+    } catch (e) {
+      console.error('Upload failed', e);
+      alert('Photo upload failed. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleComplete = async () => {
+    // Save final state
+    await saveProgress(6);
+  };
+
+  // If complete, show success component
+  if (step === 6) {
+    return <SetupComplete businessName={businessNameEn || 'Your Business'} />;
   }
 
   return (
-    <div className="min-h-screen flex flex-col p-6 pb-32 animate-fadeIn">
-      <BackButton onClick={() => setStep(step === 2 ? 1 : 2)} />
-
-      <div className="text-center mb-6">
-        <div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden bg-card-2 flex items-center justify-center ring-2 ring-primary/30">
-          {user?.photoURL ? (
-            <img src={user.photoURL} className="w-20 h-20 rounded-full object-cover" alt="" />
-          ) : (
-            <span className="text-4xl">🏢</span>
-          )}
+    <div className="min-h-screen flex flex-col p-6 pb-24 animate-fadeIn bg-bg">
+      {step < 6 && (
+        <div className="mb-6 flex items-center justify-between">
+          <BackButton onClick={() => step > 1 ? handleBack() : nav('/role')} />
+          <div className="text-sm font-semibold text-text-dim">
+            Step {step} of {totalSteps - 1}
+          </div>
         </div>
-        <h1 className="text-xl font-bold">{t('profile.setup')} (Step {step}/3)</h1>
-        <p className="text-text-dim text-sm mt-1">
-          {step === 2 ? 'Setup your business details' : 'Setup your services'}
-        </p>
-      </div>
+      )}
 
-      <div className="space-y-4 max-w-sm mx-auto w-full">
-        {step === 2 && (
-          <>
-            <div>
-              <label className="text-sm text-text-dim mb-1 block">{t('profile.name')} {t('profile.optional')}</label>
-              <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" className="input-field" />
-            </div>
-            <div>
-              <label className="text-sm text-text-dim mb-1 block">Business Name {t('profile.optional')}</label>
-              <input value={salonName} onChange={e => setSalonName(e.target.value)} placeholder="Your business name" className="input-field" />
-            </div>
-            <div>
-              <label className="text-sm text-text-dim mb-1 block">{t('profile.location')} {t('profile.optional')}</label>
-              <input value={location} onChange={e => setLocation(e.target.value)} placeholder="Business location" className="input-field" />
-            </div>
-            <div>
-              <label className="text-sm text-text-dim mb-1 block">{t('profile.phone')} {t('profile.optional')}</label>
-              <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 XXXXXXXXXX" className="input-field" type="tel" />
-            </div>
-          </>
-        )}
+      {/* Progress Bar */}
+      {step < 6 && (
+        <div className="w-full bg-border rounded-full h-2 mb-8 overflow-hidden">
+          <div
+            className="bg-primary h-2 rounded-full transition-all duration-500"
+            style={{ width: `${(step / (totalSteps - 1)) * 100}%` }}
+          />
+        </div>
+      )}
 
-        {step === 3 && (
-          <div>
-            <label className="text-sm text-text-dim mb-2 block">{t('services')} - Add what you offer</label>
-            <div className="space-y-2">
-              {services.map(s => (
-                <div key={s.id} className="flex items-center gap-2 p-3 bg-card rounded-xl border border-border">
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{s.name}</p>
-                    <p className="text-text-dim text-xs">₹{s.price} · {s.avgTime} {t('min')}</p>
-                  </div>
-                  <button onClick={() => removeService(s.id)} className="text-danger text-lg">✕</button>
+      <div className="flex-1 overflow-y-auto">
+        {step === 1 && (
+          <div className="flex flex-col animate-fadeIn">
+            <div className="text-center mb-8">
+              <h1 className="text-2xl font-bold">Basic Information</h1>
+              <p className="text-text-dim text-sm mt-1">Let's start with the basics of your business</p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-1.5 block">Business Name (English)</label>
+                <input value={businessNameEn} onChange={e => setBusinessNameEn(e.target.value)} placeholder="e.g. Royal Salon" className="input-field w-full" />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1.5 block">Business Name (Hindi) <span className="text-text-dim font-normal">(Optional)</span></label>
+                <input value={businessNameHi} onChange={e => setBusinessNameHi(e.target.value)} placeholder="e.g. रॉयल सैलून" className="input-field w-full" />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1.5 block">Owner Name</label>
+                <input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" className="input-field w-full" />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1.5 block">Phone Number</label>
+                <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 XXXXXXXXXX" className="input-field w-full" type="tel" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-sm font-medium mb-1.5 block">City</label>
+                  <input value={city} onChange={e => setCity(e.target.value)} placeholder="City" className="input-field w-full" />
                 </div>
-              ))}
-            </div>
-
-            {showAddService ? (
-              <div className="mt-3 p-4 bg-card rounded-xl border border-border space-y-3 animate-slideUp">
-                <input value={newService} onChange={e => setNewService(e.target.value)} placeholder="Service name (e.g. Consultation)" className="input-field text-sm" />
-                <div className="flex gap-2">
-                  <input value={newPrice} onChange={e => setNewPrice(e.target.value)} placeholder="Price ₹" className="input-field text-sm" type="number" />
-                  <input value={newTime} onChange={e => setNewTime(e.target.value)} placeholder="Time (min)" className="input-field text-sm" type="number" />
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={addService} className="btn-primary text-sm py-2">✓ Add</button>
-                  <button onClick={() => setShowAddService(false)} className="btn-secondary text-sm py-2">{t('btn.cancel')}</button>
+                <div>
+                  <label className="text-sm font-medium mb-1.5 block">State</label>
+                  <input value={state} onChange={e => setState(e.target.value)} placeholder="State" className="input-field w-full" />
                 </div>
               </div>
-            ) : (
-              <button onClick={() => setShowAddService(true)} className="mt-3 w-full p-3 rounded-xl border border-dashed border-primary/50 text-primary text-sm font-medium">
-                + {t('services.add')}
+
+              <div>
+                <label className="text-sm font-medium mb-1.5 block">Full Address</label>
+                <textarea
+                  value={address}
+                  onChange={e => setAddress(e.target.value)}
+                  placeholder="Street, Landmark, Pincode"
+                  className="input-field w-full resize-none h-24"
+                />
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <button
+                onClick={handleNext}
+                className="w-full btn-primary py-3 rounded-xl font-semibold disabled:opacity-50"
+                disabled={!businessNameEn || !name || !phone}
+              >
+                Continue →
               </button>
-            )}
+            </div>
           </div>
         )}
-      </div>
 
-      <div className="mt-8 space-y-3 max-w-sm mx-auto w-full">
-        <button onClick={handleContinue} className="btn-primary">
-          {step === 2 ? 'Next' : t('btn.continue')} →
-        </button>
+        {step === 2 && (
+          <BusinessTypeSetup
+            initialType={businessType}
+            onSelect={handleBusinessTypeSelect}
+            onBack={handleBack}
+          />
+        )}
+
         {step === 3 && (
-          <button onClick={handleSkip} className="btn-secondary">
-            {t('btn.skip')} →
-          </button>
+          <ServicesSetup
+            services={services}
+            setServices={setServices}
+            onNext={handleNext}
+            onBack={handleBack}
+          />
+        )}
+
+        {step === 4 && (
+          <div className="flex flex-col animate-fadeIn">
+            <div className="text-center mb-8">
+              <h1 className="text-2xl font-bold">Business Photos</h1>
+              <p className="text-text-dim text-sm mt-1">Add photos to attract more customers</p>
+            </div>
+
+            <div className="space-y-6">
+              {/* Cover Photo */}
+              <div>
+                <label className="text-sm font-medium mb-2 block">Cover Photo (16:9)</label>
+                <div className="relative w-full aspect-video bg-card rounded-2xl border-2 border-dashed border-border overflow-hidden group">
+                  {coverPhotoUrl ? (
+                    <img src={coverPhotoUrl} alt="Cover" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-text-dim">
+                      <span className="text-3xl mb-2">📸</span>
+                      <span className="text-sm font-medium">Upload Cover</span>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={e => e.target.files?.[0] && handlePhotoUpload(e.target.files[0], 'cover')}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                  {uploading && <div className="absolute inset-0 bg-black/50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>}
+                </div>
+              </div>
+
+              {/* Logo Photo */}
+              <div>
+                <label className="text-sm font-medium mb-2 block">Business Logo (1:1)</label>
+                <div className="relative w-32 h-32 mx-auto bg-card rounded-full border-2 border-dashed border-border overflow-hidden group">
+                  {logoPhotoUrl ? (
+                    <img src={logoPhotoUrl} alt="Logo" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-text-dim">
+                      <span className="text-2xl mb-1">🏢</span>
+                      <span className="text-xs font-medium">Upload Logo</span>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={e => e.target.files?.[0] && handlePhotoUpload(e.target.files[0], 'logo')}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                  {uploading && <div className="absolute inset-0 bg-black/50 flex items-center justify-center"><div className="w-6 h-6 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-auto pt-8 flex gap-3">
+              <button onClick={handleBack} className="btn-secondary flex-1 py-3 rounded-xl font-semibold">
+                Back
+              </button>
+              <button onClick={handleNext} className="btn-primary flex-1 py-3 rounded-xl font-semibold" disabled={uploading}>
+                Continue
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 5 && (
+          <HoursSetup
+            hours={hours}
+            setHours={setHours}
+            onNext={() => { handleComplete(); setStep(6); }}
+            onBack={handleBack}
+          />
         )}
       </div>
     </div>
