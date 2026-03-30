@@ -29,14 +29,15 @@ export default function CustomerAuth() {
         } catch {}
       }
       nav('/customer/setup', { replace: true });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Auth error:', err);
-      if (err?.code === 'auth/popup-closed-by-user') {
+      const e = err as { code?: string; message?: string };
+      if (e.code === 'auth/popup-closed-by-user') {
         setError('Popup closed. Please try again.');
-      } else if (err?.code === 'auth/popup-blocked') {
+      } else if (e.code === 'auth/popup-blocked') {
         setError('Popup blocked. Please allow popups for this site.');
       } else {
-        setError(err?.message || 'Login failed. Please try again.');
+        setError(e.message || 'Login failed. Please try again.');
       }
     } finally {
       setLoading(false);
