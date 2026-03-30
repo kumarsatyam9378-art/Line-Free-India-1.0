@@ -1,39 +1,73 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper Functions
     function isAuth() { return request.auth != null; }
     function isOwner(uid) { return isAuth() && request.auth.uid == uid; }
+    function isVerified() { return isAuth() && request.auth.token.email_verified == true; }
 
-    // Business Profiles - collection is named "barbers" currently based on old app, we will use "barbers"
-    // to match what the app does, or "salons" for backward compat. Let's stick with "barbers".
-    // Wait, the prompt states: Collection is named "salons" for backward compat. Let's update it to "salons".
-    // I will use salons.
-    match /salons/{salonId} {
+    // In our logic for backwards compat, a user can either be a business owner
+    // or a customer. The rules check if auth.uid matches the required ID.
+
+    // Businesses (Public read, owner write)
+    match /businesses/{businessId} {
       allow read: if true;
-      allow create: if isOwner(salonId);
-      allow update, delete: if isOwner(salonId);
+      allow create: if isOwner(businessId);
+      allow update, delete: if isOwner(businessId);
+    }
+    match /salons/{businessId} {
+      allow read: if true;
+      allow create: if isOwner(businessId);
+      allow update, delete: if isOwner(businessId);
+    }
+    match /barbers/{businessId} {
+      allow read: if true;
+      allow create: if isOwner(businessId);
+      allow update, delete: if isOwner(businessId);
     }
 
-    match /barbers/{salonId} {
-      allow read: if true;
-      allow create: if isOwner(salonId);
-      allow update, delete: if isOwner(salonId);
-    }
-
-    // Queue tokens / bookings
-    match /tokens/{tokenId} {
+    // Business sub-collections (Staff/Jobs/etc) (Owner write)
+    match /businesses/{businessId}/{subcollection}/{docId} {
       allow read: if isAuth();
+      allow write: if isOwner(businessId);
+    }
+    match /salons/{businessId}/{subcollection}/{docId} {
+      allow read: if isAuth();
+      allow write: if isOwner(businessId);
+    }
+    match /barbers/{businessId}/{subcollection}/{docId} {
+      allow read: if isAuth();
+      allow write: if isOwner(businessId);
+    }
+
+    // Bookings / Tokens (Auth users can create, only involved parties can read/update)
+    match /bookings/{bookingId} {
       allow create: if isAuth();
-      allow update, delete: if isAuth() && (
-        resource.data.salonId == request.auth.uid ||
+      allow read, update, delete: if isAuth() && (
+        resource.data.businessId == request.auth.uid ||
         resource.data.customerId == request.auth.uid
       );
     }
+    match /tokens/{bookingId} {
+      allow create: if isAuth();
+      allow read, update, delete: if isAuth() && (
+        resource.data.salonId == request.auth.uid ||
+        resource.data.customerId == request.auth.uid ||
+        resource.data.businessId == request.auth.uid
+      );
+    }
 
-    // Reviews
+    // Customers (Owner only)
+    match /customers/{customerId} {
+      allow read, write: if isOwner(customerId);
+    }
+
+    // Reviews (Public read, verified users create)
     match /reviews/{reviewId} {
       allow read: if true;
-      allow create: if isAuth();
+      // Note: Assuming standard Firebase Auth email verified. Google Sign-In makes email_verified true.
+      allow create: if isVerified();
+      // Only author can update/delete
       allow update, delete: if isAuth() && resource.data.customerId == request.auth.uid;
     }
 
@@ -49,24 +83,6 @@ service cloud.firestore {
       allow read: if isAuth();
       allow create: if isAuth();
       allow update, delete: if isAuth() && resource.data.senderId == request.auth.uid;
-    }
-
-    // Customer Profiles
-    match /customers/{customerId} {
-      allow read: if true;
-      allow create: if isOwner(customerId);
-      allow update, delete: if isOwner(customerId);
-    }
-
-    // Business sub-collections (inventory, jobs, etc.)
-    match /salons/{salonId}/{subcollection}/{docId} {
-      allow read: if isAuth();
-      allow write: if isOwner(salonId);
-    }
-
-    match /barbers/{salonId}/{subcollection}/{docId} {
-      allow read: if isAuth();
-      allow write: if isOwner(salonId);
     }
 
     // Deny everything else
