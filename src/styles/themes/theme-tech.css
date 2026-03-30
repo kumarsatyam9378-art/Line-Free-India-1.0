@@ -1,0 +1,53 @@
+[data-theme="tech"] {
+  /* === PRIMARY COLORS === */
+  --color-primary: #00BCD4;
+  --color-primary-light: #14E4FF;
+  --color-primary-dark: #008394;
+  --color-accent: #003CD4;
+  --color-accent-2: #00D46C;
+
+  /* === BACKGROUNDS === */
+  --bg-primary: #040A0F;
+  --bg-surface: #060F16;
+  --bg-card: rgba(0, 188, 212, 0.08);
+  --bg-glass: rgba(0, 188, 212, 0.12);
+  --bg-input: rgba(255, 255, 255, 0.06);
+
+  /* === TEXT === */
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-dim: rgba(255, 255, 255, 0.45);
+  --text-accent: #14E4FF;
+
+  /* === TYPOGRAPHY === */
+  --font-display: 'JetBrains Mono', 'Fira Code', sans-serif;
+  --font-body: 'JetBrains Mono', 'Fira Code', sans-serif;
+  --font-size-display: 2.5rem;
+  --font-size-h1: 1.75rem;
+  --font-size-body: 0.9375rem;
+
+  /* === GRADIENTS === */
+  --gradient-hero: linear-gradient(135deg, #00BCD4 0%, #040A0F 100%);
+  --gradient-card: linear-gradient(135deg, rgba(0, 188, 212, 0.1) 0%, rgba(0, 188, 212, 0.02) 100%);
+  --gradient-button: linear-gradient(135deg, #00BCD4 0%, #003CD4 100%);
+  --gradient-glow: radial-gradient(ellipse, rgba(0, 188, 212, 0.3), transparent 70%);
+
+  /* === BORDERS === */
+  --border-color: rgba(0, 188, 212, 0.2);
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+
+  /* === SHADOWS === */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 32px rgba(0, 188, 212, 0.2);
+  --shadow-lg: 0 16px 48px rgba(0, 188, 212, 0.3);
+  --shadow-button: 0 4px 20px rgba(0, 188, 212, 0.5);
+  --shadow-glow: 0 0 40px rgba(0, 188, 212, 0.4);
+
+  /* === ANIMATIONS === */
+  --anim-duration: 0.3s;
+  --anim-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
