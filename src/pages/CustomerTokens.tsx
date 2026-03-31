@@ -36,14 +36,7 @@ export default function CustomerTokens() {
   const [tokens, setTokens] = useState<TokenEntry[]>([]);
   const [enriched, setEnriched] = useState<Map<string, EnrichedToken>>(new Map());
   const [loading, setLoading] = useState(true);
-  const [timeNow, setTimeNow] = useState(Date.now());
   const salonListeners = useRef<Map<string, () => void>>(new Map());
-
-  // Tick every second for live countdown
-  useEffect(() => {
-    const iv = setInterval(() => setTimeNow(Date.now()), 1000);
-    return () => clearInterval(iv);
-  }, []);
 
   // Load today's tokens for this customer
   useEffect(() => {

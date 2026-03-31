@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { uploadToCloudinary } from '../utils/cloudinary';
 
-export type Lang = 'en' | 'hi';
+export type Lang = 'en' | 'hi' | 'gu' | 'ta' | 'mr' | 'bn';
 export type Role = 'customer' | 'barber' | 'business';
 
 export type BusinessCategory =
@@ -363,11 +363,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       await deleteUser(user);
       await signOutUser();
       return { success: true };
-    } catch (e: any) {
-      if (e?.code === 'auth/requires-recent-login') {
+    } catch (e: unknown) {
+      const err = e as { code?: string; message?: string };
+      if (err.code === 'auth/requires-recent-login') {
         try { await reauthenticateWithPopup(user, googleProvider); return deleteAccount(); } catch { return { success: false, error: 'Re-auth failed.' }; }
       }
-      return { success: false, error: e?.message || 'Failed' };
+      return { success: false, error: err.message || 'Failed' };
     }
   };
 
@@ -464,8 +465,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const today = getTodayStr();
     try {
       const allTokens = await getSalonTokens(user.uid, today);
-      const serving = allTokens.filter(t => t.status === 'serving');
-      const waiting = allTokens.filter(t => t.status === 'waiting').sort((a, b) => a.tokenNumber - b.tokenNumber);
+      const serving: TokenEntry[] = [];
+      const waiting: TokenEntry[] = [];
+      for (const t of allTokens) {
+        if (t.status === 'serving') serving.push(t);
+        else if (t.status === 'waiting') waiting.push(t);
+      }
+      waiting.sort((a, b) => a.tokenNumber - b.tokenNumber);
       await Promise.all(serving.map(t => updateDoc(doc(db, 'tokens', t.id!), { status: 'done' })));
       if (waiting.length > 0) {
         const next = waiting[0];
