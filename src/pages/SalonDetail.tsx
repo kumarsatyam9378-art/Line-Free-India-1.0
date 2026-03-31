@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useApp, BarberProfile, ServiceItem, TokenEntry, ReviewEntry } from '../store/AppContext';
 import BackButton from '../components/BackButton';
 
-const UPI_ID = 'kumarsatyam9378@okhdfcbank';
+const UPI_ID = import.meta.env.VITE_UPI_ID;
 
 export default function SalonDetail() {
   const { id } = useParams<{ id: string }>();
