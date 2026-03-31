@@ -14,7 +14,7 @@ interface CustomerData {
   totalSpent: number;
 }
 
-export default function BarberCustomers() {
+export default function BarberCustomerList() {
   const { user, barberProfile, pushNotification } = useApp();
   const [customers, setCustomers] = useState<CustomerData[]>([]);
   const [loading, setLoading] = useState(true);

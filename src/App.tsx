@@ -23,6 +23,9 @@ import BarberAnalytics from './pages/BarberAnalytics';
 import CustomerChat from './pages/CustomerChat';
 import BarberMessages from './pages/BarberMessages';
 import NotificationsPage from './pages/NotificationsPage';
+import BarberOffers from './pages/BarberOffers';
+import BarberSegments from './pages/BarberSegments';
+import BarberCustomerList from './pages/BarberCustomerList';
 
 function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requiredRole: 'customer' | 'barber' }) {
   const { user, role, loading } = useApp();
@@ -90,6 +93,9 @@ function AppRoutes() {
       <Route path="/barber/analytics" element={<AuthGuard requiredRole="barber"><BarberAnalytics /></AuthGuard>} />
       <Route path="/barber/messages" element={<AuthGuard requiredRole="barber"><BarberMessages /></AuthGuard>} />
       <Route path="/barber/notifications" element={<AuthGuard requiredRole="barber"><NotificationsPage /></AuthGuard>} />
+      <Route path="/barber/offers" element={<AuthGuard requiredRole="barber"><BarberOffers /></AuthGuard>} />
+      <Route path="/barber/segments" element={<AuthGuard requiredRole="barber"><BarberSegments /></AuthGuard>} />
+      <Route path="/barber/customer-list" element={<AuthGuard requiredRole="barber"><BarberCustomerList /></AuthGuard>} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
