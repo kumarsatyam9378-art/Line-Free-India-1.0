@@ -22,9 +22,10 @@ export default function BottomNav() {
             const hasNotif = tab.path === '/customer/profile' && unreadCount > 0;
             return (
               <button key={tab.path} onClick={() => nav(tab.path)}
+                aria-current={active ? 'page' : undefined}
                 className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all relative ${active ? 'text-primary' : 'text-text-dim hover:text-text'}`}>
                 {active && <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-6 h-1 rounded-full bg-primary" />}
-                <span className={`text-xl transition-transform ${active ? 'scale-110' : ''}`}>{tab.icon}</span>
+                <span className={`text-xl transition-transform ${active ? 'scale-110' : ''}`} aria-hidden="true">{tab.icon}</span>
                 <span className={`text-[10px] font-medium ${active ? 'font-bold' : ''}`}>{tab.label}</span>
                 {hasNotif && <div className="absolute top-1 right-2 w-2 h-2 bg-danger rounded-full" />}
               </button>
@@ -51,9 +52,10 @@ export default function BottomNav() {
             const hasNotif = (tab.path === '/barber/messages') || (tab.path === '/barber/profile' && unreadCount > 0);
             return (
               <button key={tab.path} onClick={() => nav(tab.path)}
+                aria-current={active ? 'page' : undefined}
                 className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all relative ${active ? 'text-primary' : 'text-text-dim hover:text-text'}`}>
                 {active && <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-6 h-1 rounded-full bg-primary" />}
-                <span className={`text-xl transition-transform ${active ? 'scale-110' : ''}`}>{tab.icon}</span>
+                <span className={`text-xl transition-transform ${active ? 'scale-110' : ''}`} aria-hidden="true">{tab.icon}</span>
                 <span className={`text-[9px] font-medium ${active ? 'font-bold' : ''}`}>{tab.label}</span>
                 {hasNotif && !active && <div className="absolute top-1 right-2 w-2 h-2 bg-danger rounded-full border border-card animate-pulse" />}
               </button>
