@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
+import { logEvent } from '../firebase';
+import { useEffect } from 'react';
 import BottomNav from '../components/BottomNav';
 
 export default function CustomerSearch() {
@@ -36,6 +38,16 @@ export default function CustomerSearch() {
   };
 
   const results = getFiltered();
+
+  useEffect(() => {
+    if (query.trim().length > 2) {
+      const timer = setTimeout(() => {
+        logEvent('search_performed', { query, resultCount: results.length });
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [query, results.length]);
+
 
   return (
     <div className="min-h-screen pb-24 animate-fadeIn">

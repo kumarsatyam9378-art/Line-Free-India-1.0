@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp, BarberProfile } from '../store/AppContext';
 import BottomNav from '../components/BottomNav';
+import { Helmet } from 'react-helmet-async';
 
 export default function CustomerHome() {
   const { user, customerProfile, signOutUser, allSalons, isFavorite, toggleFavorite, getUserLocation, unreadCount, t } = useApp();
@@ -69,7 +70,11 @@ export default function CustomerHome() {
   );
 
   return (
-    <div className="min-h-screen pb-24 animate-fadeIn">
+    <>
+      <Helmet>
+        <title>{`Line Free India - ${customerProfile?.city || "Near You"}`}</title>
+      </Helmet>
+      <div className="min-h-screen pb-24 animate-fadeIn">
       {/* Header */}
       <div className="p-6 pb-2">
         <div className="flex items-center justify-between mb-4">
@@ -210,5 +215,6 @@ export default function CustomerHome() {
         )}
       </div>
     </div>
+    </>
   );
 }

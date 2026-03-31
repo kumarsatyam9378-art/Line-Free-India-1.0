@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp, BarberProfile, ServiceItem, TokenEntry, ReviewEntry } from '../store/AppContext';
 import BackButton from '../components/BackButton';
+import { logEvent } from '../firebase';
+import { Helmet } from 'react-helmet-async';
 
 const UPI_ID = import.meta.env.VITE_UPI_ID;
 
@@ -22,6 +24,12 @@ export default function SalonDetail() {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [activeTab, setActiveTab] = useState<'services' | 'reviews'>('services');
   const [advanceDate, setAdvanceDate] = useState('');
+
+  useEffect(() => {
+    if (salon) {
+      logEvent('business_view', { businessId: salon.uid, businessType: salon.category });
+    }
+  }, [salon]);
 
   const today = (() => {
     const d = new Date();
@@ -213,6 +221,26 @@ export default function SalonDetail() {
   const canGetToken = salon.isOpen && !salon.isStopped;
 
   return (
+    <>
+      <Helmet>
+        <title>{salon?.salonName || salon?.name || 'Loading...'} - Line Free India</title>
+        <meta name="description" content={salon?.about || `Book an appointment at ${salon?.salonName || salon?.name}`} />
+        {salon?.coverPhoto && <meta property="og:image" content={salon.coverPhoto} />}
+        {salon && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": salon.salonName || salon.name || '',
+              "image": salon.coverPhoto || '',
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": salon.location || ''
+              },
+              "priceRange": "₹₹",
+              "telephone": salon.phone || ''
+            }).replace(/</g, '\\u003c') }} />
+        )}
+      </Helmet>
     <div className="min-h-screen pb-8 animate-fadeIn">
       <div className="p-6">
         <BackButton to="/customer/search" />
@@ -518,5 +546,6 @@ export default function SalonDetail() {
         </div>
       )}
     </div>
+    </>
   );
 }

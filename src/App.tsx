@@ -1,5 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AppProvider, useApp } from './store/AppContext';
+import { logEvent } from './firebase';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import SplashPage from './pages/onboarding/SplashPage';
 import LanguageSelect from './pages/LanguageSelect';
 import RoleSelect from './pages/RoleSelect';
@@ -43,6 +47,10 @@ function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requ
 
 function AppRoutes() {
   const { loading } = useApp();
+  const location = useLocation();
+  useEffect(() => {
+    logEvent('page_view', { page_path: location.pathname });
+  }, [location]);
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
@@ -98,10 +106,12 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
       <AppProvider>
         <AppRoutes />
       </AppProvider>
     </BrowserRouter>
+    </HelmetProvider>
   );
 }

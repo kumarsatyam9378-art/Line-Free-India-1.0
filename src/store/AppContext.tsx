@@ -9,6 +9,8 @@ import {
   updateDoc, addDoc, onSnapshot, deleteDoc, orderBy, limit, serverTimestamp
 } from 'firebase/firestore';
 import { uploadToCloudinary } from '../utils/cloudinary';
+import { requestNotificationPermission } from '../firebase';
+import { logEvent } from '../firebase';
 
 export type Lang = 'en' | 'hi' | 'gu' | 'ta' | 'mr' | 'bn';
 export type Role = 'customer' | 'barber' | 'business';
@@ -291,6 +293,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [role, setRoleState] = useState<Role | null>(() => localStorage.getItem('lf_role') as Role | null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [lastBookingTime, setLastBookingTime] = useState<number>(0);
+
+  const sanitize = (str: string) => {
+    if (!str) return str;
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  };
+
+  const validatePhone = (phone: string) => /^[6-9]\d{9}$/.test(phone);
+
   const [customerProfile, setCustomerProfileState] = useState<CustomerProfile | null>(null);
   const [barberProfile, setBarberProfileState] = useState<BarberProfile | null>(null);
   const [allSalons, setAllSalons] = useState<BarberProfile[]>([]);
@@ -331,9 +342,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (u) {
         const savedRole = localStorage.getItem('lf_role') as Role | null;
         if (savedRole === 'customer') {
-          try { const snap = await getDoc(doc(db, 'customers', u.uid)); if (snap.exists()) setCustomerProfile(snap.data() as CustomerProfile); else { const l = localStorage.getItem('lf_customer'); if (l) try { setCustomerProfileState(JSON.parse(l)); } catch {} } } catch { const l = localStorage.getItem('lf_customer'); if (l) try { setCustomerProfileState(JSON.parse(l)); } catch {} }
+          try {
+            const snap = await getDoc(doc(db, 'customers', u.uid));
+            if (snap.exists()) setCustomerProfile(snap.data() as CustomerProfile);
+            else { const l = localStorage.getItem('lf_customer'); if (l) try { setCustomerProfileState(JSON.parse(l)); } catch {} }
+          } catch { const l = localStorage.getItem('lf_customer'); if (l) try { setCustomerProfileState(JSON.parse(l)); } catch {} }
         } else if (savedRole === 'barber') {
-          try { const snap = await getDoc(doc(db, 'barbers', u.uid)); if (snap.exists()) setBarberProfile(snap.data() as BarberProfile); else { const l = localStorage.getItem('lf_barber'); if (l) try { setBarberProfileState(JSON.parse(l)); } catch {} } } catch { const l = localStorage.getItem('lf_barber'); if (l) try { setBarberProfileState(JSON.parse(l)); } catch {} }
+          try {
+            const snap = await getDoc(doc(db, 'barbers', u.uid));
+            if (snap.exists()) setBarberProfile(snap.data() as BarberProfile);
+            else { const l = localStorage.getItem('lf_barber'); if (l) try { setBarberProfileState(JSON.parse(l)); } catch {} }
+          } catch { const l = localStorage.getItem('lf_barber'); if (l) try { setBarberProfileState(JSON.parse(l)); } catch {} }
+        }
+
+        // Request FCM Notification Permission and Save Token (Non-blocking)
+        if (savedRole) {
+          requestNotificationPermission().then(fcmToken => {
+            if (fcmToken) {
+              const uRef = doc(db, savedRole === 'customer' ? 'customers' : 'barbers', u.uid);
+              updateDoc(uRef, { fcmToken }).catch(e => console.log('FCM save error', e));
+            }
+          }).catch(e => console.log('FCM request error', e));
         }
       } else { setCustomerProfileState(null); setBarberProfileState(null); }
       setLoading(false);
@@ -376,6 +405,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const uploadPhoto = async (file: File, folder: string) => uploadToCloudinary(file, folder);
 
   const saveCustomerProfile = async (p: CustomerProfile) => {
+    if (p.phone && !validatePhone(p.phone)) throw new Error('Invalid Indian phone number. Must be 10 digits starting with 6-9.');
+    if (p.name) p.name = sanitize(p.name);
+    if (p.location) p.location = sanitize(p.location);
     if (!p.referralCode) p = { ...p, referralCode: `LF${p.uid.slice(0, 6).toUpperCase()}` };
     setCustomerProfile(p);
     try { await setDoc(doc(db, 'customers', p.uid), p, { merge: true }); } catch (e) { console.warn('Save failed:', e); }
@@ -449,6 +481,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const getToken = async (token: Omit<TokenEntry, 'id'>): Promise<string | null> => {
     try {
+      const now = Date.now();
+      if (now - lastBookingTime < 30000) {
+        throw new Error("Please wait 30 seconds before booking again.");
+      }
+      setLastBookingTime(now);
+
+      logEvent('booking_started', { salonId: token.salonId, customerId: token.customerId, totalServices: token.selectedServices.length });
       const ref = await addDoc(collection(db, 'tokens'), token);
       // Notify customer
       try { await pushNotification(token.customerId, { title: '🎫 Token Confirmed!', body: `Token #${token.tokenNumber} at ${token.salonName}. Est. wait: ${token.estimatedWaitMinutes} min`, type: 'token_ready', data: { salonId: token.salonId, tokenNumber: token.tokenNumber } }); } catch {}
@@ -458,7 +497,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } catch (e) { console.error('getToken error:', e); return null; }
   };
 
-  const cancelToken = async (tokenId: string) => { try { await updateDoc(doc(db, 'tokens', tokenId), { status: 'cancelled' }); } catch {} };
+  const cancelToken = async (tokenId: string) => { try { await updateDoc(doc(db, 'tokens', tokenId), { status: 'cancelled' }); logEvent('booking_cancelled', { tokenId }); } catch {} };
   const rateToken = async (tokenId: string, rating: number) => { try { await updateDoc(doc(db, 'tokens', tokenId), { rating }); } catch {} };
 
   const nextCustomer = async () => {
@@ -474,6 +513,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
       waiting.sort((a, b) => a.tokenNumber - b.tokenNumber);
       await Promise.all(serving.map(t => updateDoc(doc(db, 'tokens', t.id!), { status: 'done' })));
+      serving.forEach(t => logEvent('booking_completed', { tokenId: t.id, salonId: t.salonId }));
       if (waiting.length > 0) {
         const next = waiting[0];
         await updateDoc(doc(db, 'tokens', next.id!), { status: 'serving' });
@@ -509,6 +549,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const isBarberSubscribed = () => isBarberTrialActive() || (!!(barberProfile?.subscriptionExpiry) && barberProfile.subscriptionExpiry! > Date.now());
 
   const addReview = async (review: Omit<ReviewEntry, 'id'>) => {
+    if (review.comment) review.comment = sanitize(review.comment);
     try {
       await addDoc(collection(db, 'reviews'), review);
       const snap = await getDocs(query(collection(db, 'reviews'), where('salonId', '==', review.salonId)));
@@ -536,6 +577,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   // ✅ FIX: sendMessage — updated schema with senderId/senderRole
   const sendMessage = async (msg: Omit<MessageEntry, 'id'>) => {
+    if (msg.text) msg.text = sanitize(msg.text);
     try { await addDoc(collection(db, 'messages'), { ...msg, createdAt: Date.now() }); } catch (e) { console.error('sendMessage error:', e); }
   };
 
