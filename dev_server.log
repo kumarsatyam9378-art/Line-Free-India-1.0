@@ -1,0 +1,16 @@
+
+> react-vite-tailwind@0.0.0 dev
+> vite
+
+1:37:35 AM [vite] (client) Re-optimizing dependencies because lockfile has changed
+Port 5173 is in use, trying another one...
+
+  VITE v7.2.4  ready in 929 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: use --host to expose
+1:44:19 AM [vite] (client) hmr update /src/pages/BarberHome.tsx, /src/index.css
+1:44:57 AM [vite] (client) hmr update /src/index.css, /src/components/dashboard/LiveQueueDisplay.tsx
+1:47:14 AM [vite] (client) hmr update /src/store/AppContext.tsx, /src/index.css
+1:48:57 AM [vite] (client) hmr update /src/store/AppContext.tsx, /src/index.css
+1:54:43 AM [vite] (client) hmr update /src/store/AppContext.tsx, /src/index.css

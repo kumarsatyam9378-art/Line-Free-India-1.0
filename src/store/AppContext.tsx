@@ -57,6 +57,7 @@ export interface BusinessProfile {
   uid: string; name: string; businessName: string; businessType: BusinessCategory;
   location: string; phone: string;
   photoURL: string; bannerImageURL: string; services: ServiceItem[];
+  salonName?: string; salonImageURL?: string; logoUrl?: string; galleryUrls?: string[];
   isOpen: boolean; isBreak: boolean; isStopped: boolean;
   currentToken: number; totalTokensToday: number; breakStartTime: number | null;
   createdAt: any; rating?: number; totalReviews?: number; totalEarnings?: number;
@@ -94,8 +95,6 @@ export interface BusinessProfile {
   attendance?: AttendanceRecord[];
   groupClasses?: GroupClass[];
   announcement?: string;
-  salonName?: string; // legacy compat
-  salonImageURL?: string; // legacy compat
 }
 
 export type BarberProfile = BusinessProfile;
