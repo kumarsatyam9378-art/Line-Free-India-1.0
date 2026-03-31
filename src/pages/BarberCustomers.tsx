@@ -3,6 +3,7 @@ import { useApp, TokenEntry } from '../store/AppContext';
 import { db } from '../firebase';
 import { collection, query, where, onSnapshot, updateDoc, doc } from 'firebase/firestore';
 import BottomNav from '../components/BottomNav';
+import { openWhatsApp } from '../lib/whatsapp';
 
 export default function BarberCustomers() {
   const { user, nextCustomer, getTodayEarnings, barberProfile, t } = useApp();
@@ -144,7 +145,16 @@ export default function BarberCustomers() {
                       <p className="text-xs text-text-dim">~{token.estimatedWaitMinutes}min</p>
                     </div>
                     {token.customerPhone && (
-                      <a href={`tel:${token.customerPhone}`} className="text-primary text-lg">📞</a>
+                      <div className="flex gap-1 ml-2">
+                        <button
+                          onClick={(e) => { e.preventDefault(); openWhatsApp(token.customerPhone!, `Hi ${token.customerName}, this is regarding your token #${token.tokenNumber} at ${barberProfile?.salonName}.`); }}
+                          className="w-8 h-8 rounded-full bg-[#25D366]/15 flex items-center justify-center text-[#25D366] hover:bg-[#25D366]/20 transition-colors"
+                          title="WhatsApp"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 0C5.405 0 0 5.405 0 12.031c0 2.115.55 4.18 1.59 6l-1.565 5.717 5.842-1.536A11.968 11.968 0 0012.031 24c6.626 0 12.031-5.405 12.031-12.031C24.062 5.405 18.657 0 12.031 0zm0 21.986c-1.783 0-3.528-.48-5.06-1.39l-3.376.887.904-3.292C3.492 16.516 3.014 14.302 3.014 12.03 3.014 7.062 7.062 3.014 12.03 3.014c4.968 0 9.016 4.048 9.016 9.016 0 4.968-4.048 9.016-9.016 9.016zm4.945-6.73c-.27-.135-1.597-.79-1.843-.88-.246-.09-.425-.135-.605.135-.18.27-.695.88-.85.1.06-.156.126-.403-.045-.694-.135-.292-.27-1.597-.835-2.227-1.485-.63-.135-.135-.306-.135-.486 0-.27.18-.742-.427-1.687-.833-2.564-.383-.833-.923-.27-1.057-.27-1.844-.27-.246 0-.648.09-.985.495-.337.405-.985.967-.985 2.362 0 1.395 1.012 2.744 1.147 2.924.135.18 1.99 3.04 4.82 4.262 2.83 1.222 2.83.81 3.348.765.518-.045 1.597-.652 1.822-1.282.225-.63.225-1.17.157-1.282-.068-.112-.248-.18-.518-.315z"/></svg>
+                        </button>
+                        <a href={`tel:${token.customerPhone}`} className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors text-lg" title="Call">📞</a>
+                      </div>
                     )}
                   </div>
 

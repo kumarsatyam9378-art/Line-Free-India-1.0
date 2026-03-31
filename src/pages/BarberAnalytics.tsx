@@ -1,36 +1,85 @@
 import { useState, useEffect } from 'react';
-import { useApp, DayStat } from '../store/AppContext';
+import { useApp } from '../store/AppContext';
 import BottomNav from '../components/BottomNav';
 import BackButton from '../components/BackButton';
 import { generateMonthlyReport } from '../utils/generateReport';
+import { calculateDailyRevenue, findPeakHours, getServiceBreakdown, calculateRetentionRate, Booking } from '../utils/analytics';
+import RevenueChart from '../components/analytics/RevenueChart';
+import BookingsChart from '../components/analytics/BookingsChart';
+import PeakHoursChart from '../components/analytics/PeakHoursChart';
+import ServicePopularityChart from '../components/analytics/ServicePopularityChart';
 
 export default function BarberAnalytics() {
-  const { getBarberFullStats, barberProfile } = useApp();
-  const [range, setRange] = useState<7 | 14 | 30>(30);
-  const [stats, setStats] = useState<DayStat[]>([]);
+  const { barberProfile, getSalonTokens, user } = useApp();
+  const [range, setRange] = useState<7 | 14 | 30 | 90>(30);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
-    setLoading(true);
-    getBarberFullStats(range).then(data => { setStats(data); setLoading(false); });
-  }, [range]);
+    if (!user) return;
 
-  const totalRevenue   = stats.reduce((s, d) => s + d.revenue, 0);
-  const totalCustomers = stats.reduce((s, d) => s + d.count, 0);
-  const totalCancelled = stats.reduce((s, d) => s + d.cancelled, 0);
-  const activeDays     = stats.filter(d => d.count > 0).length;
+    setLoading(true);
+    const fetchTokens = async () => {
+      try {
+        const allTokens: Booking[] = [];
+        // Fetch tokens day by day using the existing method
+        for (let i = 0; i < range; i++) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const dateStr = d.toISOString().slice(0, 10);
+
+          const tks = await getSalonTokens(user.uid, dateStr);
+          // Map to the Booking interface expected by analytics utils
+          const mappedTks = tks.map((t: any) => ({
+            id: t.id,
+            createdAt: t.createdAt,
+            date: t.date,
+            time: t.time || '00:00', // tokens might not have exact time, fallback to 00:00
+            status: t.status === 'done' ? 'completed' : t.status === 'cancelled' ? 'cancelled' : 'booked',
+            totalPrice: t.totalPrice || 0,
+            services: t.selectedServices || [],
+            customerId: t.customerId || ''
+          })) as Booking[];
+
+          allTokens.push(...mappedTks);
+        }
+        setBookings(allTokens);
+      } catch (err) {
+        console.error('Error fetching analytics tokens:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTokens();
+  }, [range, user, getSalonTokens]);
+
+  const dailyStats = calculateDailyRevenue(bookings, range);
+  const peakHours = findPeakHours(bookings);
+  const serviceBreakdown = getServiceBreakdown(bookings);
+  const retention = calculateRetentionRate(bookings);
+
+  const totalRevenue   = dailyStats.reduce((s, d) => s + d.revenue, 0);
+  const totalCustomers = dailyStats.reduce((s, d) => s + d.completed, 0);
+  const totalCancelled = dailyStats.reduce((s, d) => s + d.cancelled, 0);
+  const activeDays     = dailyStats.filter(d => d.completed > 0).length;
   const avgPerDay      = activeDays > 0 ? Math.round(totalRevenue / activeDays) : 0;
-  const bestDay        = stats.reduce((b, d) => d.revenue > (b?.revenue || 0) ? d : b, stats[0]);
-  const maxRevenue     = Math.max(...stats.map(d => d.revenue), 1);
-  const maxCount       = Math.max(...stats.map(d => d.count), 1);
 
   const handleDownloadPDF = async () => {
-    if (!barberProfile || stats.length === 0) return;
+    if (!barberProfile || dailyStats.length === 0) return;
     setGenerating(true);
     try {
       const month = new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
-      await generateMonthlyReport(stats, barberProfile, month);
+      // Map back to DayStat format for the legacy report generator
+      const mappedStats = dailyStats.map(d => ({
+        date: d.date,
+        dayName: new Date(d.date).toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' }),
+        revenue: d.revenue,
+        count: d.completed,
+        cancelled: d.cancelled
+      }));
+      await generateMonthlyReport(mappedStats, barberProfile, month);
     } catch (e) {
       console.error('PDF error:', e);
       alert('PDF generation failed. Please try again.');
@@ -49,118 +98,73 @@ export default function BarberAnalytics() {
             <h1 className="text-2xl font-bold">📊 Analytics</h1>
             <p className="text-text-dim text-xs mt-0.5">{barberProfile?.salonName}</p>
           </div>
-          <div className="flex items-center gap-2">
-            {/* Range selector */}
-            <div className="flex gap-1 p-1 bg-card rounded-xl border border-border">
-              {([7, 14, 30] as const).map(r => (
-                <button key={r} onClick={() => setRange(r)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${range === r ? 'bg-primary text-white shadow' : 'text-text-dim'}`}>
-                  {r}d
-                </button>
-              ))}
-            </div>
-          </div>
+        </div>
+
+        {/* Range Selector */}
+        <div className="flex overflow-x-auto gap-2 mb-6 pb-2 no-scrollbar">
+          {([7, 14, 30, 90] as const).map(r => (
+            <button key={r} onClick={() => setRange(r)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${range === r ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-card border border-border text-text-dim hover:text-text'}`}>
+              {r === 7 ? 'Week' : r === 30 ? 'Month' : r === 90 ? '3 Months' : `${r} Days`}
+            </button>
+          ))}
         </div>
 
         {loading ? (
           <div className="space-y-4">
-            {[1, 2, 3, 4].map(i => <div key={i} className="h-20 rounded-2xl bg-card animate-pulse" />)}
+            {[1, 2, 3, 4].map(i => <div key={i} className="h-32 rounded-3xl bg-card animate-pulse" />)}
           </div>
         ) : (
           <>
             {/* ── KPI Cards ── */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-success/20 to-success/5 border border-success/20">
-                <p className="text-[10px] text-text-dim uppercase tracking-wide mb-1">Revenue</p>
-                <p className="text-2xl font-black text-success">₹{totalRevenue.toLocaleString('en-IN')}</p>
-                <p className="text-[10px] text-text-dim mt-1">{range} days</p>
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="p-4 rounded-3xl bg-card border border-border shadow-sm">
+                <p className="text-[10px] text-text-dim uppercase tracking-wider font-semibold mb-1">Revenue</p>
+                <p className="text-2xl font-black text-primary">₹{totalRevenue.toLocaleString('en-IN')}</p>
+                <p className="text-[10px] text-success mt-1">↑ from previous</p>
               </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20">
-                <p className="text-[10px] text-text-dim uppercase tracking-wide mb-1">Customers</p>
-                <p className="text-2xl font-black gradient-text">{totalCustomers}</p>
+              <div className="p-4 rounded-3xl bg-card border border-border shadow-sm">
+                <p className="text-[10px] text-text-dim uppercase tracking-wider font-semibold mb-1">Customers</p>
+                <p className="text-2xl font-black text-text">{totalCustomers}</p>
                 <p className="text-[10px] text-text-dim mt-1">served</p>
               </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20">
-                <p className="text-[10px] text-text-dim uppercase tracking-wide mb-1">Avg / Day</p>
+              <div className="p-4 rounded-3xl bg-card border border-border shadow-sm">
+                <p className="text-[10px] text-text-dim uppercase tracking-wider font-semibold mb-1">Avg / Day</p>
                 <p className="text-2xl font-black text-gold">₹{avgPerDay.toLocaleString('en-IN')}</p>
                 <p className="text-[10px] text-text-dim mt-1">{activeDays} active days</p>
               </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-danger/20 to-danger/5 border border-danger/20">
-                <p className="text-[10px] text-text-dim uppercase tracking-wide mb-1">Cancelled</p>
-                <p className="text-2xl font-black text-danger">{totalCancelled}</p>
-                <p className="text-[10px] text-text-dim mt-1">tokens</p>
+              <div className="p-4 rounded-3xl bg-card border border-border shadow-sm">
+                <p className="text-[10px] text-text-dim uppercase tracking-wider font-semibold mb-1">Retention</p>
+                <p className="text-2xl font-black text-accent">{retention.retentionRate.toFixed(0)}%</p>
+                <p className="text-[10px] text-text-dim mt-1">return rate</p>
               </div>
             </div>
 
-            {/* ── Best Day ── */}
-            {bestDay && bestDay.revenue > 0 && (
-              <div className="p-4 rounded-2xl bg-gold/5 border border-gold/20 mb-5 flex items-center gap-3">
-                <span className="text-3xl">🏆</span>
-                <div>
-                  <p className="text-xs text-text-dim">Best Day ({range}d)</p>
-                  <p className="font-bold">{bestDay.dayName}</p>
-                  <p className="text-gold font-semibold text-sm">₹{bestDay.revenue.toLocaleString('en-IN')} — {bestDay.count} customers</p>
-                </div>
+            {/* ── Revenue Chart ── */}
+            <div className="p-4 rounded-3xl bg-card border border-border mb-6 shadow-sm">
+              <h3 className="font-bold text-sm mb-4">💰 Revenue Trend</h3>
+              <RevenueChart data={dailyStats.reverse()} />
+            </div>
+
+            {/* ── Bookings Chart ── */}
+            <div className="p-4 rounded-3xl bg-card border border-border mb-6 shadow-sm">
+              <h3 className="font-bold text-sm mb-4">👥 Bookings Over Time</h3>
+              <BookingsChart data={dailyStats} />
+            </div>
+
+            {/* ── Peak Hours Heatmap ── */}
+            <div className="p-4 rounded-3xl bg-card border border-border mb-6 shadow-sm overflow-hidden">
+              <h3 className="font-bold text-sm mb-4">🔥 Peak Hours</h3>
+              <PeakHoursChart data={peakHours} />
+            </div>
+
+            {/* ── Service Popularity ── */}
+            {serviceBreakdown.length > 0 && (
+              <div className="p-4 rounded-3xl bg-card border border-border mb-6 shadow-sm">
+                <h3 className="font-bold text-sm mb-4">✨ Service Popularity</h3>
+                <ServicePopularityChart data={serviceBreakdown} />
               </div>
             )}
-
-            {/* ── Revenue Bar Chart ── */}
-            <div className="p-4 rounded-2xl bg-card border border-border mb-4">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-sm">💰 Revenue Trend</h3>
-                <p className="text-xs text-text-dim">max ₹{maxRevenue.toLocaleString('en-IN')}</p>
-              </div>
-              <div className="flex items-end gap-0.5" style={{ height: 72 }}>
-                {stats.map((d, i) => {
-                  const h    = Math.max(3, (d.revenue / maxRevenue) * 72);
-                  const isToday = d.date === new Date().toISOString().slice(0, 10);
-                  return (
-                    <div key={i} className="flex-1 flex flex-col items-center group relative">
-                      <div
-                        className={`w-full rounded-t-sm transition-all duration-500 ${
-                          isToday ? 'bg-gradient-to-t from-primary to-primary/50' :
-                          d.revenue > 0 ? 'bg-success/50' : 'bg-card-2/40'
-                        }`}
-                        style={{ height: h }}
-                      />
-                      {/* Hover tooltip */}
-                      <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-popover text-[8px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10 pointer-events-none border border-border shadow">
-                        ₹{d.revenue}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex justify-between mt-2">
-                <p className="text-[8px] text-text-dim">{stats[0]?.dayName?.split(',')[0]}</p>
-                <p className="text-[8px] text-primary font-bold">Today</p>
-              </div>
-            </div>
-
-            {/* ── Customer Count Chart ── */}
-            <div className="p-4 rounded-2xl bg-card border border-border mb-5">
-              <h3 className="font-semibold text-sm mb-4">👥 Customer Volume</h3>
-              <div className="flex items-end gap-0.5" style={{ height: 48 }}>
-                {stats.map((d, i) => {
-                  const h = Math.max(3, (d.count / maxCount) * 48);
-                  const isToday = d.date === new Date().toISOString().slice(0, 10);
-                  return (
-                    <div key={i} className="flex-1 flex flex-col items-center group relative">
-                      <div
-                        className={`w-full rounded-t-sm transition-all duration-500 ${
-                          isToday ? 'bg-gradient-to-t from-accent to-accent/50' :
-                          d.count > 0 ? 'bg-primary/30' : 'bg-card-2/30'
-                        }`}
-                        style={{ height: h }}
-                      />
-                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-popover text-[8px] px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10 border border-border shadow">
-                        {d.count}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
 
             {/* ── Download Report PDF Button ── */}
             <button
@@ -184,47 +188,12 @@ export default function BarberAnalytics() {
               <p className="text-center text-text-dim text-xs -mt-3 mb-5">No revenue data to generate report</p>
             )}
 
-            {/* ── Daily Table ── */}
-            <div className="p-4 rounded-2xl bg-card border border-border">
-              <h3 className="font-semibold text-sm mb-3">📋 Daily Breakdown</h3>
-              <div className="space-y-0 max-h-72 overflow-y-auto">
-                {/* Table header */}
-                <div className="flex text-[9px] text-text-dim font-semibold uppercase tracking-wide pb-2 border-b border-border">
-                  <span className="flex-1">Day</span>
-                  <span className="w-14 text-center">Cust.</span>
-                  <span className="w-14 text-center">Cancelled</span>
-                  <span className="w-16 text-right">Revenue</span>
-                </div>
-                {[...stats].reverse().map((d, i) => (
-                  <div key={i} className={`flex items-center py-2 border-b border-border/40 last:border-0 text-sm ${d.count === 0 ? 'opacity-40' : ''}`}>
-                    <div className="flex-1">
-                      <p className="text-xs font-medium">{d.dayName}</p>
-                    </div>
-                    <span className={`w-14 text-center text-xs font-bold ${d.count > 0 ? 'text-success' : 'text-text-dim'}`}>
-                      {d.count || '—'}
-                    </span>
-                    <span className={`w-14 text-center text-xs ${d.cancelled > 0 ? 'text-danger' : 'text-text-dim'}`}>
-                      {d.cancelled || '—'}
-                    </span>
-                    <span className={`w-16 text-right text-xs font-bold ${d.revenue > 0 ? 'text-text' : 'text-text-dim'}`}>
-                      {d.revenue > 0 ? `₹${d.revenue}` : '—'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              {/* Totals row */}
-              <div className="flex items-center py-2.5 border-t-2 border-primary/30 mt-1 text-sm font-bold">
-                <span className="flex-1 text-xs gradient-text">Total</span>
-                <span className="w-14 text-center text-xs text-success">{totalCustomers}</span>
-                <span className="w-14 text-center text-xs text-danger">{totalCancelled}</span>
-                <span className="w-16 text-right text-xs gradient-text">₹{totalRevenue.toLocaleString('en-IN')}</span>
-              </div>
-            </div>
-
             {/* Rating */}
             {barberProfile?.rating ? (
-              <div className="p-4 rounded-2xl bg-gold/5 border border-gold/20 mt-4 flex items-center gap-4">
-                <p className="text-4xl font-black text-gold">{barberProfile.rating}</p>
+              <div className="p-4 rounded-3xl bg-card border border-border shadow-sm mt-4 flex items-center gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-gold/10 flex items-center justify-center">
+                  <p className="text-2xl font-black text-gold">{barberProfile.rating}</p>
+                </div>
                 <div className="flex-1">
                   <p className="font-semibold text-sm">Overall Rating</p>
                   <p className="text-text-dim text-xs">{barberProfile.totalReviews || 0} reviews</p>

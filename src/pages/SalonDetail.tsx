@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp, BarberProfile, ServiceItem, TokenEntry, ReviewEntry } from '../store/AppContext';
 import BackButton from '../components/BackButton';
+import { generateBusinessShareMessage, openWhatsApp } from '../lib/whatsapp';
+import { generateDeepLink } from '../utils/shareHelpers';
+import { useLoyalty } from '../hooks/useLoyalty';
+import ReviewList from '../components/business/ReviewList';
 
 const UPI_ID = import.meta.env.VITE_UPI_ID;
 
@@ -22,6 +26,8 @@ export default function SalonDetail() {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [activeTab, setActiveTab] = useState<'services' | 'reviews'>('services');
   const [advanceDate, setAdvanceDate] = useState('');
+  const [useLoyaltyPoints, setUseLoyaltyPoints] = useState(false);
+  const { points } = useLoyalty();
 
   const today = (() => {
     const d = new Date();
@@ -55,7 +61,18 @@ export default function SalonDetail() {
   };
 
   const totalTime = selected.reduce((a, s) => a + s.avgTime, 0);
-  const totalPrice = selected.reduce((a, s) => a + s.price, 0);
+  const baseTotalPrice = selected.reduce((a, s) => a + s.price, 0);
+
+  // Max redeemable points = 50% of total price
+  const maxRedeemable = Math.min(points, Math.floor(baseTotalPrice / 2));
+  const discountAmount = useLoyaltyPoints ? maxRedeemable : 0;
+  const totalPrice = Math.max(0, baseTotalPrice - discountAmount);
+
+  const handleWhatsAppShare = () => {
+    if (!salon || !salon.phone) return;
+    const msg = generateBusinessShareMessage(salon);
+    openWhatsApp(salon.phone, msg);
+  };
 
   const handleGetToken = async () => {
     if (!salon || !user || selected.length === 0) return;
@@ -106,12 +123,6 @@ export default function SalonDetail() {
   const handlePayUPI = (amount: number) => {
     const upiUrl = `upi://pay?pa=${salon?.upiId || UPI_ID}&pn=${encodeURIComponent(salon?.salonName || 'Salon')}&tn=${encodeURIComponent(`Payment for salon services`)}&am=${amount}&cu=INR`;
     window.location.href = upiUrl;
-  };
-
-  const handleWhatsAppShare = () => {
-    const text = `Check out ${salon?.salonName} on Line Free! 💈\n📍 ${salon?.location || ''}\n🎫 Get your token online and skip the queue!\n\nServices: ${salon?.services?.map(s => `${s.name} (₹${s.price})`).join(', ')}`;
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
   };
 
   const handleSubmitReview = async () => {
@@ -265,14 +276,17 @@ export default function SalonDetail() {
 
           {/* Action Buttons */}
           <div className="flex gap-2 mt-3">
-            <button onClick={() => nav(`/customer/chat/${salon.uid}`)} className="flex-1 p-2.5 rounded-xl bg-primary/15 border border-primary/30 text-center text-sm font-medium text-primary">
+            <button onClick={() => nav(`/customer/chat/${salon.uid}`)} className="flex-1 p-2.5 rounded-xl bg-primary/15 border border-primary/30 text-center text-sm font-medium text-primary flex items-center justify-center gap-1.5 hover:bg-primary/20 transition-colors">
               💬 Message
             </button>
-            <button onClick={handleWhatsAppShare} className="flex-1 p-2.5 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-center text-sm font-medium text-[#25D366]">
-              📲 Share
-            </button>
             {salon.phone && (
-              <a href={`tel:${salon.phone}`} className="flex-1 p-2.5 rounded-xl bg-accent/15 border border-accent/30 text-center text-sm font-medium text-accent">
+              <button onClick={handleWhatsAppShare} className="flex-1 p-2.5 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-center text-sm font-medium text-[#25D366] flex items-center justify-center gap-1.5 hover:bg-[#25D366]/20 transition-colors">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 0C5.405 0 0 5.405 0 12.031c0 2.115.55 4.18 1.59 6l-1.565 5.717 5.842-1.536A11.968 11.968 0 0012.031 24c6.626 0 12.031-5.405 12.031-12.031C24.062 5.405 18.657 0 12.031 0zm0 21.986c-1.783 0-3.528-.48-5.06-1.39l-3.376.887.904-3.292C3.492 16.516 3.014 14.302 3.014 12.03 3.014 7.062 7.062 3.014 12.03 3.014c4.968 0 9.016 4.048 9.016 9.016 0 4.968-4.048 9.016-9.016 9.016zm4.945-6.73c-.27-.135-1.597-.79-1.843-.88-.246-.09-.425-.135-.605.135-.18.27-.695.88-.85.1.06-.156.126-.403-.045-.694-.135-.292-.27-1.597-.835-2.227-1.485-.63-.135-.135-.306-.135-.486 0-.27.18-.742-.427-1.687-.833-2.564-.383-.833-.923-.27-1.057-.27-1.844-.27-.246 0-.648.09-.985.495-.337.405-.985.967-.985 2.362 0 1.395 1.012 2.744 1.147 2.924.135.18 1.99 3.04 4.82 4.262 2.83 1.222 2.83.81 3.348.765.518-.045 1.597-.652 1.822-1.282.225-.63.225-1.17.157-1.282-.068-.112-.248-.18-.518-.315z"/></svg>
+                WhatsApp
+              </button>
+            )}
+            {salon.phone && (
+              <a href={`tel:${salon.phone}`} className="flex-1 p-2.5 rounded-xl bg-accent/15 border border-accent/30 text-center text-sm font-medium text-accent flex items-center justify-center gap-1.5 hover:bg-accent/20 transition-colors">
                 📞 Call
               </a>
             )}
@@ -405,44 +419,12 @@ export default function SalonDetail() {
         {activeTab === 'reviews' && (
           <div>
             <button
-              onClick={() => setShowReview(true)}
-              className="w-full p-3 rounded-xl border border-dashed border-primary/50 text-primary text-sm font-medium mb-4"
+              onClick={() => nav(`/customer/review/${salon.uid}`)}
+              className="w-full p-4 rounded-2xl bg-primary/10 border border-primary/30 text-primary text-sm font-bold mb-6 active:scale-95 transition-transform shadow-inner flex items-center justify-center gap-2"
             >
-              ✍️ Write a Review
+              <span>✍️</span> Write a Review
             </button>
-
-            {reviews.length === 0 ? (
-              <div className="text-center py-10">
-                <span className="text-4xl block mb-3">⭐</span>
-                <p className="text-text-dim">No reviews yet</p>
-                <p className="text-text-dim text-xs mt-1">Be the first to review this salon!</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {reviews.map(review => (
-                  <div key={review.id} className="p-4 rounded-xl bg-card border border-border">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-9 h-9 rounded-full bg-card-2 overflow-hidden flex-shrink-0">
-                        {review.customerPhoto ? (
-                          <img src={review.customerPhoto} className="w-9 h-9 object-cover" alt="" />
-                        ) : (
-                          <div className="w-9 h-9 flex items-center justify-center text-lg">👤</div>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-sm">{review.customerName}</p>
-                        <div className="flex items-center gap-1">
-                          {[1,2,3,4,5].map(s => (
-                            <span key={s} className={`text-xs ${s <= review.rating ? 'text-gold' : 'text-border'}`}>★</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    {review.comment && <p className="text-text-dim text-sm">{review.comment}</p>}
-                  </div>
-                ))}
-              </div>
-            )}
+            <ReviewList reviews={reviews.map(r => ({ ...r, customerAvatar: r.customerPhoto }))} />
           </div>
         )}
       </div>
@@ -450,30 +432,75 @@ export default function SalonDetail() {
       {/* Confirm Modal */}
       {showConfirm && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-6">
-          <div className="bg-card rounded-2xl p-6 w-full max-w-sm animate-scaleIn">
-            <h2 className="text-xl font-bold mb-4">Confirm Token</h2>
-            <p className="text-text-dim mb-2">{salon.salonName}</p>
-            <div className="space-y-1 mb-4">
-              {selected.map(s => (
-                <p key={s.id} className="text-sm">• {s.name} - ₹{s.price} ({s.avgTime}min)</p>
-              ))}
+          <div className="bg-card rounded-2xl p-6 w-full max-w-sm animate-scaleIn flex flex-col max-h-[90vh]">
+            <h2 className="text-xl font-bold mb-4 shrink-0">Confirm Token</h2>
+
+            <div className="overflow-y-auto pr-2 no-scrollbar mb-4">
+              <p className="font-semibold text-text mb-3">{salon.salonName}</p>
+              <div className="space-y-2 mb-4 bg-background p-3 rounded-xl border border-border">
+                {selected.map(s => (
+                  <div key={s.id} className="flex justify-between items-center text-sm">
+                    <span className="text-text-dim">{s.name} <span className="text-[10px] opacity-70">({s.avgTime}m)</span></span>
+                    <span className="font-medium text-text">₹{s.price}</span>
+                  </div>
+                ))}
+              </div>
+
+              {points > 0 && maxRedeemable > 0 && (
+                <div className="p-3 mb-4 rounded-xl bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-bold text-sm text-gold flex items-center gap-1.5">
+                        <span>🎁</span> Loyalty Points
+                      </p>
+                      <p className="text-xs text-text-dim mt-0.5">You have {points} pts available</p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer mt-1">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={useLoyaltyPoints}
+                        onChange={(e) => setUseLoyaltyPoints(e.target.checked)}
+                      />
+                      <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gold"></div>
+                    </label>
+                  </div>
+
+                  {useLoyaltyPoints && (
+                    <div className="mt-3 pt-3 border-t border-gold/20 flex justify-between items-center text-sm">
+                      <span className="text-text-dim">Redeeming</span>
+                      <span className="font-bold text-gold">-{maxRedeemable} pts (₹{maxRedeemable})</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="flex justify-between items-end mb-2 pt-4 border-t border-border">
+                <div>
+                  <p className="text-xs text-text-dim mb-0.5">Est. wait time</p>
+                  <p className="font-semibold">~{totalTime} min</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-text-dim mb-0.5">Total Amount</p>
+                  <p className="text-2xl font-black text-primary">₹{totalPrice}</p>
+                  {useLoyaltyPoints && <p className="text-[10px] text-text-dim line-through">₹{baseTotalPrice}</p>}
+                </div>
+              </div>
             </div>
-            <div className="divider" />
-            <div className="flex justify-between font-bold mb-5">
-              <span>Total: ~{totalTime}min</span>
-              <span className="text-primary">₹{totalPrice}</span>
+
+            <div className="shrink-0 pt-2">
+              <button onClick={handleGetToken} disabled={getting} className="w-full p-4 rounded-2xl bg-gradient-to-r from-primary to-accent text-white font-bold flex justify-center items-center gap-2 mb-3 active:scale-95 transition-transform disabled:opacity-70">
+                {getting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Confirming...
+                  </>
+                ) : 'Confirm & Get Token'}
+              </button>
+              <button onClick={() => setShowConfirm(false)} className="w-full p-4 rounded-2xl bg-card border border-border text-text font-bold active:bg-border transition-colors">
+                {t('btn.cancel')}
+              </button>
             </div>
-            <button onClick={handleGetToken} disabled={getting} className="btn-primary mb-2">
-              {getting ? (
-                <span className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Getting Token...
-                </span>
-              ) : 'Confirm & Get Token'}
-            </button>
-            <button onClick={() => setShowConfirm(false)} className="btn-secondary">
-              {t('btn.cancel')}
-            </button>
           </div>
         </div>
       )}
