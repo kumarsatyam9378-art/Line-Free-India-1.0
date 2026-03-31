@@ -1,0 +1,36 @@
+export interface Booking {
+  id: string;
+  businessId: string;
+  customerId: string;
+  type: 'queue' | 'appointment' | 'reservation';
+  status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
+  tokenNumber: number;
+  queuePosition: number;
+  services: Array<{ id: string; name: string; price: number; duration: number }>;
+  totalAmount: number;
+  discount: number;
+  finalAmount: number;
+  bookedFor: any;
+  bookedAt: any;
+  estimatedStart?: any;
+  estimatedEnd?: any;
+  actualStart?: any;
+  actualEnd?: any;
+  assignedStaffId?: string;
+  assignedStaffName?: string;
+  customerName: string;
+  customerPhone: string;
+  customerPhoto?: string;
+  partySize: number;
+  isEmergency: boolean;
+  isHomeService: boolean;
+  serviceAddress?: string;
+  notes?: string;
+  ownerNotes?: string;
+  paymentStatus: 'pending' | 'paid' | 'refunded';
+  paymentMethod?: 'cash' | 'upi' | 'card';
+  pointsEarned?: number;
+  pointsRedeemed?: number;
+  cancelReason?: string;
+  cancelledBy?: 'customer' | 'owner';
+}
