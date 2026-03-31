@@ -1,5 +1,5 @@
 import { useApp } from '../store/AppContext';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 import BackButton from '../components/BackButton';
 
 const UPI_ID = 'kumarsatyam9378@okhdfcbank';

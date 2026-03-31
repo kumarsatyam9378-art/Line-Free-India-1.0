@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp, ServiceItem } from '../store/AppContext';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 import BackButton from '../components/BackButton';
 
 export default function BarberProfile() {

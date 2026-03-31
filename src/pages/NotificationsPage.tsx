@@ -1,7 +1,7 @@
 import { useApp } from '../store/AppContext';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '../components/BackButton';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 
 const NOTIF_ICONS: Record<string, string> = {
   token_ready: '🎫', token_called: '🔔', salon_open: '💈', review: '⭐', general: '📢',

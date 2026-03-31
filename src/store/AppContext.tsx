@@ -11,145 +11,54 @@ import {
 import { uploadToCloudinary } from '../utils/cloudinary';
 
 export type Lang = 'en' | 'hi';
-export type Role = 'customer' | 'barber' | 'business';
+export type Role = 'customer' | 'barber';
 
-export type BusinessCategory =
-  | 'men_salon' | 'beauty_parlour' | 'unisex_salon' | 'clinic' | 'hospital'
-  | 'restaurant' | 'cafe' | 'gym' | 'spa' | 'pet_care' | 'coaching'
-  | 'law_firm' | 'photography' | 'repair_shop' | 'laundry' | 'event_planner' | 'other' | string;
+export interface ServiceItem { id: string; name: string; price: number; avgTime: number; }
 
-export interface Terminology {
-  provider: string;
-  action: string;
-  noun: string;
-  item: string;
-  unit: string;
+export interface ReviewEntry {
+  id?: string; salonId: string; customerId: string; customerName: string;
+  customerPhoto: string; rating: number; comment: string; createdAt: any;
 }
 
-export interface ServiceItem { id: string; name: string; price: number; avgTime: number; priceType?: 'fixed' | 'variable'; }
+export interface NotificationEntry {
+  id?: string; userId: string; title: string; body: string;
+  type: 'token_ready' | 'token_called' | 'salon_open' | 'review' | 'general';
+  data?: any; read: boolean; createdAt: number;
+}
 
-export interface StaffMember { id?: string; name?: string; role?: string; phone?: string; photoURL?: string; revenue?: number; }
-export interface TaxSettings { name?: string; rate?: number; isInclusive?: boolean; type?: string; }
-export interface PricingPlan { id?: string; name?: string; price?: number; durationDays?: number; features?: string[]; }
-export interface MenuItem { id?: string; name?: string; price?: number; category?: string; isVeg?: boolean; photo?: string; available?: boolean; }
-export interface TableItem { id?: string; seats?: number; x?: number; y?: number; isReserved?: boolean; label?: string; }
-export interface Story { url?: string; expiresAt?: number; businessId?: string; }
-export interface PortfolioItem { id?: string; imageURL?: string; category?: string; description?: string; tags?: string[]; }
-export interface EventBooking { id?: string; clientName?: string; date?: string; type?: string; venue?: string; budget?: number; status?: string; }
-export interface ServicePackage { id?: string; name?: string; description?: string; includedServiceIds?: string[]; price?: number; }
-export interface HospitalDepartment { id?: string; name?: string; doctorIds?: string[]; }
-export interface DynamicPricingRule { id?: string; }
-export interface WaitlistEntry { id?: string; }
-export interface PatientRecord { id?: string; }
-export interface DoctorProfile { id?: string; }
-export interface UserMembership { id?: string; }
-export interface CoachingBatch { id?: string; }
-export interface SpaRoom { id?: string; }
-export interface TailorOrder { id?: string; }
-export interface RepairEstimate { id?: string; }
-export interface StudentProfile { id?: string; }
-export interface AttendanceRecord { id?: string; }
-export interface GroupClass { id?: string; }
-export interface PetProfile { id?: string; name?: string; species?: string; breed?: string; dob?: string; photoURL?: string; }
-export interface InventoryItem { id?: string; name?: string; quantity?: number; }
-
-export interface BusinessProfile {
-  uid: string; name: string; businessName: string; businessType: BusinessCategory;
-  location: string; phone: string;
-  photoURL: string; bannerImageURL: string; services: ServiceItem[];
+export interface BarberProfile {
+  uid: string; name: string; salonName: string; location: string; phone: string;
+  photoURL: string; salonImageURL: string; services: ServiceItem[];
   isOpen: boolean; isBreak: boolean; isStopped: boolean;
   currentToken: number; totalTokensToday: number; breakStartTime: number | null;
   createdAt: any; rating?: number; totalReviews?: number; totalEarnings?: number;
   subscription?: string | null; subscriptionExpiry?: number | null;
-  upiId?: string; businessHours?: string; bio?: string;
-  instagram?: string; website?: string;
-  referralCode?: string; totalCustomersAllTime?: number;
-  lat?: number; lng?: number; fcmToken?: string; queueDelayMinutes?: number;
-  staffMembers?: StaffMember[];
-  taxSettings?: TaxSettings[];
-  blockedDates?: string[];
-  products?: { id: string; name: string; price: number; stock?: number }[];
-  promoCodes?: { code: string; type: 'percentage' | 'flat'; value: number; active: boolean }[];
-  maxCapacity?: number;
-  franchiseId?: string;
-  stories?: Story[];
-  menuItems?: MenuItem[];
-  tableLayout?: TableItem[];
-  memberships?: PricingPlan[];
-  gymMembers?: UserMembership[];
-  coachingBatches?: CoachingBatch[];
-  doctors?: DoctorProfile[];
-  patientRecords?: PatientRecord[];
-  inventory?: InventoryItem[];
-  pricingRules?: DynamicPricingRule[];
-  waitlist?: WaitlistEntry[];
-  spaRooms?: SpaRoom[];
-  tailorOrders?: TailorOrder[];
-  repairEstimates?: RepairEstimate[];
-  portfolioItems?: PortfolioItem[];
-  eventBookings?: EventBooking[];
-  departments?: HospitalDepartment[];
-  packages?: ServicePackage[];
-  students?: StudentProfile[];
-  attendance?: AttendanceRecord[];
-  groupClasses?: GroupClass[];
-  announcement?: string;
-  salonName?: string; // legacy compat
-  salonImageURL?: string; // legacy compat
+  upiId?: string; businessHours?: string; bio?: string; instagram?: string;
+  referralCode?: string; totalCustomersAllTime?: number; lat?: number; lng?: number;
 }
-
-export type BarberProfile = BusinessProfile;
 
 export interface CustomerProfile {
   uid: string; name: string; phone: string; location: string; photoURL: string;
   favoriteSalons: string[]; subscription: string | null; createdAt: any;
   referralCode?: string; totalVisits?: number; referredBy?: string;
-  fcmToken?: string; totalNoShows?: number; lat?: number; lng?: number;
-  activeMemberships?: UserMembership[];
-  pets?: PetProfile[];
-  loyaltyPoints?: number; currentStreak?: number;
 }
 
 export interface TokenEntry {
-  id?: string; salonId: string; salonName: string;
-  customerId: string; customerName: string; customerPhone: string;
-  tokenNumber: number; selectedServices: ServiceItem[];
-  totalTime: number; totalPrice: number; estimatedWaitMinutes: number;
-  status: 'waiting' | 'serving' | 'done' | 'cancelled' | 'no-show';
-  createdAt: any; date: string; isAdvanceBooking: boolean; advanceDate?: string;
-  rating?: number; assignedStaffId?: string;
-  isTatkal?: boolean; tatkalFee?: number;
-  groupSize?: number; promoCode?: string; discountAmount?: number;
-  specialInstructions?: string; tipAmount?: number;
-  repairStatus?: 'Received' | 'Diagnosed' | 'Parts Ordered' | 'Ready';
-  caseStatus?: 'Consultation' | 'Filing' | 'Hearing' | 'Closed';
-  photographyStatus?: 'Scheduled' | 'Shooting' | 'Editing' | 'Delivered';
-  deliveryLink?: string;
-  prescription?: any;
-  assignedRoomId?: string;
-  petHealthLog?: any;
-}
-
-export interface ReviewEntry {
-  id?: string; salonId: string; customerId: string; customerName: string;
-  customerPhoto: string; rating: number; comment: string; createdAt: any;
-  images?: string[]; staffId?: string; staffName?: string;
-}
-
-export interface NotificationEntry {
-  id?: string; userId: string; title: string; body: string;
-  type: 'token_ready' | 'token_called' | 'salon_open' | 'review' | 'general' | string;
-  data?: any; read: boolean; createdAt: number;
+  id?: string; salonId: string; salonName: string; customerId: string;
+  customerName: string; customerPhone: string; tokenNumber: number;
+  selectedServices: ServiceItem[]; totalTime: number; totalPrice: number;
+  estimatedWaitMinutes: number; status: 'waiting' | 'serving' | 'done' | 'cancelled';
+  createdAt: any; date: string; isAdvanceBooking: boolean; advanceDate?: string; rating?: number;
 }
 
 export interface MessageEntry {
   id?: string; salonId: string; salonName: string;
   senderId: string; senderName: string; senderPhoto: string;
-  senderRole: 'customer' | 'barber' | 'business';
+  senderRole: 'customer' | 'barber';
+  // legacy compat
   customerId?: string; customerName?: string; customerPhoto?: string;
   message: string; createdAt: any; read: boolean;
 }
-
 
 export interface DayStat { date: string; dayName: string; count: number; revenue: number; cancelled: number; }
 

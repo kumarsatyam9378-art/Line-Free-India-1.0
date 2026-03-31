@@ -1,134 +1,111 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
-import { db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
 import BackButton from '../components/BackButton';
+import Button from '../components/ui/Button';
 
 export default function BarberAuth() {
-  const { signInWithGoogle, user, setRole, t } = useApp();
+  const { signInWithGoogle, getSalonById, t } = useApp();
   const nav = useNavigate();
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleGoogle = async () => {
+  const login = async () => {
+    setLoading(true);
     setError('');
-    setLoading(true);
     try {
-      const result = await signInWithGoogle();
-      setRole('barber');
-      // ✅ Check if barber already has a profile → go home, else → setup
-      const uid = (result as any)?.user?.uid || user?.uid;
-      if (uid) {
-        try {
-          const snap = await getDoc(doc(db, 'barbers', uid));
-          if (snap.exists()) {
-            nav('/barber/home', { replace: true });
-            return;
-          }
-        } catch {}
+      const res = await signInWithGoogle();
+      if (res?.user) {
+        const salon = await getSalonById(res.user.uid);
+        if (salon) {
+          nav('/barber/home', { replace: true });
+        } else {
+          nav('/barber/setup', { replace: true });
+        }
       }
-      nav('/barber/setup', { replace: true });
     } catch (err: any) {
-      console.error('Auth error:', err);
-      if (err?.code === 'auth/popup-closed-by-user') {
-        setError('Popup closed. Please try again.');
-      } else if (err?.code === 'auth/popup-blocked') {
-        setError('Popup blocked. Please allow popups for this site.');
-      } else {
-        setError(err?.message || 'Login failed. Please try again.');
-      }
+      setError(err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
   };
-
-  const handleContinueAsExisting = async () => {
-    if (!user) return;
-    setLoading(true);
-    try {
-      const snap = await getDoc(doc(db, 'barbers', user.uid));
-      if (snap.exists()) {
-        nav('/barber/home', { replace: true });
-      } else {
-        nav('/barber/setup', { replace: true });
-      }
-    } catch {
-      nav('/barber/setup', { replace: true });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (user) {
-    return (
-      <div className="min-h-screen flex flex-col p-6 animate-fadeIn">
-        <BackButton to="/role" />
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <div className="w-20 h-20 rounded-full bg-card-2 flex items-center justify-center mb-4 ring-2 ring-primary/30 overflow-hidden">
-            {user.photoURL ? (
-              <img src={user.photoURL} className="w-20 h-20 rounded-full" alt="" />
-            ) : (
-              <span className="text-4xl">💈</span>
-            )}
-          </div>
-          <p className="text-lg font-semibold mb-1">{user.displayName || 'Barber'}</p>
-          <p className="text-text-dim text-sm mb-8">{user.email}</p>
-          <button
-            onClick={handleContinueAsExisting}
-            disabled={loading}
-            className="btn-primary flex items-center gap-2"
-          >
-            {loading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            ) : null}
-            {loading ? 'Loading...' : `${t('btn.continue')} →`}
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="min-h-screen flex flex-col p-6 animate-fadeIn">
-      <BackButton to="/role" />
+    <div className="min-h-[100dvh] flex flex-col p-6 animate-fadeIn royal-gradient bg-surface text-on-surface relative overflow-hidden">
       
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mb-6 shadow-xl">
-          <span className="text-5xl">💈</span>
-        </div>
-        <h1 className="text-2xl font-bold mb-2">{t('role.barber')}</h1>
-        <p className="text-text-dim mb-10">Manage your salon & queue online</p>
+      {/* Background Orbs */}
+      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-secondary opacity-20 blur-[100px] pointer-events-none rounded-full" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-primary opacity-10 blur-[100px] pointer-events-none rounded-full" />
 
-        {error && (
-          <div className="w-full max-w-xs mb-4 p-3 rounded-xl bg-danger/20 border border-danger/30 text-sm text-center">
-            {error}
-          </div>
-        )}
+      <BackButton to="/role" />
 
-        <div className="w-full max-w-xs space-y-4">
-          <button
-            onClick={handleGoogle}
-            disabled={loading}
-            className="w-full p-4 rounded-2xl bg-white text-gray-800 font-semibold flex items-center justify-center gap-3 hover:bg-gray-100 transition-all disabled:opacity-50 shadow-md"
-          >
-            {loading ? (
-              <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <svg width="20" height="20" viewBox="0 0 48 48">
-                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-              </svg>
-            )}
-            {loading ? 'Logging in...' : t('auth.google')}
-          </button>
+      <div className="flex-1 flex flex-col items-center justify-center text-center z-10 max-w-sm mx-auto w-full">
+        <div className="w-24 h-24 rounded-[2rem] glass-card border border-white/10 flex items-center justify-center mb-8 shadow-2xl relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 to-primary/10 opacity-50" />
+          <span className="material-symbols-outlined text-5xl text-secondary z-10" style={{ fontVariationSettings: "'FILL' 1" }}>
+            storefront
+          </span>
         </div>
 
-        <p className="text-text-dim text-xs mt-8 text-center max-w-xs">
-          30-day free trial included. No credit card required.
+        <h1 className="text-4xl font-black font-headline tracking-tighter text-white mb-2 uppercase leading-none">
+          {t('role.barber') || 'Business'} <span className="text-secondary italic">Owner</span>
+        </h1>
+        <p className="text-on-surface-variant text-sm tracking-wide font-label uppercase mb-12">
+          Manage your business digitally
         </p>
+
+        <div className="space-y-4 w-full">
+          <div className="glass-card p-4 rounded-2xl flex items-center gap-4 text-left border-white/5">
+            <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+              <span className="material-symbols-outlined">queue</span>
+            </div>
+            <div>
+              <p className="font-bold text-sm text-white">Smart Queue System</p>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Stop the waiting room chaos</p>
+            </div>
+          </div>
+
+          <div className="glass-card p-4 rounded-2xl flex items-center gap-4 text-left border-white/5">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+              <span className="material-symbols-outlined">insights</span>
+            </div>
+            <div>
+              <p className="font-bold text-sm text-white">Deep Analytics</p>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Understand your growth</p>
+            </div>
+          </div>
+
+          <div className="glass-card p-4 rounded-2xl flex items-center gap-4 text-left border-white/5">
+            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+              <span className="material-symbols-outlined">groups</span>
+            </div>
+            <div>
+              <p className="font-bold text-sm text-white">Team Management</p>
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Manage staff easily</p>
+            </div>
+          </div>
+        </div>
+
+        {error && <p className="text-danger text-sm mt-8 font-bold">{error}</p>}
+
+        <div className="mt-12 w-full">
+          <Button onClick={login} loading={loading} className="w-full h-14 bg-white text-bg-surface hover:bg-white/90 shadow-[0_8px_32px_rgba(255,255,255,0.15)] flex gap-3 text-lg items-center justify-center border-none">
+            <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+              <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
+                <path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/>
+                <path fill="#34A853" d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"/>
+                <path fill="#FBBC05" d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"/>
+                <path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 41.939 C -8.804 39.869 -11.514 38.739 -14.754 38.739 C -19.444 38.739 -23.494 41.439 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"/>
+              </g>
+            </svg>
+            <span className="font-bold text-bg-primary tracking-tight">{t('auth.google') || 'Continue with Google'}</span>
+          </Button>
+
+          <p className="mt-8 text-[10px] text-on-surface-variant font-bold uppercase tracking-widest leading-relaxed">
+            By continuing, you agree to our<br/>
+            <a href="#" className="text-secondary underline decoration-secondary/50 underline-offset-2">Terms of Service</a> & <a href="#" className="text-secondary underline decoration-secondary/50 underline-offset-2">Privacy Policy</a>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useApp, TokenEntry } from '../store/AppContext';
 import { db } from '../firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 
 type EnrichedToken = TokenEntry & {
   liveQueuePos: number;

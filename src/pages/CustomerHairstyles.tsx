@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useApp } from '../store/AppContext';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 import BackButton from '../components/BackButton';
 
 const categories = [

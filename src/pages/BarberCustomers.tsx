@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApp, TokenEntry } from '../store/AppContext';
 import { db } from '../firebase';
 import { collection, query, where, onSnapshot, updateDoc, doc } from 'firebase/firestore';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 
 export default function BarberCustomers() {
   const { user, nextCustomer, getTodayEarnings, barberProfile, t } = useApp();

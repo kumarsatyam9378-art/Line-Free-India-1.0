@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApp, TokenEntry } from '../store/AppContext';
 import { useNavigate } from 'react-router-dom';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 import BackButton from '../components/BackButton';
 
 export default function CustomerHistory() {

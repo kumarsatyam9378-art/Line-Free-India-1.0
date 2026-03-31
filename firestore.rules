@@ -1,77 +1,57 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isAuth() { return request.auth != null; }
-    function isOwner(uid) { return isAuth() && request.auth.uid == uid; }
 
-    // Business Profiles - collection is named "barbers" currently based on old app, we will use "barbers"
-    // to match what the app does, or "salons" for backward compat. Let's stick with "barbers".
-    // Wait, the prompt states: Collection is named "salons" for backward compat. Let's update it to "salons".
-    // I will use salons.
-    match /salons/{salonId} {
+    // BARBERS — public read, owner write
+    match /barbers/{barberId} {
       allow read: if true;
-      allow create: if isOwner(salonId);
-      allow update, delete: if isOwner(salonId);
+      allow create, update: if request.auth != null && request.auth.uid == barberId;
+      allow delete: if request.auth != null && request.auth.uid == barberId;
     }
 
-    match /barbers/{salonId} {
-      allow read: if true;
-      allow create: if isOwner(salonId);
-      allow update, delete: if isOwner(salonId);
+    // CUSTOMERS — private
+    match /customers/{customerId} {
+      allow read, write: if request.auth != null && request.auth.uid == customerId;
     }
 
-    // Queue tokens / bookings
+    // TOKENS — barber sees salon tokens; customer sees own tokens
     match /tokens/{tokenId} {
-      allow read: if isAuth();
-      allow create: if isAuth();
-      allow update, delete: if isAuth() && (
-        resource.data.salonId == request.auth.uid ||
-        resource.data.customerId == request.auth.uid
+      allow read: if request.auth != null && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.salonId == request.auth.uid
       );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.salonId == request.auth.uid
+      );
+      allow delete: if false;
     }
 
-    // Reviews
+    // REVIEWS — public read, auth write
     match /reviews/{reviewId} {
       allow read: if true;
-      allow create: if isAuth();
-      allow update, delete: if isAuth() && resource.data.customerId == request.auth.uid;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
     }
 
-    // Notifications
+    // MESSAGES
+    match /messages/{msgId} {
+      allow read: if request.auth != null && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.salonId == request.auth.uid
+      );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && resource.data.salonId == request.auth.uid;
+      allow delete: if false;
+    }
+
+    // NOTIFICATIONS — user sees own only
     match /notifications/{notifId} {
-      allow read, update: if isAuth() && resource.data.userId == request.auth.uid;
-      allow create: if isAuth();
-      allow delete: if isAuth() && resource.data.userId == request.auth.uid;
-    }
-
-    // Chat Messages
-    match /messages/{messageId} {
-      allow read: if isAuth();
-      allow create: if isAuth();
-      allow update, delete: if isAuth() && resource.data.senderId == request.auth.uid;
-    }
-
-    // Customer Profiles
-    match /customers/{customerId} {
-      allow read: if true;
-      allow create: if isOwner(customerId);
-      allow update, delete: if isOwner(customerId);
-    }
-
-    // Business sub-collections (inventory, jobs, etc.)
-    match /salons/{salonId}/{subcollection}/{docId} {
-      allow read: if isAuth();
-      allow write: if isOwner(salonId);
-    }
-
-    match /barbers/{salonId}/{subcollection}/{docId} {
-      allow read: if isAuth();
-      allow write: if isOwner(salonId);
-    }
-
-    // Deny everything else
-    match /{document=**} {
-      allow read, write: if false;
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
   }
 }

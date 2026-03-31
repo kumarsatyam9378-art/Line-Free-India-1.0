@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useApp, MessageEntry } from '../store/AppContext';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 
 interface CustomerThread {
   customerId: string;

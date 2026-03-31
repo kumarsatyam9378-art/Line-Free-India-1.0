@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApp, DayStat } from '../store/AppContext';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 import BackButton from '../components/BackButton';
 import { generateMonthlyReport } from '../utils/generateReport';
 
