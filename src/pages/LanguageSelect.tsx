@@ -1,103 +1,134 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp, Lang } from '../store/AppContext';
+import { motion } from 'framer-motion';
+
+const languages = [
+  { id: 'en', name: 'English', script: 'English', emoji: '🇬🇧', flagBg: 'from-blue-500/20 to-blue-600/20', flagBorder: 'border-blue-500/30' },
+  { id: 'hi', name: 'Hindi', script: 'हिंदी', emoji: '🇮🇳', flagBg: 'from-orange-500/20 to-green-600/20', flagBorder: 'border-orange-500/30' },
+  { id: 'gu', name: 'Gujarati', script: 'ગુજરાતી', emoji: '🇮🇳', flagBg: 'from-yellow-500/20 to-orange-600/20', flagBorder: 'border-yellow-500/30' },
+  { id: 'ta', name: 'Tamil', script: 'தமிழ்', emoji: '🇮🇳', flagBg: 'from-red-500/20 to-orange-600/20', flagBorder: 'border-red-500/30' },
+  { id: 'mr', name: 'Marathi', script: 'मराठी', emoji: '🇮🇳', flagBg: 'from-orange-500/20 to-orange-600/20', flagBorder: 'border-orange-500/30' },
+  { id: 'bn', name: 'Bengali', script: 'বাংলা', emoji: '🇮🇳', flagBg: 'from-green-500/20 to-red-600/20', flagBorder: 'border-green-500/30' },
+];
 
 export default function LanguageSelect() {
-  const { setLang } = useApp();
+  const { lang, setLang, t } = useApp();
   const nav = useNavigate();
-  const [show, setShow] = useState(false);
-  const [splash, setSplash] = useState(true);
+  const [selectedLang, setSelectedLang] = useState<Lang>(lang as Lang || 'en');
 
-  useEffect(() => {
-    setTimeout(() => setSplash(false), 2000);
-    setTimeout(() => setShow(true), 2200);
-  }, []);
-
-  const select = (l: Lang) => {
-    setLang(l);
+  const handleContinue = () => {
+    setLang(selectedLang);
     nav('/role');
   };
 
-  if (splash) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-bg via-bg to-primary/5">
-        <div className="text-center animate-fadeIn">
-          <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-6 shadow-2xl animate-pulse-glow">
-            <span className="text-6xl">✂️</span>
-          </div>
-          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary via-accent to-gold bg-clip-text text-transparent">
-            Line Free
-          </h1>
-          <p className="text-text-dim text-sm mt-2 animate-float">Skip the queue, save your time</p>
-          <div className="mt-8 flex gap-1.5 justify-center">
-            <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0s' }} />
-            <div className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: '0.1s' }} />
-            <div className="w-2 h-2 rounded-full bg-gold animate-bounce" style={{ animationDelay: '0.2s' }} />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6">
-      <div className={`transition-all duration-500 w-full max-w-sm ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-        {/* Logo */}
-        <div className="mb-10 text-center">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-5xl">✂️</span>
+    <div className="min-h-screen flex flex-col bg-bg overflow-hidden relative p-6">
+      {/* Dynamic Background Mesh */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-20%] right-[-20%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/10 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="flex-1 flex flex-col max-w-md w-full mx-auto z-10 pt-10">
+
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-10"
+        >
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4 shadow-xl shadow-primary/20">
+            <span className="text-4xl">✂️</span>
           </div>
           <h1 className="text-3xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Line Free
+            {t('selectLanguage', selectedLang)}
           </h1>
-          <p className="text-text-dim text-sm mt-1">No more waiting in line</p>
-        </div>
+          <p className="text-text-dim text-sm mt-2">
+            {t('chooseLanguage', selectedLang)}
+          </p>
+        </motion.div>
 
-        <h2 className="text-center text-lg font-semibold mb-6">Select Language / भाषा चुनें</h2>
+        {/* Language Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-2 gap-4 mb-8"
+        >
+          {languages.map((l) => {
+            const isSelected = selectedLang === l.id;
+            return (
+              <motion.button
+                key={l.id}
+                variants={itemVariants}
+                onClick={() => setSelectedLang(l.id as Lang)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`
+                  relative flex flex-col items-center justify-center p-6 rounded-3xl transition-all duration-300
+                  ${isSelected
+                    ? 'bg-gradient-to-br from-primary/20 to-accent/10 border-2 border-primary shadow-lg shadow-primary/20'
+                    : 'bg-card border-2 border-border hover:border-primary/50'
+                  }
+                `}
+              >
+                {/* Active Indicator */}
+                {isSelected && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute top-3 right-3 w-5 h-5 bg-primary rounded-full flex items-center justify-center shadow-md"
+                  >
+                    <span className="text-white text-xs">✓</span>
+                  </motion.div>
+                )}
 
-        <div className="space-y-3">
-          <button
-            onClick={() => select('en')}
-            className="w-full p-5 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all flex items-center gap-4 active:scale-[0.98] group"
+                <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${l.flagBg} border ${l.flagBorder} flex items-center justify-center mb-4 text-3xl shadow-inner`}>
+                  {l.emoji}
+                </div>
+                <div className="text-center">
+                  <span className={`block font-bold text-lg mb-1 ${isSelected ? 'text-primary' : 'text-text'}`}>
+                    {l.script}
+                  </span>
+                  <span className={`block text-xs font-medium ${isSelected ? 'text-text' : 'text-text-dim'}`}>
+                    {l.name}
+                  </span>
+                </div>
+              </motion.button>
+            );
+          })}
+        </motion.div>
+
+        <div className="mt-auto pb-6">
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            onClick={handleContinue}
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-accent text-white font-bold text-lg shadow-xl shadow-primary/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 group"
           >
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <span className="text-3xl">🇬🇧</span>
-            </div>
-            <div className="text-left flex-1">
-              <p className="font-semibold text-lg">English</p>
-              <p className="text-text-dim text-sm">Continue in English</p>
-            </div>
-            <span className="text-text-dim">→</span>
-          </button>
-
-          <button
-            onClick={() => select('hi')}
-            className="w-full p-5 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all flex items-center gap-4 active:scale-[0.98] group"
-          >
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <span className="text-3xl">🇮🇳</span>
-            </div>
-            <div className="text-left flex-1">
-              <p className="font-semibold text-lg">हिंदी</p>
-              <p className="text-text-dim text-sm">हिंदी में जारी रखें</p>
-            </div>
-            <span className="text-text-dim">→</span>
-          </button>
+            {t('continue', selectedLang)}
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </motion.button>
         </div>
 
-        {/* Feature highlights */}
-        <div className="mt-8 grid grid-cols-3 gap-2">
-          {[
-            { icon: '⚡', label: 'Instant Token' },
-            { icon: '📱', label: 'UPI Payment' },
-            { icon: '⭐', label: 'Top Salons' },
-          ].map((f, i) => (
-            <div key={i} className="p-2.5 rounded-xl bg-card-2/50 text-center">
-              <span className="text-lg block">{f.icon}</span>
-              <p className="text-[9px] text-text-dim mt-0.5 font-medium">{f.label}</p>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
