@@ -23,6 +23,10 @@ import BarberAnalytics from './pages/BarberAnalytics';
 import CustomerChat from './pages/CustomerChat';
 import BarberMessages from './pages/BarberMessages';
 import NotificationsPage from './pages/NotificationsPage';
+import OwnerInventory from './pages/OwnerInventory';
+import OwnerCoupons from './pages/OwnerCoupons';
+import OwnerReports from './pages/OwnerReports';
+import DigitalCard from './pages/owner/DigitalCard';
 
 function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requiredRole: 'customer' | 'barber' }) {
   const { user, role, loading } = useApp();
@@ -90,6 +94,12 @@ function AppRoutes() {
       <Route path="/barber/analytics" element={<AuthGuard requiredRole="barber"><BarberAnalytics /></AuthGuard>} />
       <Route path="/barber/messages" element={<AuthGuard requiredRole="barber"><BarberMessages /></AuthGuard>} />
       <Route path="/barber/notifications" element={<AuthGuard requiredRole="barber"><NotificationsPage /></AuthGuard>} />
+      <Route path="/barber/inventory" element={<AuthGuard requiredRole="barber"><OwnerInventory /></AuthGuard>} />
+      <Route path="/barber/coupons" element={<AuthGuard requiredRole="barber"><OwnerCoupons /></AuthGuard>} />
+      <Route path="/barber/reports" element={<AuthGuard requiredRole="barber"><OwnerReports /></AuthGuard>} />
+
+      {/* Public Routes */}
+      <Route path="/b/:businessId" element={<DigitalCard />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

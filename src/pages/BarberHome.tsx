@@ -216,6 +216,26 @@ export default function BarberHome() {
             <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Expenses</span>
           </button>
 
+          <button onClick={() => nav('/barber/inventory')} className="flex flex-col items-center gap-1 group">
+            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">📦</div>
+            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Inventory</span>
+          </button>
+
+          <button onClick={() => nav('/barber/coupons')} className="flex flex-col items-center gap-1 group">
+            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">🎫</div>
+            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Coupons</span>
+          </button>
+
+          <button onClick={() => nav('/barber/reports')} className="flex flex-col items-center gap-1 group">
+            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">📄</div>
+            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Reports</span>
+          </button>
+
+          <button onClick={() => window.open(`/b/${barberProfile.uid}`, '_blank')} className="flex flex-col items-center gap-1 group">
+            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">🌐</div>
+            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Biz Card</span>
+          </button>
+
         </div>
       </div>
 

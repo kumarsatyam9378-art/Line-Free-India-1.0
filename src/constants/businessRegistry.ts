@@ -620,7 +620,14 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
       "unit": "min",
       "customer": "Customer"
     },
-    "defaultServices": [],
+    "defaultServices": [
+      {
+        "id": "1",
+        "name": "Combo Meal",
+        "price": 150,
+        "avgTime": 30
+      }
+    ],
     "defaultWorkingHours": {
       "open": "09:00",
       "close": "20:00"

@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp, BarberProfile, ServiceItem, TokenEntry, ReviewEntry } from '../store/AppContext';
+import { db } from '../firebase';
+import { collection, query, where, getDocs, updateDoc, doc, increment } from 'firebase/firestore';
 import BackButton from '../components/BackButton';
+import { Coupon } from './OwnerCoupons';
 
 const UPI_ID = import.meta.env.VITE_UPI_ID;
 
@@ -22,6 +25,12 @@ export default function SalonDetail() {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [activeTab, setActiveTab] = useState<'services' | 'reviews'>('services');
   const [advanceDate, setAdvanceDate] = useState('');
+
+  // Promo code state
+  const [promoCodeInput, setPromoCodeInput] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<Coupon | null>(null);
+  const [promoError, setPromoError] = useState('');
+  const [applyingPromo, setApplyingPromo] = useState(false);
 
   const today = (() => {
     const d = new Date();
@@ -55,7 +64,64 @@ export default function SalonDetail() {
   };
 
   const totalTime = selected.reduce((a, s) => a + s.avgTime, 0);
-  const totalPrice = selected.reduce((a, s) => a + s.price, 0);
+  const subtotal = selected.reduce((a, s) => a + s.price, 0);
+
+  const discountAmount = appliedPromo
+    ? (appliedPromo.discountType === 'percentage'
+      ? Math.round(subtotal * (appliedPromo.discountValue / 100))
+      : appliedPromo.discountValue)
+    : 0;
+
+  const totalPrice = Math.max(0, subtotal - discountAmount);
+
+  const handleApplyPromo = async () => {
+    if (!promoCodeInput.trim() || !salon) return;
+    setApplyingPromo(true);
+    setPromoError('');
+    try {
+      const q = query(
+        collection(db, `businesses/${salon.uid}/coupons`),
+        where('code', '==', promoCodeInput.trim().toUpperCase())
+      );
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        setPromoError('Invalid promo code');
+        setAppliedPromo(null);
+        return;
+      }
+
+      const coupon = { id: snap.docs[0].id, ...snap.docs[0].data() } as Coupon;
+
+      if (!coupon.active) {
+        setPromoError('This promo code is inactive');
+        return;
+      }
+
+      if (coupon.expiryDate && new Date(coupon.expiryDate).getTime() < new Date().getTime()) {
+        setPromoError('This promo code has expired');
+        return;
+      }
+
+      if (coupon.maxUses > 0 && coupon.currentUses >= coupon.maxUses) {
+        setPromoError('This promo code usage limit has been reached');
+        return;
+      }
+
+      setAppliedPromo(coupon);
+      setPromoCodeInput('');
+    } catch (e) {
+      console.error("Error applying promo:", e);
+      setPromoError('Error applying promo code');
+    } finally {
+      setApplyingPromo(false);
+    }
+  };
+
+  const removePromo = () => {
+    setAppliedPromo(null);
+    setPromoError('');
+  };
 
   const handleGetToken = async () => {
     if (!salon || !user || selected.length === 0) return;
@@ -93,10 +159,21 @@ export default function SalonDetail() {
       date: bookingDate,
       isAdvanceBooking: isAdvance,
       advanceDate: isAdvance ? advanceDate : undefined,
+      promoCode: appliedPromo?.code,
+      discountAmount: discountAmount,
     };
 
     const tokenId = await getToken(token);
     if (tokenId) {
+      if (appliedPromo?.id) {
+        try {
+          await updateDoc(doc(db, `businesses/${salon.uid}/coupons`, appliedPromo.id), {
+            currentUses: increment(1)
+          });
+        } catch (e) {
+          console.error("Failed to increment coupon usage:", e);
+        }
+      }
       setTokenResult({ tokenNumber: newTokenNumber, waitTime: waitMinutes });
     }
     setGetting(false);
@@ -351,10 +428,53 @@ export default function SalonDetail() {
                   <span className="text-sm">~{totalTime} {t('min')}</span>
                 </div>
                 <div className="divider" />
-                <div className="flex justify-between font-bold text-lg">
+                <div className="flex justify-between font-bold mb-2">
+                  <span>Subtotal</span>
+                  <span>₹{subtotal}</span>
+                </div>
+                {appliedPromo && (
+                  <div className="flex justify-between text-success mb-2 font-medium">
+                    <span>Discount ({appliedPromo.code})</span>
+                    <span>-₹{discountAmount}</span>
+                  </div>
+                )}
+                <div className="flex justify-between font-bold text-lg pt-2 border-t border-border">
                   <span>Total</span>
                   <span className="gradient-text">₹{totalPrice}</span>
                 </div>
+              </div>
+            )}
+
+            {/* Promo Code Input */}
+            {selected.length > 0 && (
+              <div className="mb-4 animate-slideUp">
+                {appliedPromo ? (
+                  <div className="p-3 rounded-xl bg-success/10 border border-success/30 flex justify-between items-center">
+                    <div>
+                      <p className="text-success font-bold text-sm">Promo applied!</p>
+                      <p className="text-success/80 text-xs">{appliedPromo.code} (-₹{discountAmount})</p>
+                    </div>
+                    <button onClick={removePromo} className="text-danger text-sm font-semibold px-2 py-1">Remove</button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={promoCodeInput}
+                      onChange={e => { setPromoCodeInput(e.target.value.toUpperCase()); setPromoError(''); }}
+                      placeholder="Promo Code (Optional)"
+                      className="input-field flex-1 font-bold tracking-widest uppercase"
+                    />
+                    <button
+                      onClick={handleApplyPromo}
+                      disabled={!promoCodeInput.trim() || applyingPromo}
+                      className="px-4 py-2 bg-card-2 border border-border text-primary font-bold rounded-xl disabled:opacity-50"
+                    >
+                      {applyingPromo ? '...' : 'Apply'}
+                    </button>
+                  </div>
+                )}
+                {promoError && <p className="text-danger text-xs mt-1 font-medium">{promoError}</p>}
               </div>
             )}
 
