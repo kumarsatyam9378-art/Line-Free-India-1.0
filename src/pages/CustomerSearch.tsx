@@ -7,7 +7,11 @@ export default function CustomerSearch() {
   const { allSalons, isFavorite, t } = useApp();
   const nav = useNavigate();
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<'all' | 'open' | 'rated' | 'favorites'>('all');
+
+
+
+  const [filter, setFilter] = useState<'all' | 'open' | 'rated' | 'favorites' | 'trending'>('all');
+
 
   const getFiltered = () => {
     let results = [...allSalons];
@@ -30,6 +34,11 @@ export default function CustomerSearch() {
       results = results.filter(s => (s.rating || 0) > 0).sort((a, b) => (b.rating || 0) - (a.rating || 0));
     } else if (filter === 'favorites') {
       results = results.filter(s => isFavorite(s.uid));
+
+
+    } else if (filter === 'trending') {
+      results = results.sort((a, b) => (b.totalTokensToday || 0) - (a.totalTokensToday || 0)).slice(0, 10);
+
     }
 
     return results;
@@ -57,6 +66,12 @@ export default function CustomerSearch() {
 
         {/* Filter Chips */}
         <div className="flex gap-2 mb-5 overflow-x-auto">
+
+
+          <button onClick={() => setFilter('trending')} className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 ${filter === 'trending' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-card border border-border text-text-dim hover:border-primary/30'}`}>
+            🔥 Trending
+          </button>
+
           {[
             { id: 'all' as const, label: '📋 All', count: allSalons.length },
             { id: 'open' as const, label: '🟢 Open Now', count: allSalons.filter(s => s.isOpen && !s.isBreak && !s.isStopped).length },

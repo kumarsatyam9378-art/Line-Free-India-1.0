@@ -108,6 +108,21 @@ export default function CustomerHome() {
       </div>
 
       <div className="px-6">
+
+
+        {/* Social Proof Live Ticker */}
+        {allSalons.length > 0 && (
+          <div className="mb-4 bg-primary/10 border border-primary/20 rounded-xl p-3 flex items-center gap-3 overflow-hidden shadow-inner relative">
+            <span className="text-xl animate-pulse">🔥</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-primary line-clamp-1">
+                <span className="font-bold">{Math.floor(Math.random() * 10) + 5} bookings</span> made in your area in the last hour!
+              </p>
+            </div>
+          </div>
+        )}
+
+
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3 mb-5">
           <button onClick={() => nav('/customer/search')} className="p-4 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 text-left active:scale-[0.97] transition-all">

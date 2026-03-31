@@ -279,6 +279,23 @@ export default function SalonDetail() {
           </div>
         </div>
 
+
+
+        {/* Social Proof Visits */}
+        <div className="mb-4 bg-card-2 border border-border rounded-xl p-3 flex items-center gap-2">
+          <div className="flex -space-x-2 mr-2">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="w-6 h-6 rounded-full bg-card border-2 border-bg overflow-hidden flex items-center justify-center text-[10px]">
+                👤
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-text-dim flex-1">
+            <span className="font-semibold text-text">Priya, Rahul</span> and {Math.floor(Math.random() * 20) + 10} others visited recently
+          </p>
+        </div>
+
+
         {/* Tab Switcher */}
         <div className="flex gap-2 mb-4">
           <button

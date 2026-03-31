@@ -158,6 +158,27 @@ export default function BarberHome() {
       {/* QUICK ACTIONS GRID (Dynamic based on business type) */}
       <div className="p-6">
         <div className="flex justify-between items-center mb-3">
+
+
+          <h2 className="font-semibold">Grow Your Business</h2>
+        </div>
+        <div className="grid grid-cols-2 gap-3 mb-2">
+          <button onClick={() => nav('/barber/offers')} className="bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 rounded-2xl p-4 text-left">
+            <span className="text-2xl mb-1 block">🏷️</span>
+            <p className="font-bold text-sm text-primary">Seasonal Offers</p>
+            <p className="text-[10px] text-text-dim mt-0.5">Create discounts</p>
+          </button>
+          <button onClick={() => nav('/barber/segments')} className="bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20 rounded-2xl p-4 text-left">
+            <span className="text-2xl mb-1 block">🎯</span>
+            <p className="font-bold text-sm text-accent">Segments</p>
+            <p className="text-[10px] text-text-dim mt-0.5">Target customers</p>
+          </button>
+        </div>
+      </div>
+
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-3">
+
           <h2 className="font-semibold">Quick Actions</h2>
           <button onClick={() => nav('/barber/more')} className="text-xs text-primary font-medium">See All →</button>
         </div>
