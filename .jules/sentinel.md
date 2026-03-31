@@ -1,0 +1,4 @@
+## 2024-03-31 - [CRITICAL] Fix Insecure Direct Object Reference (IDOR) in Firestore Rules
+**Vulnerability:** The `/messages/{messageId}` collection rule in `firestore.rules` permitted any authenticated user (`allow read: if isAuth();`) to read all chat messages across the entire application, leading to a severe data exposure.
+**Learning:** Firestore rules lacking proper resource-level checks easily result in Broken Access Control. `isAuth()` alone is rarely sufficient for user-specific data; we must explicitly authorize the user against specific document fields (like `senderId` or `customerId`).
+**Prevention:** Always scope read access strictly to the document owners using specific document data conditions: `resource.data.<userIdField> == request.auth.uid`. Implement test cases that verify access denial for unrelated, authenticated users.
