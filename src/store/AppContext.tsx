@@ -24,6 +24,7 @@ export interface Terminology {
   noun: string;
   item: string;
   unit: string;
+  customer?: string;
 }
 
 export interface ServiceItem { id: string; name: string; price: number; avgTime: number; priceType?: 'fixed' | 'variable'; }
