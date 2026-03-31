@@ -1,68 +1,83 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp, ServiceItem } from '../store/AppContext';
 import BottomNav from '../components/BottomNav';
 import BackButton from '../components/BackButton';
+import toast from 'react-hot-toast';
 
 export default function BarberProfile() {
-  const { user, barberProfile, saveBarberProfile, syncPending, signOutUser, deleteAccount, uploadPhoto, theme, toggleTheme, unreadCount, t } = useApp();
+  const { user, barberProfile, saveBarberProfile, syncPending, signOutUser, deleteAccount, theme, toggleTheme, unreadCount, t } = useApp();
   const nav = useNavigate();
+
+  // Basic Info State
   const [name, setName] = useState(barberProfile?.name || '');
   const [salonName, setSalonName] = useState(barberProfile?.salonName || '');
-  const [location, setLocation] = useState(barberProfile?.location || '');
-  const [phone, setPhone] = useState(barberProfile?.phone || '');
-  const [upiId, setUpiId] = useState(barberProfile?.upiId || '');
-  const [businessHours, setBusinessHours] = useState(barberProfile?.businessHours || '');
   const [bio, setBio] = useState(barberProfile?.bio || '');
+
+  // Contact & Social
+  const [phone, setPhone] = useState(barberProfile?.phone || '');
   const [instagram, setInstagram] = useState(barberProfile?.instagram || '');
+  const [website, setWebsite] = useState(barberProfile?.website || '');
+
+  // Location
+  const [location, setLocation] = useState(barberProfile?.location || '');
+
+  // Advanced Settings
+  const [upiId, setUpiId] = useState(barberProfile?.upiId || '');
+
+  // Services
   const [services, setServices] = useState<ServiceItem[]>(barberProfile?.services || []);
+  const [showAddService, setShowAddService] = useState(false);
+  const [newServiceName, setNewServiceName] = useState('');
+  const [newServicePrice, setNewServicePrice] = useState('');
+  const [newServiceTime, setNewServiceTime] = useState('');
+
+  // UI State
   const [saved, setSaved] = useState(false);
-  const [showAdd, setShowAdd] = useState(false);
-  const [newName, setNewName] = useState('');
-  const [newPrice, setNewPrice] = useState('');
-  const [newTime, setNewTime] = useState('');
-  const [uploading, setUploading] = useState(false);
-  const [uploadingBanner, setUploadingBanner] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState('');
   const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState('');
-  const avatarRef = useRef<HTMLInputElement>(null);
-  const bannerRef = useRef<HTMLInputElement>(null);
 
-  const handleSave = async () => {
+  // Debounced auto-save
+  useEffect(() => {
     if (!barberProfile) return;
-    await saveBarberProfile({ ...barberProfile, name: name || barberProfile.name, salonName: salonName || barberProfile.salonName, location, phone, upiId, businessHours, bio, instagram, services });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
+    const timeoutId = setTimeout(async () => {
+      // Check if values actually changed
+      if (
+        name !== barberProfile.name ||
+        salonName !== barberProfile.salonName ||
+        bio !== barberProfile.bio ||
+        phone !== barberProfile.phone ||
+        instagram !== barberProfile.instagram ||
+        website !== barberProfile.website ||
+        location !== barberProfile.location ||
+        upiId !== barberProfile.upiId ||
+        JSON.stringify(services) !== JSON.stringify(barberProfile.services)
+      ) {
+        await saveBarberProfile({
+          ...barberProfile,
+          name: name || barberProfile.name,
+          salonName: salonName || barberProfile.salonName,
+          bio,
+          phone,
+          instagram,
+          website,
+          location,
+          upiId,
+          services
+        });
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      }
+    }, 1500); // 1.5s debounce
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user || !barberProfile) return;
-    setUploading(true);
-    try {
-      const url = await uploadPhoto(file, `line-free/barbers/${user.uid}`);
-      await saveBarberProfile({ ...barberProfile, photoURL: url });
-    } catch { alert('Upload failed'); }
-    setUploading(false);
-  };
-
-  const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user || !barberProfile) return;
-    setUploadingBanner(true);
-    try {
-      const url = await uploadPhoto(file, `line-free/salons/${user.uid}`);
-      await saveBarberProfile({ ...barberProfile, salonImageURL: url });
-    } catch { alert('Upload failed'); }
-    setUploadingBanner(false);
-  };
+    return () => clearTimeout(timeoutId);
+  }, [name, salonName, bio, phone, instagram, website, location, upiId, services, barberProfile, saveBarberProfile]);
 
   const addService = () => {
-    if (!newName.trim()) return;
-    setServices([...services, { id: Date.now().toString(), name: newName.trim(), price: parseInt(newPrice) || 0, avgTime: parseInt(newTime) || 15 }]);
-    setNewName(''); setNewPrice(''); setNewTime(''); setShowAdd(false);
+    if (!newServiceName.trim()) return;
+    setServices([...services, { id: Date.now().toString(), name: newServiceName.trim(), price: parseInt(newServicePrice) || 0, avgTime: parseInt(newServiceTime) || 15 }]);
+    setNewServiceName(''); setNewServicePrice(''); setNewServiceTime(''); setShowAddService(false);
   };
   const removeService = (id: string) => setServices(services.filter(s => s.id !== id));
 
@@ -72,184 +87,260 @@ export default function BarberProfile() {
     if (deleteInput !== 'DELETE') return;
     setDeleting(true);
     const result = await deleteAccount();
-    if (result.success) nav('/', { replace: true });
-    else { setDeleteError(result.error || 'Failed'); setDeleting(false); }
+    if (result.success) {
+      toast.success('Account deleted');
+      nav('/', { replace: true });
+    } else {
+      toast.error(result.error || 'Failed to delete account');
+      setDeleting(false);
+    }
   };
 
   const handleShare = () => {
-    const text = `Check out my salon "${barberProfile?.salonName}" on Line Free! 💈\n📍 ${location}\n📞 ${phone}\n\nServices:\n${services.map(s => `• ${s.name} - ₹${s.price}`).join('\n')}\n\nBook your token online — skip the queue! 🎫`;
+    const text = `Check out "${salonName || barberProfile?.salonName}" on Line Free! 💈\n📍 ${location}\n📞 ${phone}\n\nBook your token online — skip the queue! 🎫`;
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
   };
 
-  const fields = [name, salonName, location, phone, upiId];
-  const completion = Math.round(((fields.filter(f => f.trim()).length + (services.length > 0 ? 1 : 0)) / (fields.length + 1)) * 100);
+  const fields = [name, salonName, location, phone, bio, upiId];
+  const completion = Math.round(((fields.filter(f => f && f.trim()).length + (services.length > 0 ? 1 : 0)) / (fields.length + 1)) * 100);
   const referralCode = barberProfile?.referralCode || `LF${user?.uid.slice(0, 6).toUpperCase()}`;
+
+  const renderSectionHeader = (title: string, icon: string) => (
+    <div className="flex items-center gap-2 mb-3 mt-6">
+      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-sm">{icon}</div>
+      <h2 className="text-sm font-bold">{title}</h2>
+    </div>
+  );
 
   return (
     <div className="min-h-screen pb-24 animate-fadeIn">
       <div className="p-6">
-        <BackButton to="/barber/home" />
-        <h1 className="text-2xl font-bold mb-5">{t('profile')}</h1>
-
-        {/* Banner Photo */}
-        <div className="relative h-32 rounded-2xl bg-card-2 mb-4 overflow-hidden">
-          {barberProfile?.salonImageURL ? (
-            <img src={barberProfile.salonImageURL} className="w-full h-full object-cover" alt="" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-4xl opacity-30">💈</div>
-          )}
-          <button onClick={() => bannerRef.current?.click()} disabled={uploadingBanner}
-            className="absolute bottom-2 right-2 px-3 py-1.5 rounded-lg bg-black/60 text-white text-xs font-medium backdrop-blur flex items-center gap-1">
-            {uploadingBanner ? <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" /> : '📷'} {uploadingBanner ? 'Uploading...' : 'Change Banner'}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <BackButton to="/barber/home" />
+            <h1 className="text-2xl font-bold">Business Profile</h1>
+          </div>
+          <button
+            onClick={() => nav(`/customer/salon/${user?.uid}`)}
+            className="text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-lg flex items-center gap-1"
+          >
+            👁️ Preview
           </button>
         </div>
-        <input ref={bannerRef} type="file" accept="image/*" className="hidden" onChange={handleBannerUpload} />
 
-        {/* Avatar + Info */}
-        <div className="flex items-center gap-4 mb-5">
-          <div className="relative">
-            <div className="w-16 h-16 rounded-2xl overflow-hidden bg-card-2 ring-2 ring-primary/30">
-              {barberProfile?.photoURL ? <img src={barberProfile.photoURL} className="w-16 h-16 object-cover" alt="" /> : <div className="w-16 h-16 flex items-center justify-center text-3xl">💈</div>}
+        {/* Sync Status & Completion */}
+        <div className="mb-5 flex items-center justify-between p-3 rounded-2xl bg-card border border-border">
+          <div className="flex-1">
+            <div className="flex justify-between items-center mb-1">
+              <p className="text-xs font-medium text-text-dim">Profile Completion</p>
+              <p className="text-xs font-bold gradient-text">{completion}%</p>
             </div>
-            <button onClick={() => avatarRef.current?.click()} disabled={uploading}
-              className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-lg">
-              {uploading ? <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" /> : <span className="text-[10px]">📷</span>}
-            </button>
+            <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-500" style={{ width: `${completion}%` }} />
+            </div>
           </div>
-          <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
-          <div>
-            <p className="font-bold">{salonName || barberProfile?.salonName || 'My Salon'}</p>
-            <p className="text-text-dim text-sm">{user?.email}</p>
-            {barberProfile?.rating && <p className="text-gold text-xs font-semibold mt-0.5">⭐ {barberProfile.rating} ({barberProfile.totalReviews || 0} reviews)</p>}
+
+          <div className="w-px h-8 bg-border mx-4" />
+
+          <div className="w-20 flex flex-col items-center justify-center">
+            {syncPending ? (
+              <>
+                <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin mb-1" />
+                <span className="text-[10px] text-primary font-medium">Syncing...</span>
+              </>
+            ) : saved ? (
+              <>
+                <span className="text-success text-sm mb-0.5">✓</span>
+                <span className="text-[10px] text-success font-medium">Saved</span>
+              </>
+            ) : (
+              <>
+                <span className="text-text-dim text-sm mb-0.5">☁️</span>
+                <span className="text-[10px] text-text-dim font-medium">Up to date</span>
+              </>
+            )}
           </div>
         </div>
-
-        {/* Profile Completion */}
-        <div className="mb-5 p-3 rounded-xl bg-card border border-border">
-          <div className="flex justify-between items-center mb-2">
-            <p className="text-sm font-medium">Profile Completion</p>
-            <p className="text-sm font-bold gradient-text">{completion}%</p>
-          </div>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${completion}%` }} />
-          </div>
-          {completion < 100 && <p className="text-text-dim text-[10px] mt-1.5">Complete profile to attract more customers!</p>}
-        </div>
-
-        {syncPending && (
-          <div className="mb-4 p-2 rounded-lg bg-primary/10 flex items-center gap-2 justify-center">
-            <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-primary text-[11px]">Syncing...</p>
-          </div>
-        )}
 
         {/* Referral Code */}
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 mb-5">
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 mb-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-text-dim">🎁 Your Referral Code</p>
               <p className="text-xl font-bold gradient-text tracking-widest">{referralCode}</p>
             </div>
-            <button onClick={() => { navigator.clipboard.writeText(referralCode); alert('Copied!'); }} className="p-2 rounded-xl bg-primary/20 text-primary text-sm">📋</button>
+            <button onClick={() => { navigator.clipboard.writeText(referralCode); toast.success('Copied!'); }} className="p-2 rounded-xl bg-primary/20 text-primary text-sm">📋</button>
           </div>
         </div>
 
-        {/* Fields */}
-        <div className="space-y-4 mb-5">
-          {[
-            { label: t('profile.name'), val: name, set: setName, placeholder: 'Owner name' },
-            { label: t('profile.salonName'), val: salonName, set: setSalonName, placeholder: 'Salon name' },
-            { label: t('profile.location'), val: location, set: setLocation, placeholder: 'Area, City' },
-            { label: t('profile.phone'), val: phone, set: setPhone, placeholder: '+91 XXXXXXXXXX', type: 'tel' },
-            { label: 'UPI ID', val: upiId, set: setUpiId, placeholder: 'yourname@upi' },
-            { label: 'Business Hours', val: businessHours, set: setBusinessHours, placeholder: '9 AM - 8 PM' },
-            { label: 'Bio', val: bio, set: setBio, placeholder: 'Tell customers about your salon...' },
-            { label: 'Instagram', val: instagram, set: setInstagram, placeholder: '@username' },
-          ].map(({ label, val, set, placeholder, type }) => (
-            <div key={label}>
-              <label className="text-sm text-text-dim mb-1 block">{label}</label>
-              <input value={val} onChange={e => set(e.target.value)} placeholder={placeholder} type={type || 'text'} className="input-field" />
-            </div>
-          ))}
-        </div>
-
-        {/* Services */}
-        <div className="mb-5">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="font-semibold">{t('services')}</h3>
-            <button onClick={() => setShowAdd(v => !v)} className="text-primary text-sm font-medium">+ {t('services.add')}</button>
-          </div>
-          {showAdd && (
-            <div className="p-4 rounded-2xl bg-card border border-primary/20 mb-3 animate-fadeIn space-y-3">
-              <input value={newName} onChange={e => setNewName(e.target.value)} placeholder="Service name" className="input-field" />
-              <div className="flex gap-2">
-                <input value={newPrice} onChange={e => setNewPrice(e.target.value)} placeholder="Price ₹" className="input-field" type="number" />
-                <input value={newTime} onChange={e => setNewTime(e.target.value)} placeholder="Time (min)" className="input-field" type="number" />
+        <div className="space-y-6">
+          {/* Basic Info */}
+          <div>
+            {renderSectionHeader('Basic Info', '📝')}
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4">
+              <div>
+                <label className="text-xs text-text-dim block mb-1">Business Name</label>
+                <input value={salonName} onChange={e => setSalonName(e.target.value)} placeholder="e.g. Royal Cuts" className="input-field bg-card-2" />
               </div>
+              <div>
+                <label className="text-xs text-text-dim block mb-1">Owner Name</label>
+                <input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" className="input-field bg-card-2" />
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            {renderSectionHeader('Description & Story', '📖')}
+            <div className="bg-card p-4 rounded-2xl border border-border">
+              <label className="text-xs text-text-dim block mb-1">Business Bio</label>
+              <textarea
+                value={bio}
+                onChange={e => setBio(e.target.value)}
+                placeholder="Tell customers what makes your business special..."
+                className="input-field bg-card-2 min-h-[100px] resize-none"
+              />
+            </div>
+          </div>
+
+          {/* Location */}
+          <div>
+            {renderSectionHeader('Location Details', '📍')}
+            <div className="bg-card p-4 rounded-2xl border border-border">
+              <label className="text-xs text-text-dim block mb-1">Full Address</label>
+              <textarea
+                value={location}
+                onChange={e => setLocation(e.target.value)}
+                placeholder="Street address, City, State"
+                className="input-field bg-card-2 min-h-[80px] resize-none"
+              />
+            </div>
+          </div>
+
+          {/* Contact & Social */}
+          <div>
+            {renderSectionHeader('Contact & Social', '📞')}
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4">
+              <div>
+                <label className="text-xs text-text-dim block mb-1">Phone Number</label>
+                <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 XXXXXXXXXX" type="tel" className="input-field bg-card-2" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Instagram</label>
+                  <input value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="@username" className="input-field bg-card-2" />
+                </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Website (Optional)</label>
+                  <input value={website} onChange={e => setWebsite(e.target.value)} placeholder="www.example.com" className="input-field bg-card-2" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Services Setup */}
+          <div>
+            {renderSectionHeader('Services & Menu', '✂️')}
+            <div className="bg-card p-4 rounded-2xl border border-border">
+              <div className="flex justify-between items-center mb-4">
+                <p className="text-xs text-text-dim">{services.length} services added</p>
+                <button onClick={() => setShowAddService(v => !v)} className="text-primary text-xs font-bold">+ Add Service</button>
+              </div>
+
+              {showAddService && (
+                <div className="p-4 rounded-xl bg-card-2 border border-primary/20 mb-4 animate-fadeIn space-y-3">
+                  <input value={newServiceName} onChange={e => setNewServiceName(e.target.value)} placeholder="Service name" className="input-field text-sm" />
+                  <div className="flex gap-2">
+                    <input value={newServicePrice} onChange={e => setNewServicePrice(e.target.value)} placeholder="Price ₹" className="input-field text-sm" type="number" />
+                    <input value={newServiceTime} onChange={e => setNewServiceTime(e.target.value)} placeholder="Time (min)" className="input-field text-sm" type="number" />
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    <button onClick={() => setShowAddService(false)} className="flex-1 p-2 rounded-lg border border-border text-xs font-medium">Cancel</button>
+                    <button onClick={addService} className="flex-1 bg-primary text-white p-2 rounded-lg text-xs font-bold">Add Service</button>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                {services.length === 0 ? (
+                  <p className="text-xs text-center text-text-dim py-4">No services added yet.</p>
+                ) : (
+                  services.map(s => (
+                    <div key={s.id} className="flex items-center justify-between p-3 rounded-xl bg-card-2 border border-border/50 group">
+                      <div>
+                        <p className="font-medium text-sm">{s.name}</p>
+                        <p className="text-text-dim text-[10px] mt-0.5">₹{s.price} • ~{s.avgTime} min</p>
+                      </div>
+                      <button onClick={() => removeService(s.id)} className="w-8 h-8 rounded-full bg-danger/10 text-danger flex items-center justify-center text-sm opacity-50 group-hover:opacity-100 transition-opacity">×</button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Advanced Settings */}
+          <div>
+            {renderSectionHeader('Advanced Settings', '⚙️')}
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4">
+              <div>
+                <label className="text-xs text-text-dim block mb-1">UPI ID (For Payments)</label>
+                <input value={upiId} onChange={e => setUpiId(e.target.value)} placeholder="yourname@upi" className="input-field bg-card-2" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Links Grid */}
+        <div className="grid grid-cols-2 gap-3 mt-8 mb-6">
+          <button onClick={() => nav('/barber/gallery')} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center justify-center gap-2">
+            <span>🖼️</span> Gallery
+          </button>
+          <button onClick={() => nav('/barber/staff')} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center justify-center gap-2">
+            <span>👥</span> Staff
+          </button>
+          <button onClick={() => nav('/barber/settings')} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center justify-center gap-2">
+            <span>🕒</span> Hours
+          </button>
+          <button onClick={handleShare} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center justify-center gap-2">
+            <span>📱</span> Share
+          </button>
+          <button onClick={() => nav('/barber/notifications')} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center justify-center gap-2 relative">
+            <span>🔔</span> Alerts
+            {unreadCount > 0 && <span className="absolute top-2 right-2 w-3 h-3 bg-danger rounded-full" />}
+          </button>
+          <button onClick={toggleTheme} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center justify-center gap-2">
+            <span>{theme === 'dark' ? '☀️' : '🌙'}</span> Theme
+          </button>
+        </div>
+
+        {/* Danger Zone */}
+        <div className="pt-6 border-t border-border">
+          <button onClick={handleLogout} className="w-full p-4 rounded-2xl border border-danger/30 text-danger text-sm font-bold mb-4 hover:bg-danger/10 transition-colors">
+            {t('auth.logout')}
+          </button>
+
+          {!showDeleteConfirm ? (
+            <button onClick={() => setShowDeleteConfirm(true)} className="w-full py-2 text-danger/50 text-xs hover:text-danger transition-colors">
+              Delete Business Account
+            </button>
+          ) : (
+            <div className="p-4 rounded-2xl bg-danger/10 border border-danger/30 animate-fadeIn">
+              <p className="text-danger font-bold mb-1">⚠️ Danger Zone</p>
+              <p className="text-text-dim text-xs mb-3">Deleting your account will erase all profile data, staff, tokens, and history permanently. Type <strong>DELETE</strong> to confirm.</p>
+              <input value={deleteInput} onChange={e => setDeleteInput(e.target.value)} placeholder="Type DELETE" className="input-field bg-card/50 mb-3 border-danger/30 text-center font-bold tracking-widest text-danger placeholder-danger/30" />
+
               <div className="flex gap-2">
-                <button onClick={() => setShowAdd(false)} className="flex-1 p-3 rounded-xl border border-border text-sm">{t('btn.cancel')}</button>
-                <button onClick={addService} className="flex-1 btn-primary text-sm">{t('services.add')}</button>
+                <button onClick={() => { setShowDeleteConfirm(false); setDeleteInput(''); }} className="flex-1 p-3 rounded-xl border border-border bg-card text-sm font-medium">Cancel</button>
+                <button onClick={handleDeleteAccount} disabled={deleteInput !== 'DELETE' || deleting}
+                  className="flex-1 p-3 rounded-xl bg-danger text-white text-sm font-bold disabled:opacity-50 flex items-center justify-center gap-2">
+                  {deleting ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Deleting...</> : '🗑️ Delete'}
+                </button>
               </div>
             </div>
           )}
-          <div className="space-y-2">
-            {services.map(s => (
-              <div key={s.id} className="flex items-center justify-between p-3 rounded-xl bg-card border border-border">
-                <div>
-                  <p className="font-medium text-sm">{s.name}</p>
-                  <p className="text-text-dim text-xs">₹{s.price} • ~{s.avgTime}min</p>
-                </div>
-                <button onClick={() => removeService(s.id)} className="w-7 h-7 rounded-full bg-danger/10 text-danger flex items-center justify-center text-sm">×</button>
-              </div>
-            ))}
-          </div>
         </div>
 
-        <button onClick={handleSave} className={`btn-primary w-full mb-3 ${saved ? 'bg-success' : ''}`}>
-          {saved ? '✅ Saved!' : t('btn.save')}
-        </button>
-
-        {/* Quick Links */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          <button onClick={handleShare} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center gap-2">
-            <span>📱</span> Share Salon
-          </button>
-          <button onClick={() => nav('/barber/analytics')} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center gap-2">
-            <span>📊</span> Analytics
-          </button>
-          <button onClick={() => nav('/barber/notifications')} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center gap-2 relative">
-            <span>🔔</span> Notifications
-            {unreadCount > 0 && <span className="absolute top-2 right-2 w-4 h-4 bg-danger rounded-full text-[9px] text-white flex items-center justify-center">{unreadCount}</span>}
-          </button>
-          <button onClick={toggleTheme} className="p-3 rounded-xl border border-border bg-card text-sm font-medium flex items-center gap-2">
-            <span>{theme === 'dark' ? '☀️' : '🌙'}</span> {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-          </button>
-        </div>
-
-        <button onClick={handleLogout} className="w-full p-3 rounded-xl border border-danger/30 text-danger text-sm font-medium mb-4 hover:bg-danger/5 transition-all">
-          {t('auth.logout')}
-        </button>
-
-        {/* Delete Account */}
-        {!showDeleteConfirm ? (
-          <button onClick={() => setShowDeleteConfirm(true)} className="w-full p-2 text-danger/50 text-xs hover:text-danger transition-all">
-            {t('delete.account')}
-          </button>
-        ) : (
-          <div className="p-4 rounded-2xl bg-danger/10 border border-danger/30 animate-fadeIn">
-            <p className="text-danger font-bold mb-1">⚠️ Delete Salon Account?</p>
-            <p className="text-text-dim text-xs mb-3">All salon data, tokens, reviews will be deleted. Type <strong>DELETE</strong> to confirm.</p>
-            <input value={deleteInput} onChange={e => setDeleteInput(e.target.value)} placeholder="Type DELETE" className="input-field mb-3 border-danger/30 text-center font-bold tracking-widest" />
-            {deleteError && <p className="text-danger text-xs mb-2 text-center">{deleteError}</p>}
-            <div className="flex gap-2">
-              <button onClick={() => { setShowDeleteConfirm(false); setDeleteInput(''); }} className="flex-1 p-3 rounded-xl border border-border text-sm">Cancel</button>
-              <button onClick={handleDeleteAccount} disabled={deleteInput !== 'DELETE' || deleting}
-                className="flex-1 p-3 rounded-xl bg-danger text-white text-sm font-bold disabled:opacity-50 flex items-center justify-center gap-2">
-                {deleting ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Deleting...</> : '🗑️ Delete'}
-              </button>
-            </div>
-          </div>
-        )}
       </div>
       <BottomNav />
     </div>
