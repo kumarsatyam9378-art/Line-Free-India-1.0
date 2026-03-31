@@ -8,7 +8,7 @@ import CustomerProfileSetup from './pages/CustomerProfileSetup';
 import BarberProfileSetup from './pages/BarberProfileSetup';
 import CustomerHome from './pages/CustomerHome';
 import CustomerSearch from './pages/CustomerSearch';
-import SalonDetail from './pages/SalonDetail';
+import BusinessDetail from './pages/BusinessDetail';
 import CustomerTokens from './pages/CustomerTokens';
 import CustomerProfileEdit from './pages/CustomerProfileEdit';
 import CustomerSubscription from './pages/CustomerSubscription';
@@ -66,7 +66,7 @@ function AppRoutes() {
       {/* Customer Routes */}
       <Route path="/customer/home" element={<AuthGuard requiredRole="customer"><CustomerHome /></AuthGuard>} />
       <Route path="/customer/search" element={<AuthGuard requiredRole="customer"><CustomerSearch /></AuthGuard>} />
-      <Route path="/customer/salon/:id" element={<AuthGuard requiredRole="customer"><SalonDetail /></AuthGuard>} />
+      <Route path="/customer/salon/:id" element={<AuthGuard requiredRole="customer"><BusinessDetail /></AuthGuard>} />
       <Route path="/customer/tokens" element={<AuthGuard requiredRole="customer"><CustomerTokens /></AuthGuard>} />
       <Route path="/customer/profile" element={<AuthGuard requiredRole="customer"><CustomerProfileEdit /></AuthGuard>} />
       <Route path="/customer/subscription" element={<AuthGuard requiredRole="customer"><CustomerSubscription /></AuthGuard>} />
