@@ -6,34 +6,34 @@ export interface BusinessInfo {
   [key: string]: any;
 }
 
-interface ThemeProviderProps {
-  businessInfo?: BusinessInfo;
+export interface ThemeProviderProps {
+  businessInfo?: BusinessInfo | null;
   children: React.ReactNode;
 }
 
-export function ThemeProvider({ businessInfo, children }: ThemeProviderProps) {
+export default function ThemeProvider({ businessInfo, children }: ThemeProviderProps) {
   useEffect(() => {
     const root = document.documentElement;
 
     // Apply theme
     if (businessInfo?.designTheme) {
-      root.setAttribute('data-theme', businessInfo.designTheme.toLowerCase());
+      root.setAttribute('data-theme', businessInfo.designTheme.replace('theme-', ''));
     } else {
       // Default fallback
-      root.removeAttribute('data-theme');
+      root.setAttribute('data-theme', 'retail');
     }
 
     // Apply optional primary color override
     if (businessInfo?.colorPrimary) {
-      root.style.setProperty('--color-primary', businessInfo.colorPrimary);
+      root.style.setProperty('--color-primary-override', businessInfo.colorPrimary);
     }
 
     // Cleanup on unmount
     return () => {
       root.removeAttribute('data-theme');
-      root.style.removeProperty('--color-primary');
+      root.style.removeProperty('--color-primary-override');
     };
-  }, [businessInfo?.designTheme, businessInfo?.colorPrimary]);
+  }, [businessInfo]);
 
   return <>{children}</>;
 }
