@@ -4456,7 +4456,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🔧",
     "label": "Plumber",
     "labelHi": "Plumber",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4510,7 +4510,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "⚡",
     "label": "Electrician",
     "labelHi": "Electrician",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4564,7 +4564,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🪚",
     "label": "Carpenter",
     "labelHi": "Carpenter",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4617,7 +4617,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🎨",
     "label": "Painter",
     "labelHi": "Painter",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4664,7 +4664,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🧹",
     "label": "Home Cleaning",
     "labelHi": "Home Cleaning",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4718,7 +4718,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🐛",
     "label": "Pest Control",
     "labelHi": "Pest Control",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4802,14 +4802,14 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-tech",
     "colorPrimary": "#42A5F5",
-    "category": "home_services"
+    "category": "home"
   },
   {
     "id": "ac_repair",
     "icon": "❄️",
     "label": "Ac Repair",
     "labelHi": "Ac Repair",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4863,7 +4863,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🔌",
     "label": "Appliance Repair",
     "labelHi": "Appliance Repair",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4916,7 +4916,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "📦",
     "label": "Packers Movers",
     "labelHi": "Packers Movers",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4969,7 +4969,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "☀️",
     "label": "Solar Panel Installer",
     "labelHi": "Solar Panel Installer",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -5016,7 +5016,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "💧",
     "label": "Water Purifier Service",
     "labelHi": "Water Purifier Service",
-    "category": "home_services",
+    "category": "home",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -5446,14 +5446,14 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-finance",
     "colorPrimary": "#212121",
-    "category": "finance_&_legal"
+    "category": "finance"
   },
   {
     "id": "ca_firm",
     "icon": "📊",
     "label": "Ca Firm",
     "labelHi": "Ca Firm",
-    "category": "finance_&_legal",
+    "category": "finance",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5507,7 +5507,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🛡️",
     "label": "Insurance Agent",
     "labelHi": "Insurance Agent",
-    "category": "finance_&_legal",
+    "category": "finance",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5561,7 +5561,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "💰",
     "label": "Loan Agent",
     "labelHi": "Loan Agent",
-    "category": "finance_&_legal",
+    "category": "finance",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5614,7 +5614,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "📋",
     "label": "Tax Consultant",
     "labelHi": "Tax Consultant",
-    "category": "finance_&_legal",
+    "category": "finance",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5668,7 +5668,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🧾",
     "label": "Gst Consultant",
     "labelHi": "Gst Consultant",
-    "category": "finance_&_legal",
+    "category": "finance",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5714,7 +5714,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🏢",
     "label": "Company Registration",
     "labelHi": "Company Registration",
-    "category": "finance_&_legal",
+    "category": "finance",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5766,7 +5766,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "📝",
     "label": "Notary",
     "labelHi": "Notary",
-    "category": "finance_&_legal",
+    "category": "finance",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5812,7 +5812,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "💸",
     "label": "Money Transfer",
     "labelHi": "Money Transfer",
-    "category": "finance_&_legal",
+    "category": "finance",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5864,7 +5864,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🏠",
     "label": "Real Estate Agent",
     "labelHi": "Real Estate Agent",
-    "category": "real_estate",
+    "category": "realestate",
     "terminology": {
       "provider": "Agent",
       "action": "Book Visit",
@@ -5917,7 +5917,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🏢",
     "label": "Property Dealer",
     "labelHi": "Property Dealer",
-    "category": "real_estate",
+    "category": "realestate",
     "terminology": {
       "provider": "Agent",
       "action": "Book Visit",
@@ -5963,7 +5963,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🛏️",
     "label": "Pg Hostel",
     "labelHi": "Pg Hostel",
-    "category": "real_estate",
+    "category": "realestate",
     "terminology": {
       "provider": "Agent",
       "action": "Book Visit",
@@ -6015,7 +6015,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "💻",
     "label": "Co Working Space",
     "labelHi": "Co Working Space",
-    "category": "real_estate",
+    "category": "realestate",
     "terminology": {
       "provider": "Agent",
       "action": "Book Visit",
@@ -6098,14 +6098,14 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-tech",
     "colorPrimary": "#607D8B",
-    "category": "tech_&_it"
+    "category": "technology"
   },
   {
     "id": "computer_repair",
     "icon": "💻",
     "label": "Computer Repair",
     "labelHi": "Computer Repair",
-    "category": "tech_&_it",
+    "category": "technology",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6157,7 +6157,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "📱",
     "label": "Mobile Repair",
     "labelHi": "Mobile Repair",
-    "category": "tech_&_it",
+    "category": "technology",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6209,7 +6209,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🖥️",
     "label": "It Company",
     "labelHi": "It Company",
-    "category": "tech_&_it",
+    "category": "technology",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6256,7 +6256,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🌐",
     "label": "Web Designer",
     "labelHi": "Web Designer",
-    "category": "tech_&_it",
+    "category": "technology",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6303,7 +6303,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "📱",
     "label": "Digital Marketing Agency",
     "labelHi": "Digital Marketing Agency",
-    "category": "tech_&_it",
+    "category": "technology",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6356,7 +6356,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     "icon": "🖥️",
     "label": "Cybercafe",
     "labelHi": "Cybercafe",
-    "category": "tech_&_it",
+    "category": "technology",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6904,7 +6904,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-healthcare",
     "colorPrimary": "#FF8F00",
-    "category": "special/misc"
+    "category": "specialized"
   },
   {
     "id": "other",
@@ -6938,7 +6938,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-retail",
     "colorPrimary": "#607D8B",
-    "category": "special/misc"
+    "category": "specialized"
   }
 ];
 
