@@ -5,6 +5,8 @@ import LanguageSelect from './pages/LanguageSelect';
 import RoleSelect from './pages/RoleSelect';
 import CustomerAuth from './pages/CustomerAuth';
 import BarberAuth from './pages/BarberAuth';
+import BusinessTypeSelectPage from './pages/BusinessTypeSelectPage';
+import BusinessAuth from './pages/BusinessAuth';
 import CustomerProfileSetup from './pages/CustomerProfileSetup';
 import BarberProfileSetup from './pages/BarberProfileSetup';
 import CustomerHome from './pages/CustomerHome';
@@ -71,6 +73,8 @@ function AppRoutes() {
       <Route path="/role" element={<RoleSelect />} />
       <Route path="/customer/auth" element={<CustomerAuth />} />
       <Route path="/barber/auth" element={<BarberAuth />} />
+      <Route path="/business/select" element={<BusinessTypeSelectPage />} />
+      <Route path="/business/auth" element={<BusinessAuth />} />
       <Route path="/customer/setup" element={<CustomerProfileSetup />} />
       <Route path="/barber/setup" element={<BarberProfileSetup />} />
 

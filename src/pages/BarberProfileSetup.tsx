@@ -9,14 +9,20 @@ export default function BarberProfileSetup() {
   const { user, saveBarberProfile, barberProfile, t } = useApp();
   const nav = useNavigate();
   
-  const [step, setStep] = useState(1);
-  const [businessType, setBusinessType] = useState<BusinessCategory>(barberProfile?.businessType || 'men_salon');
+  const initialSelectedType = localStorage.getItem('lf_selected_business_type') as BusinessCategory;
+
+  const [step, setStep] = useState(initialSelectedType ? 2 : 1);
+  const [businessType, setBusinessType] = useState<BusinessCategory>(initialSelectedType || barberProfile?.businessType || 'men_salon');
 
   const [name, setName] = useState(barberProfile?.name || user?.displayName || '');
   const [salonName, setSalonName] = useState(barberProfile?.salonName || '');
   const [location, setLocation] = useState(barberProfile?.location || '');
   const [phone, setPhone] = useState(barberProfile?.phone || '');
-  const [services, setServices] = useState<ServiceItem[]>(barberProfile?.services || []);
+  const [services, setServices] = useState<ServiceItem[]>(() => {
+    if (barberProfile?.services && barberProfile.services.length > 0) return barberProfile.services;
+    const categoryInfo = BUSINESS_CATEGORIES_INFO.find(c => c.id === (initialSelectedType || 'men_salon'));
+    return categoryInfo?.defaultServices || [];
+  });
   const [newService, setNewService] = useState('');
   const [newPrice, setNewPrice] = useState('');
   const [newTime, setNewTime] = useState('');
@@ -110,7 +116,11 @@ export default function BarberProfileSetup() {
 
   return (
     <div className="min-h-screen flex flex-col p-6 pb-32 animate-fadeIn">
-      <BackButton onClick={() => setStep(step === 2 ? 1 : 2)} />
+      {initialSelectedType && step === 2 ? (
+         <BackButton onClick={() => nav('/business/select')} />
+      ) : (
+         <BackButton onClick={() => setStep(step === 2 ? 1 : 2)} />
+      )}
 
       <div className="text-center mb-6">
         <div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden bg-card-2 flex items-center justify-center ring-2 ring-primary/30">

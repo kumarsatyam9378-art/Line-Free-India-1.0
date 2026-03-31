@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
 import { BUSINESS_CATEGORIES_INFO } from '../constants/businessRegistry';
+import { getQuickActionsForBusiness, getDashboardConfig } from '../constants/businessUIConfig';
 import BottomNav from '../components/layout/BottomNav';
 
 export default function BarberHome() {
@@ -46,6 +47,9 @@ export default function BarberHome() {
   const bInfo = BUSINESS_CATEGORIES_INFO.find(c => c.id === barberProfile.businessType)
                 || BUSINESS_CATEGORIES_INFO.find(c => c.id === 'other')!;
 
+  const quickActions = getQuickActionsForBusiness(barberProfile.businessType);
+  const dashboardConfig = getDashboardConfig(barberProfile.businessType);
+
   return (
     <div className={`min-h-screen pb-24 ${bInfo.designTheme} bg-bg text-text animate-fadeIn`}>
       {/* HEADER */}
@@ -61,7 +65,7 @@ export default function BarberHome() {
             </div>
             <div>
               <h1 className="font-bold text-lg leading-tight">{barberProfile.businessName || barberProfile.salonName}</h1>
-              <p className="text-text-dim text-xs mt-0.5 capitalize">{bInfo.label} • {bInfo.terminology?.provider || 'Owner'}</p>
+              <p className="text-text-dim text-xs mt-0.5 capitalize">{bInfo.label} • {dashboardConfig.providerNoun}</p>
             </div>
           </div>
           <button onClick={() => nav('/barber/notifications')} className="relative p-2 bg-card rounded-full shadow-sm">
@@ -103,7 +107,7 @@ export default function BarberHome() {
               <span className="text-2xl">👥</span>
               <span className="text-xs font-semibold text-success bg-success/10 px-2 py-0.5 rounded-full">+12%</span>
             </div>
-            <p className="text-text-dim text-xs mt-2">{bInfo.terminology?.noun || 'Tokens'}</p>
+            <p className="text-text-dim text-xs mt-2">{dashboardConfig.statsNoun}</p>
             <p className="text-2xl font-bold">{todayTokensCount}</p>
           </div>
           <div className="bg-card border border-border p-4 rounded-2xl">
@@ -118,7 +122,7 @@ export default function BarberHome() {
       </div>
 
       {/* QUEUE CONTROLS (Only for businesses that use a queue) */}
-      {!bInfo.hasTimedSlots && (
+      {dashboardConfig.showQueueControls && (
         <div className="p-6 pb-2">
           <div className="bg-card border border-border p-5 rounded-3xl text-center shadow-lg relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-10 -mt-10 blur-2xl" />
@@ -163,59 +167,12 @@ export default function BarberHome() {
         </div>
 
         <div className="grid grid-cols-4 gap-y-4 gap-x-2">
-          {bInfo.hasTimedSlots && (
-            <button onClick={() => nav('/barber/calendar')} className="flex flex-col items-center gap-1 group">
-              <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">📅</div>
-              <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Appointments</span>
-            </button>
-          )}
-
-          <button onClick={() => nav('/barber/customers')} className="flex flex-col items-center gap-1 group">
-            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">🧑‍🤝‍🧑</div>
-            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">{!bInfo.hasTimedSlots ? 'Live Queue' : 'Patients'}</span>
-          </button>
-
-          {bInfo.hasMenu && (
-            <button onClick={() => nav('/barber/digital-menu')} className="flex flex-col items-center gap-1 group">
-              <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">📖</div>
-              <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Menu</span>
-            </button>
-          )}
-
-          {bInfo.id === 'restaurant' && (
-            <button onClick={() => nav('/barber/tables')} className="flex flex-col items-center gap-1 group">
-              <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">🪑</div>
-              <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Tables</span>
-            </button>
-          )}
-
-          {bInfo.id === 'hospital' || bInfo.id === 'clinic' ? (
-            <button onClick={() => nav('/barber/patient-vault')} className="flex flex-col items-center gap-1 group">
-              <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">🗂️</div>
-              <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Patients</span>
-            </button>
-          ) : null}
-
-          <button onClick={() => nav('/barber/staff')} className="flex flex-col items-center gap-1 group">
-            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">👔</div>
-            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Staff</span>
-          </button>
-
-          <button onClick={() => nav('/barber/analytics')} className="flex flex-col items-center gap-1 group">
-            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">📊</div>
-            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Analytics</span>
-          </button>
-
-          <button onClick={() => nav('/barber/qr')} className="flex flex-col items-center gap-1 group">
-            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">📱</div>
-            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">My QR</span>
-          </button>
-
-          <button onClick={() => nav('/barber/expenses')} className="flex flex-col items-center gap-1 group">
-            <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">🧾</div>
-            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">Expenses</span>
-          </button>
-
+          {quickActions.map(action => (
+             <button key={action.id} onClick={() => nav(action.route)} className="flex flex-col items-center gap-1 group">
+                <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">{action.icon}</div>
+                <span className="text-[10px] text-text-dim font-medium text-center leading-tight">{action.label}</span>
+             </button>
+          ))}
         </div>
       </div>
 
