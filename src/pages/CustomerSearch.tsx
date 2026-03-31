@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
 import BottomNav from '../components/BottomNav';
@@ -9,7 +9,10 @@ export default function CustomerSearch() {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'all' | 'open' | 'rated' | 'favorites'>('all');
 
-  const getFiltered = () => {
+  // ⚡ Bolt: Memoize expensive filtering/sorting operations
+  // This prevents recalculating the list on every re-render (e.g. when tabbing, typing)
+  // which can be expensive for large lists of salons.
+  const results = useMemo(() => {
     let results = [...allSalons];
 
     // Text search
@@ -33,9 +36,7 @@ export default function CustomerSearch() {
     }
 
     return results;
-  };
-
-  const results = getFiltered();
+  }, [allSalons, query, filter, isFavorite]);
 
   return (
     <div className="min-h-screen pb-24 animate-fadeIn">
