@@ -363,11 +363,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       await deleteUser(user);
       await signOutUser();
       return { success: true };
-    } catch (e: any) {
-      if (e?.code === 'auth/requires-recent-login') {
+    } catch (e: unknown) {
+      const err = e as { code?: string; message?: string };
+      if (err.code === 'auth/requires-recent-login') {
         try { await reauthenticateWithPopup(user, googleProvider); return deleteAccount(); } catch { return { success: false, error: 'Re-auth failed.' }; }
       }
-      return { success: false, error: e?.message || 'Failed' };
+      return { success: false, error: err.message || 'Failed' };
     }
   };
 
