@@ -1,7 +1,21 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: 'Inter', system-ui, sans-serif;
+@import "./styles/themes/theme-agriculture.css";
+@import "./styles/themes/theme-beauty.css";
+@import "./styles/themes/theme-education.css";
+@import "./styles/themes/theme-finance.css";
+@import "./styles/themes/theme-fitness.css";
+@import "./styles/themes/theme-food.css";
+@import "./styles/themes/theme-healthcare.css";
+@import "./styles/themes/theme-hospitality.css";
+@import "./styles/themes/theme-retail.css";
+@import "./styles/themes/theme-tech.css";
+
+/* === GOOGLE FONTS === */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Lato:wght@400;700&family=Lora:wght@400;500;600&family=Merriweather:wght@400;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+
+:root {
+  /* Default base theme variables if no specific theme is selected */
   --color-primary: #6C63FF;
   --color-primary-dark: #5A52D5;
   --color-primary-light: #8B85FF;
@@ -20,6 +34,22 @@
   --color-border: #2A2A4A;
   --color-text: #EAEAEA;
   --color-text-dim: #8888AA;
+}
+
+/* === LIGHT MODE OVERRIDES === */
+:root.light {
+  --color-primary: #5A52D5;
+  --color-primary-dark: #3F37A8;
+  --color-primary-light: #8B85FF;
+  --color-secondary: #E04848;
+  --color-accent: #2BAF9A;
+
+  --color-bg: #F4F7F9;
+  --color-card: #FFFFFF;
+  --color-card-2: #E9ECEF;
+  --color-border: #DEE2E6;
+  --color-text: #212529;
+  --color-text-dim: #6C757D;
 }
 
 * {
