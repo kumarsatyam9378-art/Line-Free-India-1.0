@@ -1,0 +1,63 @@
+$ vite
+
+  VITE v7.2.4  ready in 399 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+2589 |    --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+2590 |  }
+2591 |  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wgh...
+     |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2592 |  :root {
+2593 |    --color-primary: #6C63FF;
+5:25:51 PM [vite] (client) hmr update /src/index.css
+5:25:51 PM [vite] (client) hmr update /src/index.css
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+2589 |    --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+2590 |  }
+2591 |  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wgh...
+     |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2592 |  :root {
+2593 |    --color-primary: #6C63FF;
+5:27:31 PM [vite] (client) hmr update /src/index.css
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+2589 |    --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+2590 |  }
+2591 |  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wgh...
+     |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2592 |  :root {
+2593 |    --color-primary: #6C63FF;
+5:27:31 PM [vite] (client) hmr update /src/index.css
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+2589 |    --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+2590 |  }
+2591 |  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wgh...
+     |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2592 |  :root {
+2593 |    --color-primary: #6C63FF;
+5:29:08 PM [vite] (client) hmr update /src/index.css
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+2589 |    --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+2590 |  }
+2591 |  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wgh...
+     |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2592 |  :root {
+2593 |    --color-primary: #6C63FF;
+5:29:08 PM [vite] (client) hmr update /src/index.css
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+2589 |    --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+2590 |  }
+2591 |  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wgh...
+     |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2592 |  :root {
+2593 |    --color-primary: #6C63FF;
+5:29:10 PM [vite] (client) hmr update /src/index.css
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+2589 |    --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+2590 |  }
+2591 |  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wgh...
+     |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2592 |  :root {
+2593 |    --color-primary: #6C63FF;
+5:29:10 PM [vite] (client) hmr update /src/index.css

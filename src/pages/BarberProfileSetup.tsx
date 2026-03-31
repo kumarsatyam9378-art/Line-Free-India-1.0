@@ -6,11 +6,17 @@ import BusinessTypePicker from '../components/business/BusinessTypePicker';
 import { BUSINESS_CATEGORIES_INFO } from '../constants/businessRegistry';
 
 export default function BarberProfileSetup() {
+  const preSelectedType = localStorage.getItem('selected_business_type') as BusinessCategory | null;
+  const preSelectedLabel = localStorage.getItem('selected_business_label') || '';
+  const preSelectedIcon = localStorage.getItem('selected_business_icon') || '🏪';
+
   const { user, saveBarberProfile, barberProfile, t } = useApp();
   const nav = useNavigate();
   
-  const [step, setStep] = useState(1);
-  const [businessType, setBusinessType] = useState<BusinessCategory>(barberProfile?.businessType || 'men_salon');
+  const [step, setStep] = useState(preSelectedType ? 2 : 1);
+  const [businessType, setBusinessType] = useState<BusinessCategory>(
+    barberProfile?.businessType || (preSelectedType as BusinessCategory) || 'men_salon'
+  );
 
   const [name, setName] = useState(barberProfile?.name || user?.displayName || '');
   const [salonName, setSalonName] = useState(barberProfile?.salonName || '');
@@ -76,6 +82,9 @@ export default function BarberProfileSetup() {
       createdAt: barberProfile?.createdAt || Date.now(),
     };
     await saveBarberProfile(profile);
+    localStorage.removeItem('selected_business_type');
+    localStorage.removeItem('selected_business_label');
+    localStorage.removeItem('selected_business_icon');
     nav('/barber/home', { replace: true });
   };
 
@@ -101,6 +110,9 @@ export default function BarberProfileSetup() {
       createdAt: Date.now(),
     };
     await saveBarberProfile(profile);
+    localStorage.removeItem('selected_business_type');
+    localStorage.removeItem('selected_business_label');
+    localStorage.removeItem('selected_business_icon');
     nav('/barber/home', { replace: true });
   };
 
@@ -129,6 +141,22 @@ export default function BarberProfileSetup() {
       <div className="space-y-4 max-w-sm mx-auto w-full">
         {step === 2 && (
           <>
+            {preSelectedType && (
+              <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 flex items-center gap-3 mb-4">
+                <span className="text-2xl">{preSelectedIcon}</span>
+                <div className="flex-1">
+                  <p className="text-[10px] text-text-dim uppercase tracking-wide">Selected Business</p>
+                  <p className="font-semibold text-sm text-text">{preSelectedLabel || businessType}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => nav('/business/select')}
+                  className="text-xs text-primary font-medium"
+                >
+                  Change
+                </button>
+              </div>
+            )}
             <div>
               <label className="text-sm text-text-dim mb-1 block">{t('profile.name')} {t('profile.optional')}</label>
               <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" className="input-field" />

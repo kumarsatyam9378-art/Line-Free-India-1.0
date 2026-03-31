@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
 import { BUSINESS_CATEGORIES_INFO } from '../constants/businessRegistry';
 import BottomNav from '../components/layout/BottomNav';
+import { getBusinessDashboardConfig } from '../constants/businessUIConfig';
 
 export default function BarberHome() {
   const { user, barberProfile, toggleSalonOpen, toggleSalonBreak, toggleSalonStop, continueTokens, nextCustomer, unreadCount, getSalonTokens, getTodayEarnings, t } = useApp();
@@ -45,6 +46,8 @@ export default function BarberHome() {
 
   const bInfo = BUSINESS_CATEGORIES_INFO.find(c => c.id === barberProfile.businessType)
                 || BUSINESS_CATEGORIES_INFO.find(c => c.id === 'other')!;
+
+  const dashConfig = getBusinessDashboardConfig(barberProfile.businessType);
 
   return (
     <div className={`min-h-screen pb-24 ${bInfo.designTheme} bg-bg text-text animate-fadeIn`}>
@@ -103,7 +106,7 @@ export default function BarberHome() {
               <span className="text-2xl">👥</span>
               <span className="text-xs font-semibold text-success bg-success/10 px-2 py-0.5 rounded-full">+12%</span>
             </div>
-            <p className="text-text-dim text-xs mt-2">{bInfo.terminology?.noun || 'Tokens'}</p>
+            <p className="text-text-dim text-xs mt-2">{dashConfig.todayLabel}</p>
             <p className="text-2xl font-bold">{todayTokensCount}</p>
           </div>
           <div className="bg-card border border-border p-4 rounded-2xl">
@@ -172,7 +175,7 @@ export default function BarberHome() {
 
           <button onClick={() => nav('/barber/customers')} className="flex flex-col items-center gap-1 group">
             <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-2xl group-hover:border-primary/50 group-hover:shadow-md transition-all">🧑‍🤝‍🧑</div>
-            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">{!bInfo.hasTimedSlots ? 'Live Queue' : 'Patients'}</span>
+            <span className="text-[10px] text-text-dim font-medium text-center leading-tight">{!bInfo.hasTimedSlots ? 'Live Queue' : dashConfig.customerNoun + 's'}</span>
           </button>
 
           {bInfo.hasMenu && (

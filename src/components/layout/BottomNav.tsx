@@ -1,10 +1,13 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../../store/AppContext';
+import { BUSINESS_CATEGORIES_INFO } from '../../constants/businessRegistry';
 
 export default function BottomNav({ role }: { role: 'customer' | 'barber' }) {
-  const { lang } = useApp();
+  const { lang, barberProfile } = useApp();
   const nav = useNavigate();
   const loc = useLocation();
+
+  const bInfo = BUSINESS_CATEGORIES_INFO.find(c => c.id === barberProfile?.businessType);
 
   const tabs = role === 'customer'
     ? [
@@ -17,7 +20,7 @@ export default function BottomNav({ role }: { role: 'customer' | 'barber' }) {
         { label: 'Home', icon: '🏠', path: '/barber/home' },
         { label: 'Queue', icon: '🧑‍🤝‍🧑', path: '/barber/customers' },
         { label: 'Chats', icon: '💬', path: '/barber/messages' },
-        { label: 'Profile', icon: '🏪', path: '/barber/profile' },
+        { label: 'Profile', icon: bInfo?.icon || '🏪', path: '/barber/profile' },
       ];
 
   return (
