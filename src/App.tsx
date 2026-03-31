@@ -23,6 +23,10 @@ import BarberAnalytics from './pages/BarberAnalytics';
 import CustomerChat from './pages/CustomerChat';
 import BarberMessages from './pages/BarberMessages';
 import NotificationsPage from './pages/NotificationsPage';
+import OwnerMenu from './pages/OwnerMenu';
+import OwnerCalendar from './pages/OwnerCalendar';
+import PublicMenuPage from './pages/customer/PublicMenuPage';
+import CustomerFavorites from './pages/customer/CustomerFavorites';
 
 function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requiredRole: 'customer' | 'barber' }) {
   const { user, role, loading } = useApp();
@@ -81,6 +85,7 @@ function AppRoutes() {
       <Route path="/customer/history" element={<AuthGuard requiredRole="customer"><CustomerHistory /></AuthGuard>} />
       <Route path="/customer/chat/:salonId" element={<AuthGuard requiredRole="customer"><CustomerChat /></AuthGuard>} />
       <Route path="/customer/notifications" element={<AuthGuard requiredRole="customer"><NotificationsPage /></AuthGuard>} />
+      <Route path="/customer/favorites" element={<AuthGuard requiredRole="customer"><CustomerFavorites /></AuthGuard>} />
 
       {/* Barber Routes */}
       <Route path="/barber/home" element={<AuthGuard requiredRole="barber"><BarberHome /></AuthGuard>} />
@@ -90,6 +95,11 @@ function AppRoutes() {
       <Route path="/barber/analytics" element={<AuthGuard requiredRole="barber"><BarberAnalytics /></AuthGuard>} />
       <Route path="/barber/messages" element={<AuthGuard requiredRole="barber"><BarberMessages /></AuthGuard>} />
       <Route path="/barber/notifications" element={<AuthGuard requiredRole="barber"><NotificationsPage /></AuthGuard>} />
+      <Route path="/barber/menu" element={<AuthGuard requiredRole="barber"><OwnerMenu /></AuthGuard>} />
+      <Route path="/barber/calendar" element={<AuthGuard requiredRole="barber"><OwnerCalendar /></AuthGuard>} />
+
+      {/* Public Routes */}
+      <Route path="/menu/:id" element={<PublicMenuPage />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

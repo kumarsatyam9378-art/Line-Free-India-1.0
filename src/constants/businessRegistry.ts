@@ -620,7 +620,16 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
       "unit": "min",
       "customer": "Customer"
     },
-    "defaultServices": [],
+    "defaultServices": [
+      {
+        "id": "ck_standard",
+        "name": "Standard Order Prep",
+        "nameHi": "Standard Order Prep",
+        "price": 200,
+        "avgTime": 20,
+        "isActive": true
+      }
+    ],
     "defaultWorkingHours": {
       "open": "09:00",
       "close": "20:00"
