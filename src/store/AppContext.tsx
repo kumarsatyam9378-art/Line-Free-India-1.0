@@ -464,8 +464,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const today = getTodayStr();
     try {
       const allTokens = await getSalonTokens(user.uid, today);
-      const serving = allTokens.filter(t => t.status === 'serving');
-      const waiting = allTokens.filter(t => t.status === 'waiting').sort((a, b) => a.tokenNumber - b.tokenNumber);
+      const serving: TokenEntry[] = [];
+      const waiting: TokenEntry[] = [];
+      for (const t of allTokens) {
+        if (t.status === 'serving') serving.push(t);
+        else if (t.status === 'waiting') waiting.push(t);
+      }
+      waiting.sort((a, b) => a.tokenNumber - b.tokenNumber);
       await Promise.all(serving.map(t => updateDoc(doc(db, 'tokens', t.id!), { status: 'done' })));
       if (waiting.length > 0) {
         const next = waiting[0];
