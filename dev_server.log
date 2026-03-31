@@ -1,0 +1,19 @@
+
+> react-vite-tailwind@0.0.0 dev
+> vite
+
+
+  VITE v7.2.4  ready in 404 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+2346 |    --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+2347 |  }
+2348 |  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wgh...
+     |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2349 |  :root {
+2350 |    --color-primary: #6C63FF;
+10:09:59 AM [vite] (client) hmr update /src/index.css
+10:14:32 AM [vite] (client) hmr update /src/components/booking/BookingConfirm.tsx, /src/index.css
+10:23:53 AM [vite] (client) hmr update /src/index.css

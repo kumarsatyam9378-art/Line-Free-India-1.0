@@ -23,6 +23,9 @@ import BarberAnalytics from './pages/BarberAnalytics';
 import CustomerChat from './pages/CustomerChat';
 import BarberMessages from './pages/BarberMessages';
 import NotificationsPage from './pages/NotificationsPage';
+import BookingPage from './pages/customer/BookingPage';
+import BookingConfirmPage from './pages/customer/BookingConfirmPage';
+import OwnerServices from './pages/OwnerServices';
 
 function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requiredRole: 'customer' | 'barber' }) {
   const { user, role, loading } = useApp();
@@ -81,9 +84,12 @@ function AppRoutes() {
       <Route path="/customer/history" element={<AuthGuard requiredRole="customer"><CustomerHistory /></AuthGuard>} />
       <Route path="/customer/chat/:salonId" element={<AuthGuard requiredRole="customer"><CustomerChat /></AuthGuard>} />
       <Route path="/customer/notifications" element={<AuthGuard requiredRole="customer"><NotificationsPage /></AuthGuard>} />
+      <Route path="/customer/booking/:salonId" element={<AuthGuard requiredRole="customer"><BookingPage /></AuthGuard>} />
+      <Route path="/customer/booking-confirm" element={<AuthGuard requiredRole="customer"><BookingConfirmPage /></AuthGuard>} />
 
       {/* Barber Routes */}
       <Route path="/barber/home" element={<AuthGuard requiredRole="barber"><BarberHome /></AuthGuard>} />
+      <Route path="/barber/services" element={<AuthGuard requiredRole="barber"><OwnerServices /></AuthGuard>} />
       <Route path="/barber/customers" element={<AuthGuard requiredRole="barber"><BarberCustomers /></AuthGuard>} />
       <Route path="/barber/profile" element={<AuthGuard requiredRole="barber"><BarberProfile /></AuthGuard>} />
       <Route path="/barber/subscription" element={<AuthGuard requiredRole="barber"><BarberSubscription /></AuthGuard>} />
