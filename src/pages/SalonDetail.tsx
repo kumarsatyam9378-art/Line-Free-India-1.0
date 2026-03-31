@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp, BarberProfile, ServiceItem, TokenEntry, ReviewEntry } from '../store/AppContext';
 import BackButton from '../components/BackButton';
+import EmergencyButton from '../components/booking/EmergencyButton';
 
 const UPI_ID = import.meta.env.VITE_UPI_ID;
 
@@ -22,9 +23,19 @@ export default function SalonDetail() {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [activeTab, setActiveTab] = useState<'services' | 'reviews'>('services');
   const [advanceDate, setAdvanceDate] = useState('');
+  const [isHomeService, setIsHomeService] = useState(false);
+  const [homeAddress, setHomeAddress] = useState('');
+  const [groupSize, setGroupSize] = useState(1);
 
   const today = (() => {
     const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  })();
+
+  const maxAdvanceDate = (() => {
+    const d = new Date();
+    const advanceDays = salon?.advanceBookingDays || 7;
+    d.setDate(d.getDate() + advanceDays);
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   })();
 
@@ -54,10 +65,12 @@ export default function SalonDetail() {
     else setSelected([...selected, s]);
   };
 
-  const totalTime = selected.reduce((a, s) => a + s.avgTime, 0);
-  const totalPrice = selected.reduce((a, s) => a + s.price, 0);
+  const totalTime = selected.reduce((a, s) => a + s.avgTime, 0) * groupSize;
+  const basePrice = selected.reduce((a, s) => a + s.price, 0) * groupSize;
+  const homeServiceFee = isHomeService ? 150 : 0; // standard fee for home service
+  const totalPrice = basePrice + homeServiceFee;
 
-  const handleGetToken = async () => {
+  const handleGetToken = async (isEmergency: boolean = false) => {
     if (!salon || !user || selected.length === 0) return;
     setGetting(true);
     
@@ -83,16 +96,19 @@ export default function SalonDetail() {
       customerId: user.uid,
       customerName: customerProfile?.name || user.displayName || 'Customer',
       customerPhone: customerProfile?.phone || '',
-      tokenNumber: newTokenNumber,
+      tokenNumber: isEmergency ? 0 : newTokenNumber, // 0 signifies priority/emergency
       selectedServices: selected,
       totalTime,
       totalPrice,
-      estimatedWaitMinutes: waitMinutes,
+      estimatedWaitMinutes: isEmergency ? 0 : waitMinutes,
       status: 'waiting',
       createdAt: Date.now(),
       date: bookingDate,
       isAdvanceBooking: isAdvance,
       advanceDate: isAdvance ? advanceDate : undefined,
+      specialInstructions: isEmergency ? '🚨 EMERGENCY PRIORITY BOOKING' :
+                          isHomeService ? `🏡 HOME SERVICE - Address: ${homeAddress}` : undefined,
+      groupSize,
     };
 
     const tokenId = await getToken(token);
@@ -358,6 +374,61 @@ export default function SalonDetail() {
               </div>
             )}
 
+            {/* Home Service Toggle */}
+            {selected.length > 0 && (
+              <div className="mb-4 animate-slideUp">
+                <div className="p-3 bg-card border border-border rounded-xl">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium">🏡 Home Service Request</span>
+                    <button
+                      onClick={() => setIsHomeService(!isHomeService)}
+                      className={`relative w-12 h-6 rounded-full transition-colors ${isHomeService ? 'bg-primary' : 'bg-surface'}`}
+                    >
+                      <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${isHomeService ? 'translate-x-6' : 'translate-x-0'}`} />
+                    </button>
+                  </div>
+                  {isHomeService && (
+                    <div className="mt-3 space-y-2 animate-slideDown">
+                      <p className="text-xs text-primary bg-primary/10 p-2 rounded-lg">
+                        Includes a standard ₹150 home service fee.
+                      </p>
+                      <textarea
+                        placeholder="Enter your full address & landmarks..."
+                        value={homeAddress}
+                        onChange={e => setHomeAddress(e.target.value)}
+                        className="w-full bg-surface border border-border rounded-xl p-3 text-sm focus:border-primary outline-none"
+                        rows={2}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Group Booking Selector */}
+            {selected.length > 0 && salon.supportsGroupBooking && (
+              <div className="mb-4 animate-slideUp">
+                <label className="text-sm text-text-dim mb-1.5 block">👥 Party Size</label>
+                <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-2">
+                  <button
+                    onClick={() => setGroupSize(Math.max(1, groupSize - 1))}
+                    className="w-10 h-10 rounded-lg bg-surface flex items-center justify-center text-lg active:scale-95"
+                  >
+                    -
+                  </button>
+                  <div className="flex-1 text-center font-bold text-lg">
+                    {groupSize} {groupSize === 1 ? 'Person' : 'People'}
+                  </div>
+                  <button
+                    onClick={() => setGroupSize(Math.min(10, groupSize + 1))}
+                    className="w-10 h-10 rounded-lg bg-surface flex items-center justify-center text-lg active:scale-95"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Advance Booking Date Picker */}
             {selected.length > 0 && (
               <div className="mb-4 animate-slideUp">
@@ -379,6 +450,7 @@ export default function SalonDetail() {
                       value={advanceDate}
                       onChange={e => setAdvanceDate(e.target.value)}
                       min={today}
+                      max={maxAdvanceDate}
                       className="input-field text-sm py-2.5 w-full"
                     />
                   </div>
@@ -391,12 +463,21 @@ export default function SalonDetail() {
 
             {/* Get Token Button */}
             {(canGetToken || isOnBreak) && selected.length > 0 && (
-              <button
-                onClick={() => setShowConfirm(true)}
-                className="btn-primary text-lg animate-slideUp"
-              >
-                🎫 {advanceDate && advanceDate !== today ? 'Book Advance Token' : t('btn.getToken')}
-              </button>
+              <div className="space-y-3 animate-slideUp">
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  className="btn-primary text-lg w-full"
+                >
+                  🎫 {advanceDate && advanceDate !== today ? 'Book Advance Token' : t('btn.getToken')}
+                </button>
+
+                {['clinic', 'hospital', 'ambulance'].includes(salon.businessType?.toLowerCase() || '') && (
+                  <EmergencyButton
+                    onEmergencyBooking={() => handleGetToken(true)}
+                    loading={getting}
+                  />
+                )}
+              </div>
             )}
           </>
         )}
@@ -455,15 +536,27 @@ export default function SalonDetail() {
             <p className="text-text-dim mb-2">{salon.salonName}</p>
             <div className="space-y-1 mb-4">
               {selected.map(s => (
-                <p key={s.id} className="text-sm">• {s.name} - ₹{s.price} ({s.avgTime}min)</p>
+                <p key={s.id} className="text-sm flex justify-between">
+                  <span>• {s.name} {groupSize > 1 ? `(x${groupSize})` : ''}</span>
+                  <span>₹{s.price * groupSize} ({s.avgTime * groupSize}min)</span>
+                </p>
               ))}
+              {isHomeService && (
+                <p className="text-sm flex justify-between text-primary font-medium mt-2 pt-2 border-t border-border">
+                  <span>🏡 Home Service Fee</span>
+                  <span>₹150</span>
+                </p>
+              )}
             </div>
             <div className="divider" />
             <div className="flex justify-between font-bold mb-5">
               <span>Total: ~{totalTime}min</span>
               <span className="text-primary">₹{totalPrice}</span>
             </div>
-            <button onClick={handleGetToken} disabled={getting} className="btn-primary mb-2">
+            {isHomeService && (
+              <p className="text-xs text-text-dim mb-4 line-clamp-2">📍 {homeAddress}</p>
+            )}
+            <button onClick={() => handleGetToken(false)} disabled={getting} className="btn-primary mb-2">
               {getting ? (
                 <span className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

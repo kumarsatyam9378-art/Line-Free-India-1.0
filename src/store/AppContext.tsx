@@ -75,6 +75,8 @@ export interface BusinessProfile {
   franchiseId?: string;
   stories?: Story[];
   menuItems?: MenuItem[];
+  supportsGroupBooking?: boolean;
+  advanceBookingDays?: number;
   tableLayout?: TableItem[];
   memberships?: PricingPlan[];
   gymMembers?: UserMembership[];
@@ -207,6 +209,13 @@ interface AppContextType {
 }
 
 const AppContext = createContext<AppContextType>({} as AppContextType);
+export const planFeatures = {
+  free: { bookings: 50, gallery: 5, staff: 1, analyticsDays: 7 },
+  basic: { bookings: 200, gallery: 15, staff: 3, analyticsDays: 30 },
+  pro: { bookings: 1000, gallery: 50, staff: 10, analyticsDays: 90 },
+  elite: { bookings: 999999, gallery: 999, staff: 99, analyticsDays: 365 },
+};
+
 export const useApp = () => useContext(AppContext);
 
 const translations: Record<string, Record<Lang, string>> = {
