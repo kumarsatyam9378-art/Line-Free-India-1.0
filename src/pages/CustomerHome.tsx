@@ -33,7 +33,7 @@ export default function CustomerHome() {
       const withLoc = allSalons.filter(s => s.location && s.isOpen);
       setNearbySalons(withLoc.slice(0, 5));
     } else {
-      alert('Could not get location. Please enable location access.');
+      toast('Could not get location. Please enable location access.');
     }
   };
 

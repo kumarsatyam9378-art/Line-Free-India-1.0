@@ -33,7 +33,7 @@ export default function BarberAnalytics() {
       await generateMonthlyReport(stats, barberProfile, month);
     } catch (e) {
       console.error('PDF error:', e);
-      alert('PDF generation failed. Please try again.');
+      toast('PDF generation failed. Please try again.');
     }
     setGenerating(false);
   };

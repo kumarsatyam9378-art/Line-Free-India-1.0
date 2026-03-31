@@ -44,7 +44,7 @@ export default function BarberProfile() {
     try {
       const url = await uploadPhoto(file, `line-free/barbers/${user.uid}`);
       await saveBarberProfile({ ...barberProfile, photoURL: url });
-    } catch { alert('Upload failed'); }
+    } catch { toast('Upload failed'); }
     setUploading(false);
   };
 
@@ -55,7 +55,7 @@ export default function BarberProfile() {
     try {
       const url = await uploadPhoto(file, `line-free/salons/${user.uid}`);
       await saveBarberProfile({ ...barberProfile, salonImageURL: url });
-    } catch { alert('Upload failed'); }
+    } catch { toast('Upload failed'); }
     setUploadingBanner(false);
   };
 
@@ -150,7 +150,7 @@ export default function BarberProfile() {
               <p className="text-xs text-text-dim">🎁 Your Referral Code</p>
               <p className="text-xl font-bold gradient-text tracking-widest">{referralCode}</p>
             </div>
-            <button onClick={() => { navigator.clipboard.writeText(referralCode); alert('Copied!'); }} className="p-2 rounded-xl bg-primary/20 text-primary text-sm">📋</button>
+            <button onClick={() => { navigator.clipboard.writeText(referralCode); toast('Copied!'); }} className="p-2 rounded-xl bg-primary/20 text-primary text-sm">📋</button>
           </div>
         </div>
 

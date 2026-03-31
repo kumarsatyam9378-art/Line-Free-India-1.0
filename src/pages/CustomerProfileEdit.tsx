@@ -32,7 +32,7 @@ export default function CustomerProfileEdit() {
     try {
       const url = await uploadPhoto(file, `line-free/customers/${user.uid}`);
       await saveCustomerProfile({ ...customerProfile, photoURL: url });
-    } catch { alert('Photo upload failed'); }
+    } catch { toast('Photo upload failed'); }
     setUploading(false);
   };
 
@@ -92,7 +92,7 @@ export default function CustomerProfileEdit() {
               <p className="text-xl font-bold gradient-text tracking-widest mt-0.5">{referralCode}</p>
               <p className="text-[10px] text-text-dim mt-0.5">Share to earn rewards</p>
             </div>
-            <button onClick={() => { navigator.clipboard.writeText(referralCode); alert('Copied!'); }} className="p-3 rounded-xl bg-primary/20 border border-primary/30 text-primary">
+            <button onClick={() => { navigator.clipboard.writeText(referralCode); toast('Copied!'); }} className="p-3 rounded-xl bg-primary/20 border border-primary/30 text-primary">
               📋
             </button>
           </div>

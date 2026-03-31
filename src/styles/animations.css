@@ -1,0 +1,15 @@
+/* ─── FRAMER MOTION CSS ADDITIONS ─── */
+
+.page-wrapper {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.business-card-hover {
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.business-card-hover:hover {
+  box-shadow: 0 0 20px rgba(108, 99, 255, 0.4);
+  transform: translateY(-2px);
+}
