@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { uploadToCloudinary } from '../utils/cloudinary';
 
-export type Lang = 'en' | 'hi';
+export type Lang = 'en' | 'hi' | 'gu' | 'ta' | 'mr' | 'bn';
 export type Role = 'customer' | 'barber' | 'business';
 
 export type BusinessCategory =

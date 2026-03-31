@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider, useApp } from './store/AppContext';
+import SplashPage from './pages/onboarding/SplashPage';
 import LanguageSelect from './pages/LanguageSelect';
 import RoleSelect from './pages/RoleSelect';
 import CustomerAuth from './pages/CustomerAuth';
@@ -56,7 +57,13 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<LanguageSelect />} />
+      <Route path="/" element={
+        localStorage.getItem('onboarding_done') === 'true'
+          ? <Navigate to="/language" replace />
+          : <Navigate to="/splash" replace />
+      } />
+      <Route path="/splash" element={<SplashPage />} />
+      <Route path="/language" element={<LanguageSelect />} />
       <Route path="/role" element={<RoleSelect />} />
       <Route path="/customer/auth" element={<CustomerAuth />} />
       <Route path="/barber/auth" element={<BarberAuth />} />
