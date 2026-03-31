@@ -2,7 +2,7 @@ import { useApp } from '../store/AppContext';
 import BottomNav from '../components/BottomNav';
 import BackButton from '../components/BackButton';
 
-const UPI_ID = 'kumarsatyam9378@okhdfcbank';
+const UPI_ID = import.meta.env.VITE_UPI_ID;
 
 export default function BarberSubscription() {
   const { isBarberTrialActive, getBarberTrialDaysLeft, isBarberSubscribed, barberProfile, t } = useApp();
