@@ -1,0 +1,52 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper functions
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuth() && request.auth.uid == uid;
+    }
+
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    function isSizeLessThan(mb) {
+      return request.resource.size < mb * 1024 * 1024;
+    }
+
+    // Business images (Max 5MB)
+    // Legacy support for salons and barbers, and new businesses path
+    match /businesses/{businessId}/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if isOwner(businessId) && isImage() && isSizeLessThan(5);
+      allow delete: if isOwner(businessId);
+    }
+    match /salons/{businessId}/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if isOwner(businessId) && isImage() && isSizeLessThan(5);
+      allow delete: if isOwner(businessId);
+    }
+    match /barbers/{businessId}/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if isOwner(businessId) && isImage() && isSizeLessThan(5);
+      allow delete: if isOwner(businessId);
+    }
+
+    // Customer images (Max 2MB)
+    match /customers/{customerId}/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if isOwner(customerId) && isImage() && isSizeLessThan(2);
+      allow delete: if isOwner(customerId);
+    }
+
+    // Deny default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
