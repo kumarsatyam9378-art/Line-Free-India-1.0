@@ -43,6 +43,67 @@ export default function BarberHome() {
 
   if (!barberProfile) return null;
 
+  const BUSINESS_CONFIGS: Record<string, any> = {
+    restaurant: {
+      ownerTitle: 'Restaurant Manager',
+      customersLabel: 'Guests Today',
+      waitingLabel: 'Tables Waiting',
+      earningsLabel: "Today's Revenue",
+      customerNoun: 'Guest',
+      tokenNoun: 'Table Booking'
+    },
+    clinic: {
+      ownerTitle: 'Doctor',
+      customersLabel: 'Patients Today',
+      waitingLabel: 'Patients Waiting',
+      earningsLabel: "Today's Fees",
+      customerNoun: 'Patient',
+      tokenNoun: 'Appointment'
+    },
+    hospital: {
+      ownerTitle: 'Hospital Admin',
+      customersLabel: 'Patients Today',
+      waitingLabel: 'In OPD Queue',
+      earningsLabel: "Today's Revenue",
+      customerNoun: 'Patient',
+      tokenNoun: 'OPD Token'
+    },
+    coaching_institute: {
+      ownerTitle: 'Institute Director',
+      customersLabel: 'Students Today',
+      waitingLabel: 'In Queue',
+      earningsLabel: "Today's Fees",
+      customerNoun: 'Student',
+      tokenNoun: 'Slot'
+    },
+    gym: {
+      ownerTitle: 'Gym Owner',
+      customersLabel: 'Members Today',
+      waitingLabel: 'Active Now',
+      earningsLabel: "Today's Revenue",
+      customerNoun: 'Member',
+      tokenNoun: 'Session'
+    },
+    hotel: {
+      ownerTitle: 'Hotel Manager',
+      customersLabel: 'Guests Today',
+      waitingLabel: 'Awaiting Check-in',
+      earningsLabel: "Today's Revenue",
+      customerNoun: 'Guest',
+      tokenNoun: 'Booking'
+    },
+    default: {
+      ownerTitle: 'Business Owner',
+      customersLabel: 'Customers Today',
+      waitingLabel: 'In Queue',
+      earningsLabel: "Today's Revenue",
+      customerNoun: 'Customer',
+      tokenNoun: 'Token'
+    }
+  };
+
+  const config = BUSINESS_CONFIGS[barberProfile.businessType] || BUSINESS_CONFIGS.default;
+
   const bInfo = BUSINESS_CATEGORIES_INFO.find(c => c.id === barberProfile.businessType)
                 || BUSINESS_CATEGORIES_INFO.find(c => c.id === 'other')!;
 
@@ -61,7 +122,7 @@ export default function BarberHome() {
             </div>
             <div>
               <h1 className="font-bold text-lg leading-tight">{barberProfile.businessName || barberProfile.salonName}</h1>
-              <p className="text-text-dim text-xs mt-0.5 capitalize">{bInfo.label} • {bInfo.terminology?.provider || 'Owner'}</p>
+              <p className="text-text-dim text-xs mt-0.5 capitalize">{bInfo.label} • {config.ownerTitle}</p>
             </div>
           </div>
           <button onClick={() => nav('/barber/notifications')} className="relative p-2 bg-card rounded-full shadow-sm">
@@ -80,7 +141,7 @@ export default function BarberHome() {
             <div className={`w-3 h-3 rounded-full ${barberProfile.isOpen ? 'bg-success animate-pulse' : 'bg-danger'}`} />
             <div>
               <p className="font-semibold">{barberProfile.isOpen ? 'Accepting Orders/Bookings' : 'Closed Currently'}</p>
-              <p className="text-xs text-text-dim">{barberProfile.isOpen ? 'Customers can join queue' : 'No new customers'}</p>
+              <p className="text-xs text-text-dim">{barberProfile.isOpen ? `${config.customerNoun}s can join queue` : `No new ${config.customerNoun.toLowerCase()}s`}</p>
             </div>
           </div>
           <button
@@ -103,7 +164,7 @@ export default function BarberHome() {
               <span className="text-2xl">👥</span>
               <span className="text-xs font-semibold text-success bg-success/10 px-2 py-0.5 rounded-full">+12%</span>
             </div>
-            <p className="text-text-dim text-xs mt-2">{bInfo.terminology?.noun || 'Tokens'}</p>
+            <p className="text-text-dim text-xs mt-2">{config.customersLabel}</p>
             <p className="text-2xl font-bold">{todayTokensCount}</p>
           </div>
           <div className="bg-card border border-border p-4 rounded-2xl">
@@ -111,7 +172,7 @@ export default function BarberHome() {
               <span className="text-2xl">💵</span>
               <span className="text-xs font-semibold text-success bg-success/10 px-2 py-0.5 rounded-full">+5%</span>
             </div>
-            <p className="text-text-dim text-xs mt-2">Revenue</p>
+            <p className="text-text-dim text-xs mt-2">{config.earningsLabel}</p>
             <p className="text-2xl font-bold">₹{todayEarnings}</p>
           </div>
         </div>
@@ -140,7 +201,7 @@ export default function BarberHome() {
             <div className="flex justify-between items-center mt-5 pt-5 border-t border-border z-10 relative">
               <div>
                 <p className="text-3xl font-bold text-text">{waitingCount}</p>
-                <p className="text-text-dim text-[10px] uppercase tracking-wider">{t('queue.waiting')}</p>
+                <p className="text-text-dim text-[10px] uppercase tracking-wider">{config.waitingLabel}</p>
               </div>
               <div className="flex gap-2">
                 <button onClick={toggleSalonBreak} className={`px-4 py-2 rounded-xl text-sm font-medium border ${barberProfile.isBreak ? 'bg-warning/20 border-warning text-warning' : 'border-border text-text hover:bg-card-2'}`}>

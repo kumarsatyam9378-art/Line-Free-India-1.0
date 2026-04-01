@@ -7,6 +7,8 @@ import CustomerAuth from './pages/CustomerAuth';
 import BarberAuth from './pages/BarberAuth';
 import CustomerProfileSetup from './pages/CustomerProfileSetup';
 import BarberProfileSetup from './pages/BarberProfileSetup';
+import BusinessTypeSelectPage from './pages/BusinessTypeSelectPage';
+import BusinessAuth from './pages/BusinessAuth';
 import CustomerHome from './pages/CustomerHome';
 import CustomerSearch from './pages/CustomerSearch';
 import SalonDetail from './pages/SalonDetail';
@@ -34,7 +36,7 @@ function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requ
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4 animate-pulse-glow">
-          <span className="text-3xl">✂️</span>
+          <span className="text-3xl">🏪</span>
         </div>
         <p className="text-text-dim">Loading...</p>
       </div>
@@ -51,7 +53,7 @@ function AppRoutes() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4 animate-pulse-glow">
-          <span className="text-4xl">✂️</span>
+          <span className="text-4xl">🏪</span>
         </div>
         <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Line Free</h1>
         <p className="text-text-dim mt-2">Loading...</p>
@@ -71,6 +73,8 @@ function AppRoutes() {
       <Route path="/role" element={<RoleSelect />} />
       <Route path="/customer/auth" element={<CustomerAuth />} />
       <Route path="/barber/auth" element={<BarberAuth />} />
+      <Route path="/business/select" element={<BusinessTypeSelectPage />} />
+      <Route path="/business/auth" element={<BusinessAuth />} />
       <Route path="/customer/setup" element={<CustomerProfileSetup />} />
       <Route path="/barber/setup" element={<BarberProfileSetup />} />
 

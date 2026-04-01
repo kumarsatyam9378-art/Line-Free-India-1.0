@@ -9,8 +9,12 @@ export default function BarberProfileSetup() {
   const { user, saveBarberProfile, barberProfile, t } = useApp();
   const nav = useNavigate();
   
-  const [step, setStep] = useState(1);
-  const [businessType, setBusinessType] = useState<BusinessCategory>(barberProfile?.businessType || 'men_salon');
+  const preSelectedType = localStorage.getItem('selected_business_type') as BusinessCategory;
+  const preSelectedLabel = localStorage.getItem('selected_business_label');
+  const preSelectedIcon = localStorage.getItem('selected_business_icon');
+
+  const [step, setStep] = useState(preSelectedType ? 2 : 1);
+  const [businessType, setBusinessType] = useState<BusinessCategory>(barberProfile?.businessType || preSelectedType || 'men_salon');
 
   const [name, setName] = useState(barberProfile?.name || user?.displayName || '');
   const [salonName, setSalonName] = useState(barberProfile?.salonName || '');
@@ -76,6 +80,9 @@ export default function BarberProfileSetup() {
       createdAt: barberProfile?.createdAt || Date.now(),
     };
     await saveBarberProfile(profile);
+    localStorage.removeItem('selected_business_type');
+    localStorage.removeItem('selected_business_label');
+    localStorage.removeItem('selected_business_icon');
     nav('/barber/home', { replace: true });
   };
 
@@ -101,6 +108,9 @@ export default function BarberProfileSetup() {
       createdAt: Date.now(),
     };
     await saveBarberProfile(profile);
+    localStorage.removeItem('selected_business_type');
+    localStorage.removeItem('selected_business_label');
+    localStorage.removeItem('selected_business_icon');
     nav('/barber/home', { replace: true });
   };
 
@@ -110,7 +120,30 @@ export default function BarberProfileSetup() {
 
   return (
     <div className="min-h-screen flex flex-col p-6 pb-32 animate-fadeIn">
-      <BackButton onClick={() => setStep(step === 2 ? 1 : 2)} />
+      <BackButton onClick={() => {
+        if (step === 2 && preSelectedType) nav('/business/select');
+        else setStep(step === 2 ? 1 : 2);
+      }} />
+
+      {step === 2 && preSelectedType && (
+        <div className="max-w-sm mx-auto w-full bg-card border border-border rounded-2xl p-4 mb-6 flex items-center justify-between shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-md">
+              <span className="text-2xl">{preSelectedIcon || '🏪'}</span>
+            </div>
+            <div>
+              <p className="text-xs text-text-dim font-medium uppercase tracking-wider">Selected Type</p>
+              <p className="font-bold text-sm leading-tight">{preSelectedLabel || 'Business'}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => nav('/business/select')}
+            className="text-primary text-xs font-bold bg-primary/10 px-3 py-1.5 rounded-lg hover:bg-primary/20 transition-colors"
+          >
+            Change
+          </button>
+        </div>
+      )}
 
       <div className="text-center mb-6">
         <div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden bg-card-2 flex items-center justify-center ring-2 ring-primary/30">
