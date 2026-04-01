@@ -80,7 +80,11 @@ service cloud.firestore {
 
     // Chat Messages
     match /messages/{messageId} {
-      allow read: if isAuth();
+      allow read: if isAuth() && (
+        resource.data.senderId == request.auth.uid ||
+        resource.data.customerId == request.auth.uid ||
+        resource.data.salonId == request.auth.uid
+      );
       allow create: if isAuth();
       allow update, delete: if isAuth() && resource.data.senderId == request.auth.uid;
     }
