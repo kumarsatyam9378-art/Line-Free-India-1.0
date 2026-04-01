@@ -67,7 +67,7 @@ export default function BarberHome() {
               <p className="text-text-dim text-xs mt-0.5 capitalize">{dashConfig.ownerTitle}</p>
             </div>
           </div>
-          <button onClick={() => nav('/barber/notifications')} className="relative p-2 bg-card rounded-full shadow-sm">
+          <button aria-label="View notifications" onClick={() => nav('/barber/notifications')} className="relative p-2 bg-card rounded-full shadow-sm">
             <span>🔔</span>
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-danger rounded-full border-2 border-card text-[8px] font-bold text-white flex justify-center items-center">

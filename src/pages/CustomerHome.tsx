@@ -173,6 +173,7 @@ export default function CustomerHome() {
             </div>
           </div>
           <button
+            aria-label="View notifications"
             onClick={() => nav('/customer/notifications')}
             className="relative w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center transition-transform active:scale-95"
           >
