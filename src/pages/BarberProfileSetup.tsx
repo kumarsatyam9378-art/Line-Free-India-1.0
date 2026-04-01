@@ -9,8 +9,12 @@ export default function BarberProfileSetup() {
   const { user, saveBarberProfile, barberProfile, t } = useApp();
   const nav = useNavigate();
   
-  const [step, setStep] = useState(1);
-  const [businessType, setBusinessType] = useState<BusinessCategory>(barberProfile?.businessType || 'men_salon');
+  const preSelectedType = localStorage.getItem('selected_business_type') as BusinessCategory;
+
+  const [step, setStep] = useState(preSelectedType ? 2 : 1);
+  const [businessType, setBusinessType] = useState<BusinessCategory>(
+    barberProfile?.businessType || preSelectedType || 'men_salon'
+  );
 
   const [name, setName] = useState(barberProfile?.name || user?.displayName || '');
   const [salonName, setSalonName] = useState(barberProfile?.salonName || '');
@@ -76,6 +80,9 @@ export default function BarberProfileSetup() {
       createdAt: barberProfile?.createdAt || Date.now(),
     };
     await saveBarberProfile(profile);
+    localStorage.removeItem('selected_business_type');
+    localStorage.removeItem('selected_business_label');
+    localStorage.removeItem('selected_business_icon');
     nav('/barber/home', { replace: true });
   };
 
@@ -101,6 +108,9 @@ export default function BarberProfileSetup() {
       createdAt: Date.now(),
     };
     await saveBarberProfile(profile);
+    localStorage.removeItem('selected_business_type');
+    localStorage.removeItem('selected_business_label');
+    localStorage.removeItem('selected_business_icon');
     nav('/barber/home', { replace: true });
   };
 
@@ -129,6 +139,21 @@ export default function BarberProfileSetup() {
       <div className="space-y-4 max-w-sm mx-auto w-full">
         {step === 2 && (
           <>
+            {/* Show selected business type */}
+            <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 flex items-center gap-2 mb-4">
+              <span className="text-2xl">{localStorage.getItem('selected_business_icon') || '🏪'}</span>
+              <div>
+                <p className="text-xs text-text-dim">Selected Business</p>
+                <p className="font-semibold text-sm">{localStorage.getItem('selected_business_label') || businessType}</p>
+              </div>
+              <button
+                onClick={() => nav('/business/select')}
+                className="ml-auto text-xs text-primary"
+              >
+                Change
+              </button>
+            </div>
+
             <div>
               <label className="text-sm text-text-dim mb-1 block">{t('profile.name')} {t('profile.optional')}</label>
               <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" className="input-field" />
