@@ -1,0 +1,15 @@
+
+> react-vite-tailwind@0.0.0 dev
+> vite
+
+
+  VITE v7.2.4  ready in 392 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+12:35:11 AM [vite] vite.config.ts changed, restarting server...
+12:35:11 AM [vite] (client) Re-optimizing dependencies because vite config has changed
+12:35:11 AM [vite] server restarted.
+12:36:20 AM [vite] (client) hmr update /src/App.tsx, /src/index.css
+12:36:35 AM [vite] (client) hmr update /src/App.tsx, /src/index.css
+12:44:00 AM [vite] (client) hmr update /src/pages/RoleSelect.tsx, /src/index.css
