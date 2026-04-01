@@ -32,7 +32,7 @@ export default function CustomerHistory() {
   }[status] || status);
 
   return (
-    <div className="min-h-screen pb-24 animate-fadeIn">
+    <div className="h-[100dvh] overflow-y-auto pb-24 animate-fadeIn">
       <div className="p-6">
         <BackButton to="/customer/profile" />
         <h1 className="text-2xl font-bold mb-4">📋 Visit History</h1>
