@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp, ServiceItem, BusinessCategory } from '../store/AppContext';
 import BackButton from '../components/BackButton';
@@ -11,6 +11,18 @@ export default function BarberProfileSetup() {
   
   const [step, setStep] = useState(1);
   const [businessType, setBusinessType] = useState<BusinessCategory>(barberProfile?.businessType || 'men_salon');
+
+  useEffect(() => {
+    const savedType = localStorage.getItem('selected_business_type');
+    if (savedType) {
+      setBusinessType(savedType as BusinessCategory);
+      const categoryInfo = BUSINESS_CATEGORIES_INFO.find(c => c.id === savedType);
+      if (categoryInfo && (!barberProfile?.services || barberProfile.services.length === 0)) {
+        setServices(categoryInfo.defaultServices);
+      }
+      setStep(2);
+    }
+  }, []);
 
   const [name, setName] = useState(barberProfile?.name || user?.displayName || '');
   const [salonName, setSalonName] = useState(barberProfile?.salonName || '');
@@ -76,6 +88,7 @@ export default function BarberProfileSetup() {
       createdAt: barberProfile?.createdAt || Date.now(),
     };
     await saveBarberProfile(profile);
+    localStorage.removeItem('selected_business_type');
     nav('/barber/home', { replace: true });
   };
 
@@ -101,6 +114,7 @@ export default function BarberProfileSetup() {
       createdAt: Date.now(),
     };
     await saveBarberProfile(profile);
+    localStorage.removeItem('selected_business_type');
     nav('/barber/home', { replace: true });
   };
 

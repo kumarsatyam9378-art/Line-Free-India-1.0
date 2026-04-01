@@ -26,6 +26,7 @@ export interface BusinessCategoryInfo {
 export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   {
     "id": "restaurant",
+    "category": "Food & Dining",
     "icon": "🍽️",
     "label": "Restaurant / Dhaba",
     "labelHi": "रेस्टोरेंट / ढाबा",
@@ -90,6 +91,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "cafe",
+    "category": "Food & Dining",
     "icon": "☕",
     "label": "Café / Coffee Shop",
     "labelHi": "कैफे",
@@ -145,6 +147,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "dhaba",
+    "category": "Food & Dining",
     "icon": "🫙",
     "label": "Dhaba",
     "labelHi": "Dhaba",
@@ -203,6 +206,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "fast_food",
+    "category": "Food & Dining",
     "icon": "🍔",
     "label": "Fast Food",
     "labelHi": "Fast Food",
@@ -261,6 +265,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "sweet_shop",
+    "category": "Food & Dining",
     "icon": "🍬",
     "label": "Sweet Shop",
     "labelHi": "Sweet Shop",
@@ -313,6 +318,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "juice_bar",
+    "category": "Food & Dining",
     "icon": "🥤",
     "label": "Juice Bar",
     "labelHi": "Juice Bar",
@@ -365,6 +371,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "bakery",
+    "category": "Food & Dining",
     "icon": "🎂",
     "label": "Bakery",
     "labelHi": "Bakery",
@@ -417,6 +424,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ice_cream_parlour",
+    "category": "Food & Dining",
     "icon": "🍦",
     "label": "Ice Cream Parlour",
     "labelHi": "Ice Cream Parlour",
@@ -469,6 +477,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "tiffin_service",
+    "category": "Other",
     "icon": "🍱",
     "label": "Tiffin Service",
     "labelHi": "Tiffin Service",
@@ -516,6 +525,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "caterer",
+    "category": "Other",
     "icon": "👨‍🍳",
     "label": "Caterer",
     "labelHi": "Caterer",
@@ -562,6 +572,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "food_truck",
+    "category": "Food & Dining",
     "icon": "🚚",
     "label": "Food Truck",
     "labelHi": "Food Truck",
@@ -608,6 +619,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "cloud_kitchen",
+    "category": "Other",
     "icon": "📦",
     "label": "Cloud Kitchen",
     "labelHi": "Cloud Kitchen",
@@ -637,6 +649,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "paan_shop",
+    "category": "Retail & Shopping",
     "icon": "🌿",
     "label": "Paan Shop",
     "labelHi": "Paan Shop",
@@ -683,6 +696,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "chaat_stall",
+    "category": "Other",
     "icon": "🥙",
     "label": "Chaat Stall",
     "labelHi": "Chaat Stall",
@@ -735,6 +749,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "clinic",
+    "category": "Healthcare & Clinics",
     "icon": "🩺",
     "label": "Clinic / Doctor",
     "labelHi": "क्लिनिक / डॉक्टर",
@@ -835,6 +850,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "hospital",
+    "category": "Healthcare & Clinics",
     "icon": "🏥",
     "label": "Hospital",
     "labelHi": "हॉस्पिटल",
@@ -875,6 +891,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "dental_clinic",
+    "category": "Healthcare & Clinics",
     "icon": "🦷",
     "label": "Dental Clinic",
     "labelHi": "Dental Clinic",
@@ -940,6 +957,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "eye_clinic",
+    "category": "Healthcare & Clinics",
     "icon": "👁️",
     "label": "Eye Clinic",
     "labelHi": "Eye Clinic",
@@ -994,6 +1012,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "physiotherapy",
+    "category": "Healthcare & Clinics",
     "icon": "🏋️",
     "label": "Physiotherapy",
     "labelHi": "Physiotherapy",
@@ -1048,6 +1067,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ayurveda_clinic",
+    "category": "Healthcare & Clinics",
     "icon": "🌿",
     "label": "Ayurveda Clinic",
     "labelHi": "Ayurveda Clinic",
@@ -1101,6 +1121,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "homeopathy_clinic",
+    "category": "Healthcare & Clinics",
     "icon": "💊",
     "label": "Homeopathy Clinic",
     "labelHi": "Homeopathy Clinic",
@@ -1149,6 +1170,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "lab_diagnostic",
+    "category": "Other",
     "icon": "🔬",
     "label": "Lab Diagnostic",
     "labelHi": "Lab Diagnostic",
@@ -1208,6 +1230,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "pharmacy",
+    "category": "Retail & Shopping",
     "icon": "💊",
     "label": "Pharmacy",
     "labelHi": "Pharmacy",
@@ -1248,6 +1271,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "skin_clinic",
+    "category": "Healthcare & Clinics",
     "icon": "✨",
     "label": "Skin Clinic",
     "labelHi": "Skin Clinic",
@@ -1301,6 +1325,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "orthopaedic",
+    "category": "Other",
     "icon": "🦴",
     "label": "Orthopaedic",
     "labelHi": "Orthopaedic",
@@ -1355,6 +1380,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "children_clinic",
+    "category": "Healthcare & Clinics",
     "icon": "👶",
     "label": "Children Clinic",
     "labelHi": "Children Clinic",
@@ -1409,6 +1435,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "psychiatry_clinic",
+    "category": "Healthcare & Clinics",
     "icon": "🧠",
     "label": "Psychiatry Clinic",
     "labelHi": "Psychiatry Clinic",
@@ -1457,6 +1484,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "gynecology_clinic",
+    "category": "Healthcare & Clinics",
     "icon": "🌸",
     "label": "Gynecology Clinic",
     "labelHi": "Gynecology Clinic",
@@ -1504,6 +1532,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "rehabilitation_center",
+    "category": "Other",
     "icon": "♿",
     "label": "Rehabilitation Center",
     "labelHi": "Rehabilitation Center",
@@ -1552,6 +1581,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "men_salon",
+    "category": "Beauty & Wellness",
     "icon": "💈",
     "label": "Men's Salon",
     "labelHi": "बार्बर / सैलून",
@@ -1656,6 +1686,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "beauty_parlour",
+    "category": "Other",
     "icon": "💅",
     "label": "Beauty Parlour",
     "labelHi": "ब्यूटी पार्लर",
@@ -1780,6 +1811,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "spa",
+    "category": "Beauty & Wellness",
     "icon": "🧖",
     "label": "Spa & Wellness",
     "labelHi": "स्पा",
@@ -1860,6 +1892,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "nail_studio",
+    "category": "Events & Entertainment",
     "icon": "💅",
     "label": "Nail Studio",
     "labelHi": "Nail Studio",
@@ -1918,6 +1951,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "eyebrow_studio",
+    "category": "Healthcare & Clinics",
     "icon": "👁️‍🗨️",
     "label": "Eyebrow Studio",
     "labelHi": "Eyebrow Studio",
@@ -1970,6 +2004,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "tattoo_studio",
+    "category": "Beauty & Wellness",
     "icon": "🖊️",
     "label": "Tattoo Studio",
     "labelHi": "Tattoo Studio",
@@ -2023,6 +2058,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "mehndi_artist",
+    "category": "Other",
     "icon": "🌺",
     "label": "Mehndi Artist",
     "labelHi": "Mehndi Artist",
@@ -2076,6 +2112,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "bridal_studio",
+    "category": "Events & Entertainment",
     "icon": "👰",
     "label": "Bridal Studio",
     "labelHi": "Bridal Studio",
@@ -2129,6 +2166,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "lash_studio",
+    "category": "Events & Entertainment",
     "icon": "✨",
     "label": "Lash Studio",
     "labelHi": "Lash Studio",
@@ -2182,6 +2220,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "massage_center",
+    "category": "Beauty & Wellness",
     "icon": "💆",
     "label": "Massage Center",
     "labelHi": "Massage Center",
@@ -2236,6 +2275,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "laser_hair_removal",
+    "category": "Other",
     "icon": "✨",
     "label": "Laser Hair Removal",
     "labelHi": "Laser Hair Removal",
@@ -2289,6 +2329,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ayurvedic_spa",
+    "category": "Beauty & Wellness",
     "icon": "🌿",
     "label": "Ayurvedic Spa",
     "labelHi": "Ayurvedic Spa",
@@ -2342,6 +2383,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "gym",
+    "category": "Sports & Fitness",
     "icon": "💪",
     "label": "Gym / Fitness Center",
     "labelHi": "जिम / फिटनेस सेंटर",
@@ -2421,6 +2463,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "yoga_studio",
+    "category": "Beauty & Wellness",
     "icon": "🧘",
     "label": "Yoga Studio",
     "labelHi": "Yoga Studio",
@@ -2476,6 +2519,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "slimming_center",
+    "category": "Other",
     "icon": "⚡",
     "label": "Slimming Center",
     "labelHi": "Slimming Center",
@@ -2529,6 +2573,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "crossfit_gym",
+    "category": "Sports & Fitness",
     "icon": "🏋️",
     "label": "Crossfit Gym",
     "labelHi": "Crossfit Gym",
@@ -2589,6 +2634,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "swimming_pool",
+    "category": "Other",
     "icon": "🏊",
     "label": "Swimming Pool",
     "labelHi": "Swimming Pool",
@@ -2643,6 +2689,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "sports_academy",
+    "category": "Sports & Fitness",
     "icon": "🏏",
     "label": "Sports Academy",
     "labelHi": "Sports Academy",
@@ -2696,6 +2743,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "martial_arts",
+    "category": "Retail & Shopping",
     "icon": "🥋",
     "label": "Martial Arts",
     "labelHi": "Martial Arts",
@@ -2749,6 +2797,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "boxing_gym",
+    "category": "Sports & Fitness",
     "icon": "🥊",
     "label": "Boxing Gym",
     "labelHi": "Boxing Gym",
@@ -2801,6 +2850,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "dance_studio",
+    "category": "Events & Entertainment",
     "icon": "💃",
     "label": "Dance Studio",
     "labelHi": "Dance Studio",
@@ -2855,6 +2905,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "cycling_studio",
+    "category": "Events & Entertainment",
     "icon": "🚴",
     "label": "Cycling Studio",
     "labelHi": "Cycling Studio",
@@ -2903,6 +2954,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "aerobics_center",
+    "category": "Other",
     "icon": "🤸",
     "label": "Aerobics Center",
     "labelHi": "Aerobics Center",
@@ -2951,6 +3003,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "coaching",
+    "category": "Education & Coaching",
     "icon": "📚",
     "label": "Coaching / Tuition",
     "labelHi": "कोचिंग",
@@ -3005,6 +3058,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "music_school",
+    "category": "Education & Coaching",
     "icon": "🎵",
     "label": "Music School",
     "labelHi": "Music School",
@@ -3064,6 +3118,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "dance_school",
+    "category": "Education & Coaching",
     "icon": "🩰",
     "label": "Dance School",
     "labelHi": "Dance School",
@@ -3110,6 +3165,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "art_classes",
+    "category": "Education & Coaching",
     "icon": "🎨",
     "label": "Art Classes",
     "labelHi": "Art Classes",
@@ -3162,6 +3218,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "language_classes",
+    "category": "Education & Coaching",
     "icon": "📖",
     "label": "Language Classes",
     "labelHi": "Language Classes",
@@ -3215,6 +3272,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "computer_classes",
+    "category": "Retail & Shopping",
     "icon": "💻",
     "label": "Computer Classes",
     "labelHi": "Computer Classes",
@@ -3267,6 +3325,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "driving_school",
+    "category": "Education & Coaching",
     "icon": "🚗",
     "label": "Driving School",
     "labelHi": "Driving School",
@@ -3320,6 +3379,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "neet_coaching",
+    "category": "Education & Coaching",
     "icon": "🏥",
     "label": "Neet Coaching",
     "labelHi": "Neet Coaching",
@@ -3372,6 +3432,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "jee_coaching",
+    "category": "Education & Coaching",
     "icon": "⚙️",
     "label": "Jee Coaching",
     "labelHi": "Jee Coaching",
@@ -3418,6 +3479,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "upsc_coaching",
+    "category": "Education & Coaching",
     "icon": "🏛️",
     "label": "Upsc Coaching",
     "labelHi": "Upsc Coaching",
@@ -3464,6 +3526,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "spoken_english",
+    "category": "Other",
     "icon": "🗣️",
     "label": "Spoken English",
     "labelHi": "Spoken English",
@@ -3511,6 +3574,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "coding_bootcamp",
+    "category": "Other",
     "icon": "👨‍💻",
     "label": "Coding Bootcamp",
     "labelHi": "Coding Bootcamp",
@@ -3564,6 +3628,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "chess_academy",
+    "category": "Other",
     "icon": "♟️",
     "label": "Chess Academy",
     "labelHi": "Chess Academy",
@@ -3610,6 +3675,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "clothing_store",
+    "category": "Retail & Shopping",
     "icon": "👗",
     "label": "Clothing Store",
     "labelHi": "Clothing Store",
@@ -3656,6 +3722,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "footwear_shop",
+    "category": "Retail & Shopping",
     "icon": "👟",
     "label": "Footwear Shop",
     "labelHi": "Footwear Shop",
@@ -3702,6 +3769,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "jewelry_shop",
+    "category": "Retail & Shopping",
     "icon": "💍",
     "label": "Jewelry Shop",
     "labelHi": "Jewelry Shop",
@@ -3748,6 +3816,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "electronics_store",
+    "category": "Retail & Shopping",
     "icon": "📱",
     "label": "Electronics Store",
     "labelHi": "Electronics Store",
@@ -3794,6 +3863,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "mobile_shop",
+    "category": "Retail & Shopping",
     "icon": "📱",
     "label": "Mobile Shop",
     "labelHi": "Mobile Shop",
@@ -3840,6 +3910,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "grocery_store",
+    "category": "Retail & Shopping",
     "icon": "🛒",
     "label": "Grocery Store",
     "labelHi": "Grocery Store",
@@ -3887,6 +3958,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "hardware_store",
+    "category": "Retail & Shopping",
     "icon": "🔨",
     "label": "Hardware Store",
     "labelHi": "Hardware Store",
@@ -3933,6 +4005,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "stationery_shop",
+    "category": "Retail & Shopping",
     "icon": "✏️",
     "label": "Stationery Shop",
     "labelHi": "Stationery Shop",
@@ -3979,6 +4052,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "book_shop",
+    "category": "Retail & Shopping",
     "icon": "📚",
     "label": "Book Shop",
     "labelHi": "Book Shop",
@@ -4025,6 +4099,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "toy_store",
+    "category": "Retail & Shopping",
     "icon": "🧸",
     "label": "Toy Store",
     "labelHi": "Toy Store",
@@ -4071,6 +4146,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "furniture_shop",
+    "category": "Retail & Shopping",
     "icon": "🪑",
     "label": "Furniture Shop",
     "labelHi": "Furniture Shop",
@@ -4118,6 +4194,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "flower_shop",
+    "category": "Retail & Shopping",
     "icon": "🌸",
     "label": "Flower Shop",
     "labelHi": "Flower Shop",
@@ -4165,6 +4242,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "optician",
+    "category": "Other",
     "icon": "👓",
     "label": "Optician",
     "labelHi": "Optician",
@@ -4217,6 +4295,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "tailoring_shop",
+    "category": "Retail & Shopping",
     "icon": "✂️",
     "label": "Tailoring Shop",
     "labelHi": "Tailoring Shop",
@@ -4269,6 +4348,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "saree_shop",
+    "category": "Retail & Shopping",
     "icon": "🥻",
     "label": "Saree Shop",
     "labelHi": "Saree Shop",
@@ -4315,6 +4395,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "gift_shop",
+    "category": "Retail & Shopping",
     "icon": "🎁",
     "label": "Gift Shop",
     "labelHi": "Gift Shop",
@@ -4361,6 +4442,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "handicraft_shop",
+    "category": "Retail & Shopping",
     "icon": "🏺",
     "label": "Handicraft Shop",
     "labelHi": "Handicraft Shop",
@@ -4407,6 +4489,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "home_decor_store",
+    "category": "Retail & Shopping",
     "icon": "🏠",
     "label": "Home Decor Store",
     "labelHi": "Home Decor Store",
@@ -4453,6 +4536,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "plumber",
+    "category": "Home & Local Services",
     "icon": "🔧",
     "label": "Plumber",
     "labelHi": "Plumber",
@@ -4507,6 +4591,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "electrician",
+    "category": "Home & Local Services",
     "icon": "⚡",
     "label": "Electrician",
     "labelHi": "Electrician",
@@ -4561,6 +4646,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "carpenter",
+    "category": "Automotive Services",
     "icon": "🪚",
     "label": "Carpenter",
     "labelHi": "Carpenter",
@@ -4614,6 +4700,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "painter",
+    "category": "Home & Local Services",
     "icon": "🎨",
     "label": "Painter",
     "labelHi": "Painter",
@@ -4661,6 +4748,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "home_cleaning",
+    "category": "Home & Local Services",
     "icon": "🧹",
     "label": "Home Cleaning",
     "labelHi": "Home Cleaning",
@@ -4715,6 +4803,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "pest_control",
+    "category": "Other",
     "icon": "🐛",
     "label": "Pest Control",
     "labelHi": "Pest Control",
@@ -4769,6 +4858,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "laundry",
+    "category": "Home & Local Services",
     "icon": "👕",
     "label": "Laundry / Dry Cleaner",
     "labelHi": "लॉन्ड्री",
@@ -4806,6 +4896,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ac_repair",
+    "category": "Automotive Services",
     "icon": "❄️",
     "label": "Ac Repair",
     "labelHi": "Ac Repair",
@@ -4860,6 +4951,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "appliance_repair",
+    "category": "Retail & Shopping",
     "icon": "🔌",
     "label": "Appliance Repair",
     "labelHi": "Appliance Repair",
@@ -4913,6 +5005,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "packers_movers",
+    "category": "Professional Services",
     "icon": "📦",
     "label": "Packers Movers",
     "labelHi": "Packers Movers",
@@ -4966,6 +5059,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "solar_panel_installer",
+    "category": "Other",
     "icon": "☀️",
     "label": "Solar Panel Installer",
     "labelHi": "Solar Panel Installer",
@@ -5013,6 +5107,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "water_purifier_service",
+    "category": "Other",
     "icon": "💧",
     "label": "Water Purifier Service",
     "labelHi": "Water Purifier Service",
@@ -5060,6 +5155,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "taxi_service",
+    "category": "Professional Services",
     "icon": "🚕",
     "label": "Taxi Service",
     "labelHi": "Taxi Service",
@@ -5113,6 +5209,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "auto_rickshaw",
+    "category": "Automotive Services",
     "icon": "🛺",
     "label": "Auto Rickshaw",
     "labelHi": "Auto Rickshaw",
@@ -5159,6 +5256,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "travel_agency",
+    "category": "Travel & Hospitality",
     "icon": "✈️",
     "label": "Travel Agency",
     "labelHi": "Travel Agency",
@@ -5212,6 +5310,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "car_rental",
+    "category": "Automotive Services",
     "icon": "🚗",
     "label": "Car Rental",
     "labelHi": "Car Rental",
@@ -5265,6 +5364,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ambulance_service",
+    "category": "Other",
     "icon": "🚑",
     "label": "Ambulance Service",
     "labelHi": "Ambulance Service",
@@ -5312,6 +5412,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "courier_service",
+    "category": "Professional Services",
     "icon": "📦",
     "label": "Courier Service",
     "labelHi": "Courier Service",
@@ -5365,6 +5466,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "towing_service",
+    "category": "Automotive Services",
     "icon": "🔩",
     "label": "Towing Service",
     "labelHi": "Towing Service",
@@ -5412,6 +5514,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "law_firm",
+    "category": "Other",
     "icon": "⚖️",
     "label": "Lawyer / Law Firm",
     "labelHi": "वकील",
@@ -5450,6 +5553,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ca_firm",
+    "category": "Other",
     "icon": "📊",
     "label": "Ca Firm",
     "labelHi": "Ca Firm",
@@ -5504,6 +5608,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "insurance_agent",
+    "category": "Professional Services",
     "icon": "🛡️",
     "label": "Insurance Agent",
     "labelHi": "Insurance Agent",
@@ -5558,6 +5663,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "loan_agent",
+    "category": "Professional Services",
     "icon": "💰",
     "label": "Loan Agent",
     "labelHi": "Loan Agent",
@@ -5611,6 +5717,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "tax_consultant",
+    "category": "Professional Services",
     "icon": "📋",
     "label": "Tax Consultant",
     "labelHi": "Tax Consultant",
@@ -5665,6 +5772,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "gst_consultant",
+    "category": "Professional Services",
     "icon": "🧾",
     "label": "Gst Consultant",
     "labelHi": "Gst Consultant",
@@ -5711,6 +5819,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "company_registration",
+    "category": "Other",
     "icon": "🏢",
     "label": "Company Registration",
     "labelHi": "Company Registration",
@@ -5763,6 +5872,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "notary",
+    "category": "Professional Services",
     "icon": "📝",
     "label": "Notary",
     "labelHi": "Notary",
@@ -5809,6 +5919,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "money_transfer",
+    "category": "Other",
     "icon": "💸",
     "label": "Money Transfer",
     "labelHi": "Money Transfer",
@@ -5861,6 +5972,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "real_estate_agent",
+    "category": "Professional Services",
     "icon": "🏠",
     "label": "Real Estate Agent",
     "labelHi": "Real Estate Agent",
@@ -5914,6 +6026,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "property_dealer",
+    "category": "Professional Services",
     "icon": "🏢",
     "label": "Property Dealer",
     "labelHi": "Property Dealer",
@@ -5960,6 +6073,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "pg_hostel",
+    "category": "Travel & Hospitality",
     "icon": "🛏️",
     "label": "Pg Hostel",
     "labelHi": "Pg Hostel",
@@ -6012,6 +6126,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "co_working_space",
+    "category": "Beauty & Wellness",
     "icon": "💻",
     "label": "Co Working Space",
     "labelHi": "Co Working Space",
@@ -6066,6 +6181,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "repair_shop",
+    "category": "Retail & Shopping",
     "icon": "🔧",
     "label": "Repair Shop",
     "labelHi": "रिपेयर शॉप",
@@ -6102,6 +6218,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "computer_repair",
+    "category": "Retail & Shopping",
     "icon": "💻",
     "label": "Computer Repair",
     "labelHi": "Computer Repair",
@@ -6154,6 +6271,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "mobile_repair",
+    "category": "Retail & Shopping",
     "icon": "📱",
     "label": "Mobile Repair",
     "labelHi": "Mobile Repair",
@@ -6206,6 +6324,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "it_company",
+    "category": "Other",
     "icon": "🖥️",
     "label": "It Company",
     "labelHi": "It Company",
@@ -6253,6 +6372,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "web_designer",
+    "category": "Other",
     "icon": "🌐",
     "label": "Web Designer",
     "labelHi": "Web Designer",
@@ -6300,6 +6420,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "digital_marketing_agency",
+    "category": "Retail & Shopping",
     "icon": "📱",
     "label": "Digital Marketing Agency",
     "labelHi": "Digital Marketing Agency",
@@ -6353,6 +6474,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "cybercafe",
+    "category": "Food & Dining",
     "icon": "🖥️",
     "label": "Cybercafe",
     "labelHi": "Cybercafe",
@@ -6407,6 +6529,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "hotel",
+    "category": "Travel & Hospitality",
     "icon": "🏨",
     "label": "Hotel",
     "labelHi": "Hotel",
@@ -6467,6 +6590,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "resort",
+    "category": "Travel & Hospitality",
     "icon": "🌴",
     "label": "Resort",
     "labelHi": "Resort",
@@ -6520,6 +6644,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "banquet_hall",
+    "category": "Other",
     "icon": "🎉",
     "label": "Banquet Hall",
     "labelHi": "Banquet Hall",
@@ -6569,6 +6694,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "wedding_venue",
+    "category": "Events & Entertainment",
     "icon": "💒",
     "label": "Wedding Venue",
     "labelHi": "Wedding Venue",
@@ -6622,6 +6748,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "photography",
+    "category": "Events & Entertainment",
     "icon": "📷",
     "label": "Photography Studio",
     "labelHi": "फोटोग्राफी",
@@ -6676,6 +6803,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "event_planner",
+    "category": "Events & Entertainment",
     "icon": "🎪",
     "label": "Event Planner",
     "labelHi": "इवेंट प्लानर",
@@ -6712,6 +6840,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "nursery",
+    "category": "Other",
     "icon": "🌱",
     "label": "Nursery",
     "labelHi": "Nursery",
@@ -6764,6 +6893,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "farm_shop",
+    "category": "Retail & Shopping",
     "icon": "🌾",
     "label": "Farm Shop",
     "labelHi": "Farm Shop",
@@ -6817,6 +6947,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "dairy_farm",
+    "category": "Other",
     "icon": "🥛",
     "label": "Dairy Farm",
     "labelHi": "Dairy Farm",
@@ -6870,6 +7001,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "pet_care",
+    "category": "Automotive Services",
     "icon": "🐾",
     "label": "Pet Care / Vet",
     "labelHi": "पालतू देखभाल",
@@ -6908,6 +7040,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "other",
+    "category": "Other",
     "icon": "🏪",
     "label": "Other Business",
     "labelHi": "अन्य व्यवसाय",
