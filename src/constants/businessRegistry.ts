@@ -26,6 +26,7 @@ export interface BusinessCategoryInfo {
 export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   {
     "id": "restaurant",
+    "category": "food",
     "icon": "🍽️",
     "label": "Restaurant / Dhaba",
     "labelHi": "रेस्टोरेंट / ढाबा",
@@ -86,10 +87,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-food",
     "colorPrimary": "#FF5722",
-    "category": "food"
   },
   {
     "id": "cafe",
+    "category": "food",
     "icon": "☕",
     "label": "Café / Coffee Shop",
     "labelHi": "कैफे",
@@ -141,14 +142,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-food",
     "colorPrimary": "#6F4E37",
-    "category": "food"
   },
   {
     "id": "dhaba",
+    "category": "food",
     "icon": "🫙",
     "label": "Dhaba",
     "labelHi": "Dhaba",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -203,10 +203,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "fast_food",
+    "category": "food",
     "icon": "🍔",
     "label": "Fast Food",
     "labelHi": "Fast Food",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -261,10 +261,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "sweet_shop",
+    "category": "food",
     "icon": "🍬",
     "label": "Sweet Shop",
     "labelHi": "Sweet Shop",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -313,10 +313,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "juice_bar",
+    "category": "food",
     "icon": "🥤",
     "label": "Juice Bar",
     "labelHi": "Juice Bar",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -365,10 +365,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "bakery",
+    "category": "food",
     "icon": "🎂",
     "label": "Bakery",
     "labelHi": "Bakery",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -417,10 +417,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ice_cream_parlour",
+    "category": "specialized",
     "icon": "🍦",
     "label": "Ice Cream Parlour",
     "labelHi": "Ice Cream Parlour",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -469,10 +469,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "tiffin_service",
+    "category": "food",
     "icon": "🍱",
     "label": "Tiffin Service",
     "labelHi": "Tiffin Service",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -516,10 +516,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "caterer",
+    "category": "hospitality",
     "icon": "👨‍🍳",
     "label": "Caterer",
     "labelHi": "Caterer",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -562,10 +562,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "food_truck",
+    "category": "food",
     "icon": "🚚",
     "label": "Food Truck",
     "labelHi": "Food Truck",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -608,10 +608,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "cloud_kitchen",
+    "category": "food",
     "icon": "📦",
     "label": "Cloud Kitchen",
     "labelHi": "Cloud Kitchen",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -637,10 +637,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "paan_shop",
+    "category": "specialized",
     "icon": "🌿",
     "label": "Paan Shop",
     "labelHi": "Paan Shop",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -683,10 +683,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "chaat_stall",
+    "category": "specialized",
     "icon": "🥙",
     "label": "Chaat Stall",
     "labelHi": "Chaat Stall",
-    "category": "food",
     "terminology": {
       "provider": "Staff",
       "action": "Order",
@@ -735,6 +735,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "clinic",
+    "category": "healthcare",
     "icon": "🩺",
     "label": "Clinic / Doctor",
     "labelHi": "क्लिनिक / डॉक्टर",
@@ -831,10 +832,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-healthcare",
     "colorPrimary": "#1976D2",
-    "category": "healthcare"
   },
   {
     "id": "hospital",
+    "category": "healthcare",
     "icon": "🏥",
     "label": "Hospital",
     "labelHi": "हॉस्पिटल",
@@ -871,14 +872,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-healthcare",
     "colorPrimary": "#0D47A1",
-    "category": "healthcare"
   },
   {
     "id": "dental_clinic",
+    "category": "healthcare",
     "icon": "🦷",
     "label": "Dental Clinic",
     "labelHi": "Dental Clinic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -940,10 +940,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "eye_clinic",
+    "category": "healthcare",
     "icon": "👁️",
     "label": "Eye Clinic",
     "labelHi": "Eye Clinic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -994,10 +994,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "physiotherapy",
+    "category": "healthcare",
     "icon": "🏋️",
     "label": "Physiotherapy",
     "labelHi": "Physiotherapy",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1048,10 +1048,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ayurveda_clinic",
+    "category": "specialized",
     "icon": "🌿",
     "label": "Ayurveda Clinic",
     "labelHi": "Ayurveda Clinic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1101,10 +1101,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "homeopathy_clinic",
+    "category": "specialized",
     "icon": "💊",
     "label": "Homeopathy Clinic",
     "labelHi": "Homeopathy Clinic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1149,10 +1149,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "lab_diagnostic",
+    "category": "specialized",
     "icon": "🔬",
     "label": "Lab Diagnostic",
     "labelHi": "Lab Diagnostic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1208,10 +1208,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "pharmacy",
+    "category": "healthcare",
     "icon": "💊",
     "label": "Pharmacy",
     "labelHi": "Pharmacy",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1248,10 +1248,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "skin_clinic",
+    "category": "specialized",
     "icon": "✨",
     "label": "Skin Clinic",
     "labelHi": "Skin Clinic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1301,10 +1301,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "orthopaedic",
+    "category": "specialized",
     "icon": "🦴",
     "label": "Orthopaedic",
     "labelHi": "Orthopaedic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1355,10 +1355,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "children_clinic",
+    "category": "specialized",
     "icon": "👶",
     "label": "Children Clinic",
     "labelHi": "Children Clinic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1409,10 +1409,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "psychiatry_clinic",
+    "category": "specialized",
     "icon": "🧠",
     "label": "Psychiatry Clinic",
     "labelHi": "Psychiatry Clinic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1457,10 +1457,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "gynecology_clinic",
+    "category": "specialized",
     "icon": "🌸",
     "label": "Gynecology Clinic",
     "labelHi": "Gynecology Clinic",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1504,10 +1504,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "rehabilitation_center",
+    "category": "specialized",
     "icon": "♿",
     "label": "Rehabilitation Center",
     "labelHi": "Rehabilitation Center",
-    "category": "healthcare",
     "terminology": {
       "provider": "Doctor",
       "action": "Book Appt.",
@@ -1552,6 +1552,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "men_salon",
+    "category": "beauty",
     "icon": "💈",
     "label": "Men's Salon",
     "labelHi": "बार्बर / सैलून",
@@ -1652,10 +1653,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-beauty",
     "colorPrimary": "#6C63FF",
-    "category": "beauty"
   },
   {
     "id": "beauty_parlour",
+    "category": "beauty",
     "icon": "💅",
     "label": "Beauty Parlour",
     "labelHi": "ब्यूटी पार्लर",
@@ -1776,10 +1777,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-beauty",
     "colorPrimary": "#E91E63",
-    "category": "beauty"
   },
   {
     "id": "spa",
+    "category": "beauty",
     "icon": "🧖",
     "label": "Spa & Wellness",
     "labelHi": "स्पा",
@@ -1856,14 +1857,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-beauty",
     "colorPrimary": "#E91E63",
-    "category": "beauty"
   },
   {
     "id": "nail_studio",
+    "category": "beauty",
     "icon": "💅",
     "label": "Nail Studio",
     "labelHi": "Nail Studio",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -1918,10 +1918,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "eyebrow_studio",
+    "category": "specialized",
     "icon": "👁️‍🗨️",
     "label": "Eyebrow Studio",
     "labelHi": "Eyebrow Studio",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -1970,10 +1970,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "tattoo_studio",
+    "category": "beauty",
     "icon": "🖊️",
     "label": "Tattoo Studio",
     "labelHi": "Tattoo Studio",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -2023,10 +2023,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "mehndi_artist",
+    "category": "beauty",
     "icon": "🌺",
     "label": "Mehndi Artist",
     "labelHi": "Mehndi Artist",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -2076,10 +2076,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "bridal_studio",
+    "category": "beauty",
     "icon": "👰",
     "label": "Bridal Studio",
     "labelHi": "Bridal Studio",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -2129,10 +2129,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "lash_studio",
+    "category": "specialized",
     "icon": "✨",
     "label": "Lash Studio",
     "labelHi": "Lash Studio",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -2182,10 +2182,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "massage_center",
+    "category": "beauty",
     "icon": "💆",
     "label": "Massage Center",
     "labelHi": "Massage Center",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -2236,10 +2236,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "laser_hair_removal",
+    "category": "specialized",
     "icon": "✨",
     "label": "Laser Hair Removal",
     "labelHi": "Laser Hair Removal",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -2289,10 +2289,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ayurvedic_spa",
+    "category": "specialized",
     "icon": "🌿",
     "label": "Ayurvedic Spa",
     "labelHi": "Ayurvedic Spa",
-    "category": "beauty",
     "terminology": {
       "provider": "Stylist",
       "action": "Book Slot",
@@ -2342,6 +2342,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "gym",
+    "category": "fitness",
     "icon": "💪",
     "label": "Gym / Fitness Center",
     "labelHi": "जिम / फिटनेस सेंटर",
@@ -2417,14 +2418,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-fitness",
     "colorPrimary": "#FF6F00",
-    "category": "fitness"
   },
   {
     "id": "yoga_studio",
+    "category": "education",
     "icon": "🧘",
     "label": "Yoga Studio",
     "labelHi": "Yoga Studio",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2476,10 +2476,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "slimming_center",
+    "category": "specialized",
     "icon": "⚡",
     "label": "Slimming Center",
     "labelHi": "Slimming Center",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2529,10 +2529,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "crossfit_gym",
+    "category": "specialized",
     "icon": "🏋️",
     "label": "Crossfit Gym",
     "labelHi": "Crossfit Gym",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2589,10 +2589,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "swimming_pool",
+    "category": "fitness",
     "icon": "🏊",
     "label": "Swimming Pool",
     "labelHi": "Swimming Pool",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2643,10 +2643,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "sports_academy",
+    "category": "education",
     "icon": "🏏",
     "label": "Sports Academy",
     "labelHi": "Sports Academy",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2696,10 +2696,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "martial_arts",
+    "category": "fitness",
     "icon": "🥋",
     "label": "Martial Arts",
     "labelHi": "Martial Arts",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2749,10 +2749,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "boxing_gym",
+    "category": "specialized",
     "icon": "🥊",
     "label": "Boxing Gym",
     "labelHi": "Boxing Gym",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2801,10 +2801,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "dance_studio",
+    "category": "specialized",
     "icon": "💃",
     "label": "Dance Studio",
     "labelHi": "Dance Studio",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2855,10 +2855,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "cycling_studio",
+    "category": "specialized",
     "icon": "🚴",
     "label": "Cycling Studio",
     "labelHi": "Cycling Studio",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2903,10 +2903,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "aerobics_center",
+    "category": "specialized",
     "icon": "🤸",
     "label": "Aerobics Center",
     "labelHi": "Aerobics Center",
-    "category": "fitness",
     "terminology": {
       "provider": "Trainer",
       "action": "Book Class",
@@ -2951,6 +2951,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "coaching",
+    "category": "specialized",
     "icon": "📚",
     "label": "Coaching / Tuition",
     "labelHi": "कोचिंग",
@@ -3001,14 +3002,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-education",
     "colorPrimary": "#3F51B5",
-    "category": "education"
   },
   {
     "id": "music_school",
+    "category": "education",
     "icon": "🎵",
     "label": "Music School",
     "labelHi": "Music School",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3064,10 +3064,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "dance_school",
+    "category": "specialized",
     "icon": "🩰",
     "label": "Dance School",
     "labelHi": "Dance School",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3110,10 +3110,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "art_classes",
+    "category": "education",
     "icon": "🎨",
     "label": "Art Classes",
     "labelHi": "Art Classes",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3162,10 +3162,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "language_classes",
+    "category": "education",
     "icon": "📖",
     "label": "Language Classes",
     "labelHi": "Language Classes",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3215,10 +3215,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "computer_classes",
+    "category": "specialized",
     "icon": "💻",
     "label": "Computer Classes",
     "labelHi": "Computer Classes",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3267,10 +3267,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "driving_school",
+    "category": "education",
     "icon": "🚗",
     "label": "Driving School",
     "labelHi": "Driving School",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3320,10 +3320,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "neet_coaching",
+    "category": "specialized",
     "icon": "🏥",
     "label": "Neet Coaching",
     "labelHi": "Neet Coaching",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3372,10 +3372,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "jee_coaching",
+    "category": "specialized",
     "icon": "⚙️",
     "label": "Jee Coaching",
     "labelHi": "Jee Coaching",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3418,10 +3418,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "upsc_coaching",
+    "category": "specialized",
     "icon": "🏛️",
     "label": "Upsc Coaching",
     "labelHi": "Upsc Coaching",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3464,10 +3464,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "spoken_english",
+    "category": "specialized",
     "icon": "🗣️",
     "label": "Spoken English",
     "labelHi": "Spoken English",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3511,10 +3511,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "coding_bootcamp",
+    "category": "education",
     "icon": "👨‍💻",
     "label": "Coding Bootcamp",
     "labelHi": "Coding Bootcamp",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3564,10 +3564,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "chess_academy",
+    "category": "specialized",
     "icon": "♟️",
     "label": "Chess Academy",
     "labelHi": "Chess Academy",
-    "category": "education",
     "terminology": {
       "provider": "Tutor",
       "action": "Enroll",
@@ -3610,10 +3610,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "clothing_store",
+    "category": "specialized",
     "icon": "👗",
     "label": "Clothing Store",
     "labelHi": "Clothing Store",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -3656,10 +3656,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "footwear_shop",
+    "category": "specialized",
     "icon": "👟",
     "label": "Footwear Shop",
     "labelHi": "Footwear Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -3702,10 +3702,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "jewelry_shop",
+    "category": "specialized",
     "icon": "💍",
     "label": "Jewelry Shop",
     "labelHi": "Jewelry Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -3748,10 +3748,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "electronics_store",
+    "category": "specialized",
     "icon": "📱",
     "label": "Electronics Store",
     "labelHi": "Electronics Store",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -3794,10 +3794,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "mobile_shop",
+    "category": "retail",
     "icon": "📱",
     "label": "Mobile Shop",
     "labelHi": "Mobile Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -3840,10 +3840,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "grocery_store",
+    "category": "specialized",
     "icon": "🛒",
     "label": "Grocery Store",
     "labelHi": "Grocery Store",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -3887,10 +3887,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "hardware_store",
+    "category": "specialized",
     "icon": "🔨",
     "label": "Hardware Store",
     "labelHi": "Hardware Store",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -3933,10 +3933,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "stationery_shop",
+    "category": "specialized",
     "icon": "✏️",
     "label": "Stationery Shop",
     "labelHi": "Stationery Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -3979,10 +3979,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "book_shop",
+    "category": "specialized",
     "icon": "📚",
     "label": "Book Shop",
     "labelHi": "Book Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4025,10 +4025,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "toy_store",
+    "category": "retail",
     "icon": "🧸",
     "label": "Toy Store",
     "labelHi": "Toy Store",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4071,10 +4071,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "furniture_shop",
+    "category": "specialized",
     "icon": "🪑",
     "label": "Furniture Shop",
     "labelHi": "Furniture Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4118,10 +4118,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "flower_shop",
+    "category": "specialized",
     "icon": "🌸",
     "label": "Flower Shop",
     "labelHi": "Flower Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4165,10 +4165,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "optician",
+    "category": "retail",
     "icon": "👓",
     "label": "Optician",
     "labelHi": "Optician",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4217,10 +4217,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "tailoring_shop",
+    "category": "specialized",
     "icon": "✂️",
     "label": "Tailoring Shop",
     "labelHi": "Tailoring Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4269,10 +4269,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "saree_shop",
+    "category": "retail",
     "icon": "🥻",
     "label": "Saree Shop",
     "labelHi": "Saree Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4315,10 +4315,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "gift_shop",
+    "category": "retail",
     "icon": "🎁",
     "label": "Gift Shop",
     "labelHi": "Gift Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4361,10 +4361,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "handicraft_shop",
+    "category": "specialized",
     "icon": "🏺",
     "label": "Handicraft Shop",
     "labelHi": "Handicraft Shop",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4407,10 +4407,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "home_decor_store",
+    "category": "specialized",
     "icon": "🏠",
     "label": "Home Decor Store",
     "labelHi": "Home Decor Store",
-    "category": "retail",
     "terminology": {
       "provider": "Staff",
       "action": "Buy",
@@ -4453,10 +4453,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "plumber",
+    "category": "home",
     "icon": "🔧",
     "label": "Plumber",
     "labelHi": "Plumber",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4507,10 +4507,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "electrician",
+    "category": "home",
     "icon": "⚡",
     "label": "Electrician",
     "labelHi": "Electrician",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4561,10 +4561,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "carpenter",
+    "category": "home",
     "icon": "🪚",
     "label": "Carpenter",
     "labelHi": "Carpenter",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4614,10 +4614,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "painter",
+    "category": "home",
     "icon": "🎨",
     "label": "Painter",
     "labelHi": "Painter",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4661,10 +4661,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "home_cleaning",
+    "category": "home",
     "icon": "🧹",
     "label": "Home Cleaning",
     "labelHi": "Home Cleaning",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4715,10 +4715,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "pest_control",
+    "category": "home",
     "icon": "🐛",
     "label": "Pest Control",
     "labelHi": "Pest Control",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4769,6 +4769,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "laundry",
+    "category": "home",
     "icon": "👕",
     "label": "Laundry / Dry Cleaner",
     "labelHi": "लॉन्ड्री",
@@ -4802,14 +4803,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-tech",
     "colorPrimary": "#42A5F5",
-    "category": "home_services"
   },
   {
     "id": "ac_repair",
+    "category": "home",
     "icon": "❄️",
     "label": "Ac Repair",
     "labelHi": "Ac Repair",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4860,10 +4860,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "appliance_repair",
+    "category": "home",
     "icon": "🔌",
     "label": "Appliance Repair",
     "labelHi": "Appliance Repair",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4913,10 +4913,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "packers_movers",
+    "category": "transport",
     "icon": "📦",
     "label": "Packers Movers",
     "labelHi": "Packers Movers",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -4966,10 +4966,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "solar_panel_installer",
+    "category": "specialized",
     "icon": "☀️",
     "label": "Solar Panel Installer",
     "labelHi": "Solar Panel Installer",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -5013,10 +5013,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "water_purifier_service",
+    "category": "specialized",
     "icon": "💧",
     "label": "Water Purifier Service",
     "labelHi": "Water Purifier Service",
-    "category": "home_services",
     "terminology": {
       "provider": "Technician",
       "action": "Book Service",
@@ -5060,10 +5060,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "taxi_service",
+    "category": "specialized",
     "icon": "🚕",
     "label": "Taxi Service",
     "labelHi": "Taxi Service",
-    "category": "transport",
     "terminology": {
       "provider": "Driver",
       "action": "Book Ride",
@@ -5113,10 +5113,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "auto_rickshaw",
+    "category": "transport",
     "icon": "🛺",
     "label": "Auto Rickshaw",
     "labelHi": "Auto Rickshaw",
-    "category": "transport",
     "terminology": {
       "provider": "Driver",
       "action": "Book Ride",
@@ -5159,10 +5159,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "travel_agency",
+    "category": "hospitality",
     "icon": "✈️",
     "label": "Travel Agency",
     "labelHi": "Travel Agency",
-    "category": "transport",
     "terminology": {
       "provider": "Driver",
       "action": "Book Ride",
@@ -5212,10 +5212,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "car_rental",
+    "category": "transport",
     "icon": "🚗",
     "label": "Car Rental",
     "labelHi": "Car Rental",
-    "category": "transport",
     "terminology": {
       "provider": "Driver",
       "action": "Book Ride",
@@ -5265,10 +5265,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "ambulance_service",
+    "category": "specialized",
     "icon": "🚑",
     "label": "Ambulance Service",
     "labelHi": "Ambulance Service",
-    "category": "transport",
     "terminology": {
       "provider": "Driver",
       "action": "Book Ride",
@@ -5312,10 +5312,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "courier_service",
+    "category": "specialized",
     "icon": "📦",
     "label": "Courier Service",
     "labelHi": "Courier Service",
-    "category": "transport",
     "terminology": {
       "provider": "Driver",
       "action": "Book Ride",
@@ -5365,10 +5365,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "towing_service",
+    "category": "specialized",
     "icon": "🔩",
     "label": "Towing Service",
     "labelHi": "Towing Service",
-    "category": "transport",
     "terminology": {
       "provider": "Driver",
       "action": "Book Ride",
@@ -5412,6 +5412,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "law_firm",
+    "category": "specialized",
     "icon": "⚖️",
     "label": "Lawyer / Law Firm",
     "labelHi": "वकील",
@@ -5446,14 +5447,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-finance",
     "colorPrimary": "#212121",
-    "category": "finance_&_legal"
   },
   {
     "id": "ca_firm",
+    "category": "finance",
     "icon": "📊",
     "label": "Ca Firm",
     "labelHi": "Ca Firm",
-    "category": "finance_&_legal",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5504,10 +5504,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "insurance_agent",
+    "category": "specialized",
     "icon": "🛡️",
     "label": "Insurance Agent",
     "labelHi": "Insurance Agent",
-    "category": "finance_&_legal",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5558,10 +5558,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "loan_agent",
+    "category": "finance",
     "icon": "💰",
     "label": "Loan Agent",
     "labelHi": "Loan Agent",
-    "category": "finance_&_legal",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5611,10 +5611,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "tax_consultant",
+    "category": "finance",
     "icon": "📋",
     "label": "Tax Consultant",
     "labelHi": "Tax Consultant",
-    "category": "finance_&_legal",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5665,10 +5665,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "gst_consultant",
+    "category": "specialized",
     "icon": "🧾",
     "label": "Gst Consultant",
     "labelHi": "Gst Consultant",
-    "category": "finance_&_legal",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5711,10 +5711,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "company_registration",
+    "category": "specialized",
     "icon": "🏢",
     "label": "Company Registration",
     "labelHi": "Company Registration",
-    "category": "finance_&_legal",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5763,10 +5763,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "notary",
+    "category": "finance",
     "icon": "📝",
     "label": "Notary",
     "labelHi": "Notary",
-    "category": "finance_&_legal",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5809,10 +5809,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "money_transfer",
+    "category": "specialized",
     "icon": "💸",
     "label": "Money Transfer",
     "labelHi": "Money Transfer",
-    "category": "finance_&_legal",
     "terminology": {
       "provider": "Consultant",
       "action": "Book Appt.",
@@ -5861,10 +5861,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "real_estate_agent",
+    "category": "specialized",
     "icon": "🏠",
     "label": "Real Estate Agent",
     "labelHi": "Real Estate Agent",
-    "category": "real_estate",
     "terminology": {
       "provider": "Agent",
       "action": "Book Visit",
@@ -5914,10 +5914,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "property_dealer",
+    "category": "realestate",
     "icon": "🏢",
     "label": "Property Dealer",
     "labelHi": "Property Dealer",
-    "category": "real_estate",
     "terminology": {
       "provider": "Agent",
       "action": "Book Visit",
@@ -5960,10 +5960,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "pg_hostel",
+    "category": "realestate",
     "icon": "🛏️",
     "label": "Pg Hostel",
     "labelHi": "Pg Hostel",
-    "category": "real_estate",
     "terminology": {
       "provider": "Agent",
       "action": "Book Visit",
@@ -6012,10 +6012,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "co_working_space",
+    "category": "specialized",
     "icon": "💻",
     "label": "Co Working Space",
     "labelHi": "Co Working Space",
-    "category": "real_estate",
     "terminology": {
       "provider": "Agent",
       "action": "Book Visit",
@@ -6066,6 +6066,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "repair_shop",
+    "category": "specialized",
     "icon": "🔧",
     "label": "Repair Shop",
     "labelHi": "रिपेयर शॉप",
@@ -6098,14 +6099,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-tech",
     "colorPrimary": "#607D8B",
-    "category": "tech_&_it"
   },
   {
     "id": "computer_repair",
+    "category": "technology",
     "icon": "💻",
     "label": "Computer Repair",
     "labelHi": "Computer Repair",
-    "category": "tech_&_it",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6154,10 +6154,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "mobile_repair",
+    "category": "technology",
     "icon": "📱",
     "label": "Mobile Repair",
     "labelHi": "Mobile Repair",
-    "category": "tech_&_it",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6206,10 +6206,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "it_company",
+    "category": "specialized",
     "icon": "🖥️",
     "label": "It Company",
     "labelHi": "It Company",
-    "category": "tech_&_it",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6253,10 +6253,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "web_designer",
+    "category": "specialized",
     "icon": "🌐",
     "label": "Web Designer",
     "labelHi": "Web Designer",
-    "category": "tech_&_it",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6300,10 +6300,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "digital_marketing_agency",
+    "category": "specialized",
     "icon": "📱",
     "label": "Digital Marketing Agency",
     "labelHi": "Digital Marketing Agency",
-    "category": "tech_&_it",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6353,10 +6353,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "cybercafe",
+    "category": "specialized",
     "icon": "🖥️",
     "label": "Cybercafe",
     "labelHi": "Cybercafe",
-    "category": "tech_&_it",
     "terminology": {
       "provider": "Expert",
       "action": "Book Service",
@@ -6407,10 +6407,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "hotel",
+    "category": "hospitality",
     "icon": "🏨",
     "label": "Hotel",
     "labelHi": "Hotel",
-    "category": "hospitality",
     "terminology": {
       "provider": "Manager",
       "action": "Book",
@@ -6467,10 +6467,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "resort",
+    "category": "hospitality",
     "icon": "🌴",
     "label": "Resort",
     "labelHi": "Resort",
-    "category": "hospitality",
     "terminology": {
       "provider": "Manager",
       "action": "Book",
@@ -6520,10 +6520,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "banquet_hall",
+    "category": "specialized",
     "icon": "🎉",
     "label": "Banquet Hall",
     "labelHi": "Banquet Hall",
-    "category": "hospitality",
     "terminology": {
       "provider": "Manager",
       "action": "Book",
@@ -6569,10 +6569,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "wedding_venue",
+    "category": "specialized",
     "icon": "💒",
     "label": "Wedding Venue",
     "labelHi": "Wedding Venue",
-    "category": "hospitality",
     "terminology": {
       "provider": "Manager",
       "action": "Book",
@@ -6622,6 +6622,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "photography",
+    "category": "specialized",
     "icon": "📷",
     "label": "Photography Studio",
     "labelHi": "फोटोग्राफी",
@@ -6672,10 +6673,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-retail",
     "colorPrimary": "#455A64",
-    "category": "hospitality"
   },
   {
     "id": "event_planner",
+    "category": "specialized",
     "icon": "🎪",
     "label": "Event Planner",
     "labelHi": "इवेंट प्लानर",
@@ -6708,14 +6709,13 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-retail",
     "colorPrimary": "#7B1FA2",
-    "category": "hospitality"
   },
   {
     "id": "nursery",
+    "category": "education",
     "icon": "🌱",
     "label": "Nursery",
     "labelHi": "Nursery",
-    "category": "agriculture",
     "terminology": {
       "provider": "Farmer",
       "action": "Order",
@@ -6764,10 +6764,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "farm_shop",
+    "category": "specialized",
     "icon": "🌾",
     "label": "Farm Shop",
     "labelHi": "Farm Shop",
-    "category": "agriculture",
     "terminology": {
       "provider": "Farmer",
       "action": "Order",
@@ -6817,10 +6817,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "dairy_farm",
+    "category": "agriculture",
     "icon": "🥛",
     "label": "Dairy Farm",
     "labelHi": "Dairy Farm",
-    "category": "agriculture",
     "terminology": {
       "provider": "Farmer",
       "action": "Order",
@@ -6870,6 +6870,7 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
   },
   {
     "id": "pet_care",
+    "category": "specialized",
     "icon": "🐾",
     "label": "Pet Care / Vet",
     "labelHi": "पालतू देखभाल",
@@ -6904,10 +6905,10 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-healthcare",
     "colorPrimary": "#FF8F00",
-    "category": "special/misc"
   },
   {
     "id": "other",
+    "category": "specialized",
     "icon": "🏪",
     "label": "Other Business",
     "labelHi": "अन्य व्यवसाय",
@@ -6938,7 +6939,6 @@ export const BUSINESS_CATEGORIES_INFO: BusinessCategoryInfo[] = [
     ],
     "designTheme": "theme-retail",
     "colorPrimary": "#607D8B",
-    "category": "special/misc"
   }
 ];
 
