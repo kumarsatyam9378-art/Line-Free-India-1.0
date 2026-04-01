@@ -28,11 +28,12 @@ export default function BottomNav({ role }: { role: 'customer' | 'barber' }) {
           <button
             key={i}
             onClick={() => nav(t.path)}
+            aria-current={isActive ? 'page' : undefined}
             className={`flex flex-col items-center gap-1 transition-all ${
               isActive ? 'text-primary scale-110' : 'text-text-dim hover:text-text'
             }`}
           >
-            <span className="text-xl">{t.icon}</span>
+            <span className="text-xl" aria-hidden="true">{t.icon}</span>
             <span className="text-[10px] font-medium">{t.label}</span>
           </button>
         );
