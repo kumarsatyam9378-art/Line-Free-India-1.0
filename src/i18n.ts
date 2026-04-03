@@ -507,10 +507,6 @@ const translations: Record<string, Record<string, string>> = {
     bookingFailed: "बुकिंग विफल",
     bookingPending: "बुकिंग लंबित",
   },
-  gu: {},
-  ta: {},
-  mr: {},
-  bn: {},
 };
 
 export const t = (key: string, lang: string = 'en'): string => {
