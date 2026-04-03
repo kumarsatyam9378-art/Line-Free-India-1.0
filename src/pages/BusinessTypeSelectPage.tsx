@@ -111,7 +111,7 @@ export default function BusinessTypeSelectPage() {
       <div className="sticky top-0 z-20 bg-bg border-b border-border pb-3 px-4 pt-4">
         {/* Title Row */}
         <div className="flex items-center gap-3 mb-4">
-          <button onClick={() => nav('/role')} className="p-2 rounded-xl bg-card border border-border text-text-dim hover:text-primary transition-colors">
+          <button aria-label="Go back to role selection" onClick={() => nav('/role')} className="p-2 rounded-xl bg-card border border-border text-text-dim hover:text-primary transition-colors">
             ←
           </button>
           <div>
@@ -132,7 +132,7 @@ export default function BusinessTypeSelectPage() {
             autoFocus={false}
           />
           {search && (
-            <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-dim hover:text-text text-lg">
+            <button aria-label="Clear search" onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-dim hover:text-text text-lg">
               ✕
             </button>
           )}
