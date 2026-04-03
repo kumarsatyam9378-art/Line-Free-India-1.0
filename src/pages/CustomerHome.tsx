@@ -149,7 +149,7 @@ export default function CustomerHome() {
   );
 
   return (
-    <div className="h-[100dvh] overflow-y-auto pb-24 bg-background">
+    <div className="screen-scroll pb-24 bg-background">
       <motion.div
         variants={containerVariants}
         initial="hidden"

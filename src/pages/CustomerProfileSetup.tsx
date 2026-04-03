@@ -41,7 +41,7 @@ export default function CustomerProfileSetup() {
   };
 
   return (
-    <div className="h-[100dvh] overflow-y-auto flex flex-col p-6 animate-fadeIn">
+    <div className="screen-scroll flex flex-col p-6 animate-fadeIn">
       <BackButton to="/customer/auth" />
       
       <div className="flex-1 flex flex-col pt-4">

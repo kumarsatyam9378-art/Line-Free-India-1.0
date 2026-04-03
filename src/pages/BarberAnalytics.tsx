@@ -39,7 +39,7 @@ export default function BarberAnalytics() {
   };
 
   return (
-    <div className="h-[100dvh] overflow-y-auto pb-24 animate-fadeIn">
+    <div className="screen-scroll pb-24 animate-fadeIn">
       <div className="p-6">
         <BackButton to="/barber/home" />
 

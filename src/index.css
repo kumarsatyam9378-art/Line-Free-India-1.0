@@ -82,6 +82,10 @@ html, body {
   overscroll-behavior-y: contain;
 }
 
+html, body {
+  overscroll-behavior: none;
+}
+
 body {
   font-family: var(--font-sans);
   background: var(--color-bg);
@@ -95,6 +99,9 @@ body {
   margin: 0 auto;
   position: relative;
   overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 input, textarea, select {
