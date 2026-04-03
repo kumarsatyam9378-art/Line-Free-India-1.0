@@ -390,14 +390,22 @@ export default function SalonDetail() {
             )}
 
             {/* Get Token Button */}
-            {(canGetToken || isOnBreak) && selected.length > 0 && (
+            <div className="mt-4">
               <button
                 onClick={() => setShowConfirm(true)}
-                className="btn-primary text-lg animate-slideUp"
+                disabled={!(canGetToken || isOnBreak) || selected.length === 0}
+                className={`w-full py-3 rounded-xl font-bold text-lg transition-all animate-slideUp ${
+                  (canGetToken || isOnBreak) && selected.length > 0
+                    ? 'btn-primary'
+                    : 'bg-card border border-border text-text-dim opacity-70'
+                }`}
               >
-                🎫 {advanceDate && advanceDate !== today ? 'Book Advance Token' : t('btn.getToken')}
+                {selected.length === 0
+                  ? 'Please select a service'
+                  : `🎫 ${advanceDate && advanceDate !== today ? 'Book Advance Token' : t('btn.getToken')}`
+                }
               </button>
-            )}
+            </div>
           </>
         )}
 
