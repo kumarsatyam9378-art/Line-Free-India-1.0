@@ -56,7 +56,7 @@ export default function BarberCustomers() {
   const cancelledCount = tokens.filter(t => t.status === 'cancelled').length;
 
   return (
-    <div className="h-[100dvh] overflow-y-auto pb-24 animate-fadeIn">
+    <div className="screen-scroll pb-24 animate-fadeIn">
       <div className="p-6">
         <div className="flex items-center justify-between mb-1">
           <h1 className="text-2xl font-bold">{t('queue.customers')}</h1>

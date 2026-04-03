@@ -97,7 +97,7 @@ export default function CustomerProfileEdit() {
   );
 
   return (
-    <div className="h-[100dvh] overflow-y-auto pb-24 animate-fadeIn">
+    <div className="screen-scroll pb-24 animate-fadeIn">
       <div className="p-6">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">

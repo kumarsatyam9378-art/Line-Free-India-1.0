@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import BottomNav from '../components/layout/BottomNav';
+import NearbySalonsMap from '../components/maps/NearbySalonsMap';
 
 export default function CustomerHome() {
   const { user, customerProfile, allSalons, unreadCount } = useApp();
@@ -103,6 +104,8 @@ export default function CustomerHome() {
     }
   };
 
+
+  const nearbySalons = allSalons.filter((salon) => typeof salon.lat === 'number' && typeof salon.lng === 'number').slice(0, 30);
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
@@ -146,7 +149,7 @@ export default function CustomerHome() {
   );
 
   return (
-    <div className="h-[100dvh] overflow-y-auto pb-24 bg-background">
+    <div className="screen-scroll pb-24 bg-background">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -310,6 +313,26 @@ export default function CustomerHome() {
             ) : (
               <p className="text-text-dim text-sm italic mb-4">Coming soon to your area.</p>
             )
+          )}
+        </motion.div>
+
+
+        <motion.div variants={itemVariants}>
+          <div className="flex items-center justify-between mb-4 mt-6">
+            <h2 className="font-bold text-lg">Nearby Map 🗺️</h2>
+            <button onClick={() => nav('/customer/search')} className="text-primary text-xs font-medium">Explore</button>
+          </div>
+          {nearbySalons.length > 0 ? (
+            <NearbySalonsMap
+              salons={nearbySalons}
+              center={
+                customerProfile?.lat && customerProfile?.lng
+                  ? [customerProfile.lat, customerProfile.lng]
+                  : undefined
+              }
+            />
+          ) : (
+            <p className="text-text-dim text-sm italic mb-4">Map will appear when nearby salons share GPS coordinates.</p>
           )}
         </motion.div>
 
