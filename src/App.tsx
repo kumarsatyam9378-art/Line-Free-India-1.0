@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider, useApp } from './store/AppContext';
 import { Toaster } from 'react-hot-toast';
-import { lazy, Suspense, useEffect, useState } from 'react';
-import CinematicIntro, { shouldShowIntro } from './components/intro/CinematicIntro';
+import { lazy, Suspense, useState } from 'react';
+import CinematicIntro from './components/intro/CinematicIntro';
 import AppSeo from './components/seo/AppSeo';
 
 const SplashPage = lazy(() => import('./pages/onboarding/SplashPage'));
@@ -44,13 +44,7 @@ function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requ
 
 function AppRoutes() {
   const { loading } = useApp();
-  const [showIntro, setShowIntro] = useState(() => shouldShowIntro());
-
-  useEffect(() => {
-    if (!showIntro) return;
-    const forceClose = setTimeout(() => setShowIntro(false), 5200);
-    return () => clearTimeout(forceClose);
-  }, [showIntro]);
+  const [showIntro, setShowIntro] = useState(true);
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-text-dim">Loading...</div>;
 
