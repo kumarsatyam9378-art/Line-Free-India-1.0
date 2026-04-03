@@ -150,7 +150,7 @@ export default function CustomerTokens() {
   };
 
   return (
-    <div className="min-h-screen pb-24 animate-fadeIn">
+    <div className="h-[100dvh] overflow-y-auto pb-24 animate-fadeIn">
       <div className="p-6">
         <div className="flex justify-between items-center mb-1">
           <h1 className="text-2xl font-bold">{t('tokens')}</h1>
