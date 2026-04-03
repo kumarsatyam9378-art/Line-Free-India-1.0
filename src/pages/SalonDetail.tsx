@@ -23,6 +23,12 @@ export default function SalonDetail() {
   const [activeTab, setActiveTab] = useState<'services' | 'reviews'>('services');
   const [advanceDate, setAdvanceDate] = useState('');
 
+  const [promoCode, setPromoCode] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<any>(null);
+  const [promoError, setPromoError] = useState('');
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+
+
   const today = (() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -54,8 +60,37 @@ export default function SalonDetail() {
     else setSelected([...selected, s]);
   };
 
+
+  const handleApplyPromo = async () => {
+    if (!salon || !promoCode.trim()) return;
+    setIsApplyingPromo(true);
+    setPromoError('');
+    try {
+      const q = query(collection(db, `businesses/${salon.id}/coupons`), where('code', '==', promoCode.toUpperCase()), where('isActive', '==', true));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        setPromoError('Invalid or expired promo code');
+        setAppliedPromo(null);
+      } else {
+        const promo = snap.docs[0].data();
+        if (new Date(promo.validUntil) < new Date()) {
+          setPromoError('Promo code has expired');
+          setAppliedPromo(null);
+        } else {
+          setAppliedPromo(promo);
+          toast.success('Promo applied!');
+        }
+      }
+    } catch (e) {
+      setPromoError('Failed to verify promo');
+    }
+    setIsApplyingPromo(false);
+  };
+
   const totalTime = selected.reduce((a, s) => a + s.avgTime, 0);
-  const totalPrice = selected.reduce((a, s) => a + s.price, 0);
+  const basePrice = selected.reduce((a, s) => a + s.price, 0);
+  const discountAmt = appliedPromo ? (appliedPromo.discountType === 'percentage' ? (basePrice * appliedPromo.discountValue / 100) : appliedPromo.discountValue) : 0;
+  const totalPrice = Math.max(0, basePrice - discountAmt);
 
   const handleGetToken = async () => {
     if (!salon || !user || selected.length === 0) return;
@@ -173,6 +208,20 @@ export default function SalonDetail() {
               {tokenResult.waitTime > 0 ? `~${tokenResult.waitTime} ${t('min')}` : 'You are next! 🎉'}
             </p>
           </div>
+
+          {/* Mock In-App Payment */}
+          {totalPrice > 0 && (
+            <div className="mb-4">
+              <button
+                onClick={() => {
+                  toast.success('Paid via Wallet/Card!');
+                }}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-primary text-primary font-bold hover:bg-primary/10 transition-colors"
+              >
+                💳 Pay Now (Wallet/Card)
+              </button>
+            </div>
+          )}
 
           {/* Pay Now via UPI */}
           {totalPrice > 0 && (
@@ -355,6 +404,42 @@ export default function SalonDetail() {
                   <span>Total</span>
                   <span className="gradient-text">₹{totalPrice}</span>
                 </div>
+              </div>
+            )}
+
+
+            {/* Promo Code Section */}
+            {selected.length > 0 && (
+              <div className="mb-4 animate-slideUp">
+                <label className="text-sm text-text-dim mb-1.5 block">🎟️ Promo Code</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                    placeholder="Enter Code"
+                    className="flex-1 p-2.5 rounded-xl border border-border bg-card text-sm focus:outline-none focus:border-primary uppercase"
+                    disabled={!!appliedPromo}
+                  />
+                  {!appliedPromo ? (
+                    <button
+                      onClick={handleApplyPromo}
+                      disabled={isApplyingPromo || !promoCode}
+                      className="px-4 py-2.5 bg-card-2 border border-border rounded-xl text-sm font-bold text-primary disabled:opacity-50"
+                    >
+                      Apply
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => { setAppliedPromo(null); setPromoCode(''); }}
+                      className="px-4 py-2.5 bg-danger/10 text-danger rounded-xl text-sm font-bold"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                {promoError && <p className="text-xs text-danger mt-1">{promoError}</p>}
+                {appliedPromo && <p className="text-xs text-success mt-1">Discount applied: ₹{discountAmt.toFixed(0)} off</p>}
               </div>
             )}
 

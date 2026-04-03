@@ -27,6 +27,11 @@ import NotificationsPage from './pages/NotificationsPage';
 import OwnerGallery from './pages/OwnerGallery';
 import OwnerStaff from './pages/OwnerStaff';
 import OwnerSettings from './pages/OwnerSettings';
+
+import OwnerCoupons from './pages/OwnerCoupons';
+import OwnerGiftCards from './pages/OwnerGiftCards';
+import OwnerInventory from './pages/OwnerInventory';
+
 import { Toaster } from 'react-hot-toast';
 
 function AuthGuard({ children, requiredRole }: { children: React.ReactNode; requiredRole: 'customer' | 'barber' }) {
@@ -100,6 +105,11 @@ function AppRoutes() {
       <Route path="/barber/gallery" element={<AuthGuard requiredRole="barber"><OwnerGallery /></AuthGuard>} />
       <Route path="/barber/staff" element={<AuthGuard requiredRole="barber"><OwnerStaff /></AuthGuard>} />
       <Route path="/barber/settings" element={<AuthGuard requiredRole="barber"><OwnerSettings /></AuthGuard>} />
+
+      <Route path="/barber/coupons" element={<AuthGuard requiredRole="barber"><OwnerCoupons /></AuthGuard>} />
+      <Route path="/barber/giftcards" element={<AuthGuard requiredRole="barber"><OwnerGiftCards /></AuthGuard>} />
+      <Route path="/barber/inventory" element={<AuthGuard requiredRole="barber"><OwnerInventory /></AuthGuard>} />
+
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
