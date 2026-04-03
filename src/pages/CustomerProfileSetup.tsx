@@ -59,8 +59,9 @@ export default function CustomerProfileSetup() {
 
         <div className="space-y-4 max-w-sm mx-auto w-full">
           <div>
-            <label className="text-sm text-text-dim mb-1 block">{t('profile.name')} {t('profile.optional')}</label>
+            <label htmlFor="customer-name" className="text-sm text-text-dim mb-1 block">{t('profile.name')} {t('profile.optional')}</label>
             <input
+              id="customer-name"
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="Your name"
@@ -68,8 +69,9 @@ export default function CustomerProfileSetup() {
             />
           </div>
           <div>
-            <label className="text-sm text-text-dim mb-1 block">{t('profile.phone')} {t('profile.optional')}</label>
+            <label htmlFor="customer-phone" className="text-sm text-text-dim mb-1 block">{t('profile.phone')} {t('profile.optional')}</label>
             <input
+              id="customer-phone"
               value={phone}
               onChange={e => setPhone(e.target.value)}
               placeholder="+91 XXXXXXXXXX"
@@ -78,8 +80,9 @@ export default function CustomerProfileSetup() {
             />
           </div>
           <div>
-            <label className="text-sm text-text-dim mb-1 block">{t('profile.location')} {t('profile.optional')}</label>
+            <label htmlFor="customer-location" className="text-sm text-text-dim mb-1 block">{t('profile.location')} {t('profile.optional')}</label>
             <input
+              id="customer-location"
               value={location}
               onChange={e => setLocation(e.target.value)}
               placeholder="Your city or area"
