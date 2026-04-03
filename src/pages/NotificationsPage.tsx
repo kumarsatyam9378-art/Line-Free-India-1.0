@@ -19,7 +19,7 @@ export default function NotificationsPage() {
   const backPath = role === 'barber' ? '/barber/home' : '/customer/home';
 
   return (
-    <div className="min-h-screen pb-24 animate-fadeIn">
+    <div className="h-[100dvh] overflow-y-auto pb-24 animate-fadeIn">
       <div className="p-6">
         <BackButton to={backPath} />
         <div className="flex items-center justify-between mb-5">

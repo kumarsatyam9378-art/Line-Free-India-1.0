@@ -50,7 +50,7 @@ export default function BarberHome() {
   const dashConfig = getBusinessDashboardConfig(barberProfile.businessType);
 
   return (
-    <div className={`min-h-screen pb-24 ${bInfo.designTheme} bg-bg text-text animate-fadeIn`}>
+    <div className={`h-\[100dvh\] overflow-y-auto pb-24 ${bInfo.designTheme} bg-bg text-text animate-fadeIn`}>
       {/* HEADER */}
       <div className={`p-6 bg-gradient-to-br from-[var(--cat-primary,#6C63FF)]/10 to-[var(--cat-accent,#4ECDC4)]/5 rounded-b-3xl`}>
         <div className="flex justify-between items-center">
