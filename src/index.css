@@ -1,3 +1,6 @@
+/* === GOOGLE FONTS === */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Lato:wght@400;700&family=Lora:wght@400;500;600&family=Merriweather:wght@400;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+
 @import "tailwindcss";
 
 @import "./styles/themes/theme-agriculture.css";
@@ -10,9 +13,6 @@
 @import "./styles/themes/theme-hospitality.css";
 @import "./styles/themes/theme-retail.css";
 @import "./styles/themes/theme-tech.css";
-
-/* === GOOGLE FONTS === */
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Lato:wght@400;700&family=Lora:wght@400;500;600&family=Merriweather:wght@400;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
 
 :root {
   /* Default base theme variables if no specific theme is selected */
@@ -74,7 +74,6 @@
 html, body, #root {
   height: 100%;
   width: 100%;
-  overflow: hidden;
 }
 
 body {

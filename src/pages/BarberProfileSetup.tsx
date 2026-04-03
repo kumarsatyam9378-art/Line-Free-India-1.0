@@ -119,7 +119,7 @@ export default function BarberProfileSetup() {
   }
 
   return (
-    <div className="h-[100dvh] overflow-y-auto flex flex-col p-6 pb-32 animate-fadeIn">
+    <div className="min-h-screen flex flex-col p-6 pb-32 animate-fadeIn">
       <BackButton onClick={() => setStep(step === 2 ? 1 : 2)} />
 
       <div className="text-center mb-6">

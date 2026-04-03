@@ -153,7 +153,7 @@ export default function BarberMessages() {
 
   // ── THREADS LIST VIEW ──
   return (
-    <div className="h-[100dvh] overflow-y-auto pb-24 animate-fadeIn">
+    <div className="min-h-screen pb-24 animate-fadeIn">
       <div className="p-6">
         <div className="flex items-center justify-between mb-5">
           <div>
