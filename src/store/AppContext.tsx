@@ -14,9 +14,7 @@ export type Lang = 'en' | 'hi' | 'gu' | 'ta' | 'mr' | 'bn';
 export type Role = 'customer' | 'barber' | 'business';
 
 export type BusinessCategory =
-  | 'men_salon' | 'beauty_parlour' | 'unisex_salon' | 'clinic' | 'hospital'
-  | 'restaurant' | 'cafe' | 'gym' | 'spa' | 'pet_care' | 'coaching'
-  | 'law_firm' | 'photography' | 'repair_shop' | 'laundry' | 'event_planner' | 'other' | string;
+  | 'men_salon' | 'beauty_parlour' | 'unisex_salon' | 'spa' | 'nail_studio' | 'mehndi_artist' | 'tattoo_studio' | 'massage_center' | 'acupuncture_clinic' | 'makeup_artist' | 'bridal_studio' | 'threading_waxing_center' | 'skin_clinic' | 'hair_transplant_clinic' | 'laser_hair_removal' | 'ayurvedic_spa' | 'slimming_center' | 'home_salon_service' | string;
 
 export interface Terminology {
   provider: string;

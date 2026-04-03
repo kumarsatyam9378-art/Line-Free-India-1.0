@@ -68,18 +68,13 @@ export default function CustomerHome() {
       }
 
       // Top Restaurants: category in ['restaurant', 'cafe']
-      setTopRestaurants(allSalons.filter(s => s.businessType === 'restaurant' || s.businessType === 'cafe'));
+      setTopRestaurants(allSalons.filter(s => s.businessType === 'men_salon' || s.businessType === 'beauty_parlour' || s.businessType === 'unisex_salon' || s.businessType === 'bridal_studio'));
 
       // Best Clinics: category in ['clinic', 'hospital']
-      setBestClinics(allSalons.filter(s => s.businessType === 'clinic' || s.businessType === 'hospital'));
+      setBestClinics(allSalons.filter(s => s.businessType === 'spa' || s.businessType === 'ayurvedic_spa' || s.businessType === 'massage_center' || s.businessType === 'slimming_center'));
 
       // Beauty & Wellness: category in ['men_salon', 'beauty_parlour', 'unisex_salon', 'spa']
-      setBeautyWellness(allSalons.filter(s =>
-        s.businessType === 'men_salon' ||
-        s.businessType === 'beauty_parlour' ||
-        s.businessType === 'unisex_salon' ||
-        s.businessType === 'spa'
-      ));
+      setBeautyWellness(allSalons.filter(s => s.businessType === 'skin_clinic' || s.businessType === 'hair_transplant_clinic' || s.businessType === 'laser_hair_removal' || s.businessType === 'acupuncture_clinic'));
 
       setLoading(false);
     } else {
@@ -90,14 +85,14 @@ export default function CustomerHome() {
   }, [allSalons]);
 
   const CATEGORIES = [
-    { name: 'Food', icon: '🍽️', id: 'food' },
-    { name: 'Health', icon: '🏥', id: 'health' },
-    { name: 'Beauty', icon: '💄', id: 'beauty' },
-    { name: 'Fitness', icon: '💪', id: 'fitness' },
-    { name: 'Education', icon: '📚', id: 'education' },
-    { name: 'Home', icon: '🏠', id: 'home' },
-    { name: 'Transport', icon: '🚗', id: 'transport' },
-    { name: 'Finance', icon: '💰', id: 'finance' }
+    { name: 'Men Salon', icon: '✂️', id: 'men_salon' },
+    { name: 'Beauty Parlour', icon: '💄', id: 'beauty_parlour' },
+    { name: 'Unisex Salon', icon: '💇', id: 'unisex_salon' },
+    { name: 'Spa', icon: '💆', id: 'spa' },
+    { name: 'Skin Clinic', icon: '✨', id: 'skin_clinic' },
+    { name: 'Bridal', icon: '👰', id: 'bridal_studio' },
+    { name: 'Massage', icon: '🌸', id: 'massage_center' },
+    { name: 'Laser Hair', icon: '⚡', id: 'laser_hair_removal' }
   ];
 
   const containerVariants = {
@@ -151,7 +146,7 @@ export default function CustomerHome() {
   );
 
   return (
-    <div className="min-h-screen pb-24 bg-background">
+    <div className="h-[100dvh] overflow-y-auto pb-24 bg-background">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -173,6 +168,7 @@ export default function CustomerHome() {
             </div>
           </div>
           <button
+            aria-label="View notifications"
             onClick={() => nav('/customer/notifications')}
             className="relative w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center transition-transform active:scale-95"
           >
@@ -271,8 +267,8 @@ export default function CustomerHome() {
         {/* 6. THREE SECTIONS */}
         <motion.div variants={itemVariants}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-lg">Top Restaurants 🍽️</h2>
-            <button onClick={() => nav('/customer/search?category=food')} className="text-primary text-xs font-medium">See all</button>
+            <h2 className="font-bold text-lg">Trending Salons ✂️</h2>
+            <button onClick={() => nav('/customer/search?category=specialized')} className="text-primary text-xs font-medium">See all</button>
           </div>
           {loading ? <SkeletonRow height="h-56" /> : (
             topRestaurants.length > 0 ? (
@@ -287,8 +283,8 @@ export default function CustomerHome() {
 
         <motion.div variants={itemVariants}>
           <div className="flex items-center justify-between mb-4 mt-6">
-            <h2 className="font-bold text-lg">Best Clinics 🏥</h2>
-            <button onClick={() => nav('/customer/search?category=health')} className="text-primary text-xs font-medium">See all</button>
+            <h2 className="font-bold text-lg">Top Rated Wellness 🌸</h2>
+            <button onClick={() => nav('/customer/search?category=wellness')} className="text-primary text-xs font-medium">See all</button>
           </div>
           {loading ? <SkeletonRow height="h-56" /> : (
             bestClinics.length > 0 ? (
@@ -303,8 +299,8 @@ export default function CustomerHome() {
 
         <motion.div variants={itemVariants}>
           <div className="flex items-center justify-between mb-4 mt-6">
-            <h2 className="font-bold text-lg">Beauty & Wellness ✨</h2>
-            <button onClick={() => nav('/customer/search?category=beauty')} className="text-primary text-xs font-medium">See all</button>
+            <h2 className="font-bold text-lg">Specialized Care ✨</h2>
+            <button onClick={() => nav('/customer/search?category=specialized')} className="text-primary text-xs font-medium">See all</button>
           </div>
           {loading ? <SkeletonRow height="h-56" /> : (
             beautyWellness.length > 0 ? (

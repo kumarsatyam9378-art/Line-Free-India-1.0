@@ -52,7 +52,7 @@ export default function CustomerSubscription() {
   };
 
   return (
-    <div className="min-h-screen pb-24 animate-fadeIn">
+    <div className="h-[100dvh] overflow-y-auto pb-24 animate-fadeIn">
       <div className="p-6">
         <BackButton to="/customer/home" />
         <h1 className="text-2xl font-bold mb-1">{t('sub.customer.title')}</h1>

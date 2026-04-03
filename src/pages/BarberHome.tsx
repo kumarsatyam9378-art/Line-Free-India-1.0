@@ -50,7 +50,7 @@ export default function BarberHome() {
   const dashConfig = getBusinessDashboardConfig(barberProfile.businessType);
 
   return (
-    <div className={`min-h-screen pb-24 ${bInfo.designTheme} bg-bg text-text animate-fadeIn`}>
+    <div className={`h-\[100dvh\] overflow-y-auto pb-24 ${bInfo.designTheme} bg-bg text-text animate-fadeIn`}>
       {/* HEADER */}
       <div className={`p-6 bg-gradient-to-br from-[var(--cat-primary,#6C63FF)]/10 to-[var(--cat-accent,#4ECDC4)]/5 rounded-b-3xl`}>
         <div className="flex justify-between items-center">
@@ -67,7 +67,7 @@ export default function BarberHome() {
               <p className="text-text-dim text-xs mt-0.5 capitalize">{dashConfig.ownerTitle}</p>
             </div>
           </div>
-          <button onClick={() => nav('/barber/notifications')} className="relative p-2 bg-card rounded-full shadow-sm">
+          <button aria-label="View notifications" onClick={() => nav('/barber/notifications')} className="relative p-2 bg-card rounded-full shadow-sm">
             <span>🔔</span>
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-danger rounded-full border-2 border-card text-[8px] font-bold text-white flex justify-center items-center">
