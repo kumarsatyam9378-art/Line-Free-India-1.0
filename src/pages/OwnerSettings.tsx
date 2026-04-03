@@ -100,7 +100,7 @@ export default function OwnerSettings() {
   };
 
   return (
-    <div className="screen-scroll pb-24 animate-fadeIn">
+    <div className="min-h-[100dvh] overflow-y-auto pb-24 animate-fadeIn overscroll-contain">
       <div className="p-6">
         <BackButton to="/barber/home" />
         <h1 className="text-2xl font-bold mb-5">Hours & Settings</h1>

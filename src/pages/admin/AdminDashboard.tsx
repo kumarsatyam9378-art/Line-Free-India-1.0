@@ -19,7 +19,7 @@ export default function AdminDashboard() {
   }, [allSalons]);
 
   return (
-    <div className="screen-scroll p-6 pb-24 bg-bg text-text">
+    <div className="h-[100dvh] overflow-y-auto p-6 pb-24 bg-bg text-text">
       <h1 className="text-2xl font-bold">Platform Admin Dashboard</h1>
       <p className="mt-1 text-text-dim text-sm">Signed in as {ADMIN_EMAIL}</p>
 
