@@ -1,3 +1,7 @@
 node_modules/
 .env
 dist/
+*.log
+fix_*.cjs
+update_*.cjs
+test_*.cjs

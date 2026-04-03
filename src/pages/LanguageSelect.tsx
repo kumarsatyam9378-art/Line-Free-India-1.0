@@ -6,10 +6,6 @@ import { motion } from 'framer-motion';
 const languages = [
   { id: 'en', name: 'English', script: 'English', emoji: '🇬🇧', flagBg: 'from-blue-500/20 to-blue-600/20', flagBorder: 'border-blue-500/30' },
   { id: 'hi', name: 'Hindi', script: 'हिंदी', emoji: '🇮🇳', flagBg: 'from-orange-500/20 to-green-600/20', flagBorder: 'border-orange-500/30' },
-  { id: 'gu', name: 'Gujarati', script: 'ગુજરાતી', emoji: '🇮🇳', flagBg: 'from-yellow-500/20 to-orange-600/20', flagBorder: 'border-yellow-500/30' },
-  { id: 'ta', name: 'Tamil', script: 'தமிழ்', emoji: '🇮🇳', flagBg: 'from-red-500/20 to-orange-600/20', flagBorder: 'border-red-500/30' },
-  { id: 'mr', name: 'Marathi', script: 'मराठी', emoji: '🇮🇳', flagBg: 'from-orange-500/20 to-orange-600/20', flagBorder: 'border-orange-500/30' },
-  { id: 'bn', name: 'Bengali', script: 'বাংলা', emoji: '🇮🇳', flagBg: 'from-green-500/20 to-red-600/20', flagBorder: 'border-green-500/30' },
 ];
 
 export default function LanguageSelect() {

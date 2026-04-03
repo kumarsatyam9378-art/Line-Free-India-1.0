@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { auth, db, googleProvider } from '../firebase';
+import { attachForegroundMessageListener, auth, db, googleProvider, sendPushByApi, setupFcm } from '../firebase';
 import {
   onAuthStateChanged, signInWithPopup, signOut as fbSignOut,
   deleteUser, reauthenticateWithPopup, User
@@ -9,8 +9,9 @@ import {
   updateDoc, addDoc, onSnapshot, deleteDoc, orderBy, limit, serverTimestamp
 } from 'firebase/firestore';
 import { uploadToCloudinary } from '../utils/cloudinary';
+import { triggerHaptic } from '../utils/haptics';
 
-export type Lang = 'en' | 'hi' | 'gu' | 'ta' | 'mr' | 'bn';
+export type Lang = 'en' | 'hi';
 export type Role = 'customer' | 'barber' | 'business';
 
 export type BusinessCategory =
@@ -342,6 +343,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const signInWithGoogle = async () => { const r = await signInWithPopup(auth, googleProvider); return r; };
 
   const signOutUser = async () => {
+    triggerHaptic('medium');
     try { await fbSignOut(auth); } catch {}
     setUser(null); setRole(null); setCustomerProfile(null); setBarberProfile(null);
     localStorage.removeItem('lf_role'); localStorage.removeItem('lf_customer'); localStorage.removeItem('lf_barber');
@@ -446,10 +448,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   const getToken = async (token: Omit<TokenEntry, 'id'>): Promise<string | null> => {
+    triggerHaptic('selection');
     try {
       const ref = await addDoc(collection(db, 'tokens'), token);
       // Notify customer
-      try { await pushNotification(token.customerId, { title: '🎫 Token Confirmed!', body: `Token #${token.tokenNumber} at ${token.salonName}. Est. wait: ${token.estimatedWaitMinutes} min`, type: 'token_ready', data: { salonId: token.salonId, tokenNumber: token.tokenNumber } }); } catch {}
+      try {
+        await pushNotification(token.customerId, { title: '🎫 Token Confirmed!', body: `Token #${token.tokenNumber} at ${token.salonName}. Est. wait: ${token.estimatedWaitMinutes} min`, type: 'token_ready', data: { salonId: token.salonId, tokenNumber: token.tokenNumber } });
+        await sendPushByApi(token.customerId, '🎫 Token Confirmed!', `Token #${token.tokenNumber} at ${token.salonName}. Est. wait: ${token.estimatedWaitMinutes} min`, { salonId: token.salonId, tokenNumber: String(token.tokenNumber) });
+      } catch {}
       // Notify barber
       try { await pushNotification(token.salonId, { title: '🔔 New Customer!', body: `${token.customerName} booked Token #${token.tokenNumber} — ${token.selectedServices.map(s => s.name).join(', ')}`, type: 'token_ready', data: { tokenId: ref.id } }); } catch {}
       return ref.id;
@@ -475,7 +481,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (waiting.length > 0) {
         const next = waiting[0];
         await updateDoc(doc(db, 'tokens', next.id!), { status: 'serving' });
-        try { await pushNotification(next.customerId, { title: '🔔 Your Turn!', body: `Token #${next.tokenNumber} — it's your turn at ${barberProfile.salonName}!`, type: 'token_called', data: { salonId: user.uid } }); } catch {}
+        try {
+          await pushNotification(next.customerId, { title: '🔔 Your Turn!', body: `Token #${next.tokenNumber} — it's your turn at ${barberProfile.salonName}!`, type: 'token_called', data: { salonId: user.uid } });
+          await sendPushByApi(next.customerId, '🔔 Your Turn!', `Token #${next.tokenNumber} — it's your turn at ${barberProfile.salonName}!`, { salonId: user.uid });
+          triggerHaptic('success');
+        } catch {}
         await saveBarberProfile({ ...barberProfile, currentToken: next.tokenNumber });
       }
     } catch (e) { console.error('nextCustomer error:', e); }
@@ -571,6 +581,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const getUserLocation = (): Promise<{ lat: number; lng: number } | null> =>
     new Promise(resolve => { if (!navigator.geolocation) { resolve(null); return; } navigator.geolocation.getCurrentPosition(p => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }), () => resolve(null), { timeout: 8000 }); });
+
+  useEffect(() => {
+    if (!user) return;
+    let unsubscribe: null | (() => void) = null;
+    (async () => {
+      try {
+        const token = await setupFcm();
+        if (token && role === 'customer') await updateDoc(doc(db, 'customers', user.uid), { fcmToken: token });
+        if (token && role === 'barber') await updateDoc(doc(db, 'barbers', user.uid), { fcmToken: token });
+        unsubscribe = await attachForegroundMessageListener((payload: any) => {
+          const title = payload?.notification?.title || 'Line Free India';
+          const body = payload?.notification?.body || '';
+          if (Notification.permission === 'granted') new Notification(title, { body });
+        });
+      } catch (error) {
+        console.warn('FCM setup failed', error);
+      }
+    })();
+
+    return () => { if (unsubscribe) unsubscribe(); };
+  }, [user, role]);
 
   return (
     <AppContext.Provider value={{
