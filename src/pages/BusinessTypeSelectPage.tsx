@@ -7,22 +7,9 @@ import { useApp } from '../store/AppContext';
 // Category groups for filter tabs
 const CATEGORY_TABS = [
   { id: 'all', label: 'All', emoji: '🌐' },
-  { id: 'food', label: 'Food', emoji: '🍽️' },
-  { id: 'healthcare', label: 'Health', emoji: '🏥' },
-  { id: 'beauty', label: 'Beauty', emoji: '💄' },
-  { id: 'education', label: 'Edu', emoji: '📚' },
-  { id: 'fitness', label: 'Fitness', emoji: '💪' },
-  { id: 'retail', label: 'Retail', emoji: '🛒' },
-  { id: 'home', label: 'Home', emoji: '🏠' },
-  { id: 'transport', label: 'Auto', emoji: '🚗' },
-  { id: 'realestate', label: 'Real Estate', emoji: '🏢' },
-  { id: 'technology', label: 'Tech', emoji: '💻' },
-  { id: 'finance', label: 'Finance', emoji: '📊' },
-  { id: 'agriculture', label: 'Agri', emoji: '🌾' },
-  { id: 'hospitality', label: 'Events', emoji: '🏨' },
-  { id: 'manufacturing', label: 'Mfg', emoji: '⚙️' },
-  { id: 'specialized', label: 'Services', emoji: '🏗️' },
-  { id: 'digital', label: 'Digital', emoji: '📱' },
+  { id: 'beauty', label: 'Beauty & Salon', emoji: '💄' },
+  { id: 'healthcare', label: 'Health & Clinic', emoji: '🏥' },
+  { id: 'fitness', label: 'Fitness & Wellness', emoji: '💪' }
 ];
 
 // Background gradients per category
@@ -54,8 +41,8 @@ export default function BusinessTypeSelectPage() {
 
   // POPULAR businesses to show at top
   const POPULAR_IDS = [
-    'restaurant', 'men_salon', 'clinic', 'coaching_institute',
-    'gym', 'grocery', 'medical_store', 'hotel', 'ca_firm', 'beauty_parlour'
+    'men_salon', 'beauty_parlour', 'unisex_salon', 'spa',
+    'makeup_artist', 'bridal_studio', 'skin_clinic', 'laser_hair_removal'
   ];
 
   const filteredBusinesses = useMemo(() => {
