@@ -1,5 +1,8 @@
+import { useState, useCallback, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider, useApp } from './store/AppContext';
+import { LineFreeLoader } from './components/animations/LineFreeLoader';
+import { AnimatePresence } from 'framer-motion';
 import SplashPage from './pages/onboarding/SplashPage';
 import LanguageSelect from './pages/LanguageSelect';
 import RoleSelect from './pages/RoleSelect';
@@ -107,11 +110,39 @@ function AppRoutes() {
 }
 
 export default function App() {
+  const [showAnimation, setShowAnimation] = useState(() => {
+    // Only show if not seen before in this session
+    return sessionStorage.getItem('linefree_animation_shown') !== 'true';
+  });
+
+  const handleAnimationComplete = useCallback(() => {
+    setShowAnimation(false);
+  }, []);
+
   return (
     <BrowserRouter>
       <AppProvider>
-        <Toaster position="top-center" />
-        <AppRoutes />
+        <AnimatePresence mode="wait">
+          {showAnimation && (
+            <LineFreeLoader
+              key="loader"
+              onComplete={handleAnimationComplete}
+              config={{
+                duration: 10000,
+                skipEnabled: true,
+                showOnlyOnce: true,
+                soundEnabled: true,
+              }}
+            />
+          )}
+        </AnimatePresence>
+
+        {!showAnimation && (
+          <>
+            <Toaster position="top-center" />
+            <AppRoutes />
+          </>
+        )}
       </AppProvider>
     </BrowserRouter>
   );

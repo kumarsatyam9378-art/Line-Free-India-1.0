@@ -1,3 +1,6 @@
+/* === GOOGLE FONTS === */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Lato:wght@400;700&family=Lora:wght@400;500;600&family=Merriweather:wght@400;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
 @import "./styles/themes/theme-agriculture.css";
@@ -11,8 +14,26 @@
 @import "./styles/themes/theme-retail.css";
 @import "./styles/themes/theme-tech.css";
 
-/* === GOOGLE FONTS === */
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Lato:wght@400;700&family=Lora:wght@400;500;600&family=Merriweather:wght@400;700&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+@theme {
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-primary-glow: rgba(108, 99, 255, 0.5);
+  --color-secondary-glow: rgba(255, 107, 107, 0.5);
+
+  --animate-glow-pulse: glowPulse 2s ease-in-out infinite;
+  --animate-ambient-pulse: ambientPulse 4s ease-in-out infinite;
+
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+  @keyframes ambientPulse {
+    0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+  }
+}
 
 :root {
   /* Default base theme variables if no specific theme is selected */
