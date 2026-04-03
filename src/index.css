@@ -580,3 +580,10 @@ input, textarea, select {
   --cat-bg: #E3F2FD;
   font-family: var(--font-inter);
 }
+
+.screen-scroll {
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
