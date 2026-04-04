@@ -20,6 +20,25 @@ export default function CustomerProfileEdit() {
   const [smsAlerts, setSmsAlerts] = useState(customerProfile?.preferences?.smsAlerts ?? true);
   const [promotions, setPromotions] = useState(customerProfile?.preferences?.promotions ?? false);
 
+
+  // Enhanced Profile Features
+  const [email, setEmail] = useState('');
+  const [altPhone, setAltPhone] = useState('');
+  const [bloodGroup, setBloodGroup] = useState('');
+  const [allergies, setAllergies] = useState('');
+  const [hairType, setHairType] = useState('');
+  const [skinType, setSkinType] = useState('');
+
+  // Settings
+  const [pushNotifications, setPushNotifications] = useState(true);
+  const [whatsappAlerts, setWhatsappAlerts] = useState(true);
+  const [emailAlerts, setEmailAlerts] = useState(false);
+  const [privacyPublicProfile, setPrivacyPublicProfile] = useState(false);
+  const [privacyShowActivity, setPrivacyShowActivity] = useState(true);
+
+  // Accordion State
+  const [openSection, setOpenSection] = useState<string | null>('personal');
+  const toggleSection = (sec: string) => setOpenSection(openSection === sec ? null : sec);
   // UI State
   const [saved, setSaved] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -89,15 +108,23 @@ export default function CustomerProfileEdit() {
   const photoURL = customerProfile?.photoURL || user?.photoURL || '';
   const referralCode = customerProfile?.referralCode || `LF${user?.uid.slice(0, 6).toUpperCase()}`;
 
-  const renderSectionHeader = (title: string, icon: string) => (
-    <div className="flex items-center gap-2 mb-3 mt-6">
-      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-sm">{icon}</div>
-      <h2 className="text-sm font-bold">{title}</h2>
+  const renderSectionHeader = (title: string, icon: string, sectionKey: string) => (
+    <div
+      className="flex items-center justify-between mb-3 mt-6 p-3 rounded-2xl bg-card border border-border cursor-pointer hover:border-primary/50 transition-colors"
+      onClick={() => toggleSection(sectionKey)}
+    >
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-lg">{icon}</div>
+        <h2 className="text-sm font-bold">{title}</h2>
+      </div>
+      <div className={`transform transition-transform ${openSection === sectionKey ? 'rotate-180' : ''}`}>
+        ▼
+      </div>
     </div>
   );
 
   return (
-    <div className="min-h-[100dvh] overflow-y-auto pb-24 animate-fadeIn overscroll-contain">
+    <div className="screen-scroll pb-24 animate-fadeIn overscroll-contain">
       <div className="p-6">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
@@ -139,20 +166,37 @@ export default function CustomerProfileEdit() {
             <h2 className="font-bold text-xl mb-1">{name || user?.displayName || 'Customer'}</h2>
             <p className="text-text-dim text-xs mb-4">{user?.email}</p>
 
-            <div className="flex gap-6 justify-center w-full px-4 pt-4 border-t border-border/50">
-              <div className="flex flex-col items-center">
-                <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">{favCount}</span>
-                <span className="text-text-dim text-[10px] uppercase font-bold tracking-wider mt-1">Favorites</span>
+            {/* Extended Stats */}
+            <div className="flex gap-4 justify-center w-full px-2 pt-4 border-t border-border/50">
+              <div className="flex flex-col items-center flex-1">
+                <span className="text-lg font-black text-primary">{favCount}</span>
+                <span className="text-text-dim text-[9px] uppercase font-bold mt-1">Favorites</span>
               </div>
               <div className="w-px bg-border/50" />
-              <div className="flex flex-col items-center">
-                <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">{customerProfile?.totalVisits || 0}</span>
-                <span className="text-text-dim text-[10px] uppercase font-bold tracking-wider mt-1">Visits</span>
+              <div className="flex flex-col items-center flex-1">
+                <span className="text-lg font-black text-primary">{customerProfile?.totalVisits || 0}</span>
+                <span className="text-text-dim text-[9px] uppercase font-bold mt-1">Visits</span>
               </div>
               <div className="w-px bg-border/50" />
-              <div className="flex flex-col items-center">
-                <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">0</span>
-                <span className="text-text-dim text-[10px] uppercase font-bold tracking-wider mt-1">Points</span>
+              <div className="flex flex-col items-center flex-1">
+                <span className="text-lg font-black text-accent">150</span>
+                <span className="text-text-dim text-[9px] uppercase font-bold mt-1">Points</span>
+              </div>
+              <div className="w-px bg-border/50" />
+              <div className="flex flex-col items-center flex-1">
+                <span className="text-lg font-black text-success">🔥 3</span>
+                <span className="text-text-dim text-[9px] uppercase font-bold mt-1">Streak</span>
+              </div>
+            </div>
+
+            {/* Completion Bar */}
+            <div className="w-full mt-4 pt-3 border-t border-border/50">
+              <div className="flex justify-between items-center mb-1">
+                <p className="text-[10px] text-text-dim font-medium">Profile Strength</p>
+                <p className="text-[10px] font-bold text-primary">85%</p>
+              </div>
+              <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-danger via-warning to-success transition-all duration-500" style={{ width: `85%` }} />
               </div>
             </div>
           </div>
@@ -175,8 +219,9 @@ export default function CustomerProfileEdit() {
         <div className="space-y-6">
           {/* Personal Info */}
           <div>
-            {renderSectionHeader('Personal Information', '👤')}
-            <div className="bg-card p-4 rounded-2xl border border-border space-y-4">
+            {renderSectionHeader('Personal Information', '👤', 'personal')}
+            {openSection === 'personal' && (
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4 animate-fadeIn">
               <div>
                 <label className="text-xs text-text-dim block mb-1">{t('profile.name')}</label>
                 <input value={name} onChange={e => setName(e.target.value)} className="input-field bg-card-2" placeholder="Your full name" />
@@ -206,13 +251,66 @@ export default function CustomerProfileEdit() {
                   <input value={location} onChange={e => setLocation(e.target.value)} className="input-field bg-card-2" placeholder="Your city" />
                 </div>
               </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Email</label>
+                  <input value={email} onChange={e => setEmail(e.target.value)} className="input-field bg-card-2" placeholder="your@email.com" type="email" />
+                </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Alt Phone</label>
+                  <input value={altPhone} onChange={e => setAltPhone(e.target.value)} className="input-field bg-card-2" placeholder="Emergency contact" type="tel" />
+                </div>
+              </div>
             </div>
+            )}
+          </div>
+
+          {/* Health & Style Profile */}
+          <div>
+            {renderSectionHeader('Health & Style Profile', '🧬', 'health')}
+            {openSection === 'health' && (
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4 animate-fadeIn">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Hair Type</label>
+                  <select value={hairType} onChange={e => setHairType(e.target.value)} className="input-field bg-card-2 text-sm appearance-none">
+                    <option value="">Select...</option>
+                    <option value="straight">Straight</option>
+                    <option value="wavy">Wavy</option>
+                    <option value="curly">Curly</option>
+                    <option value="coily">Coily</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Skin Type</label>
+                  <select value={skinType} onChange={e => setSkinType(e.target.value)} className="input-field bg-card-2 text-sm appearance-none">
+                    <option value="">Select...</option>
+                    <option value="dry">Dry</option>
+                    <option value="oily">Oily</option>
+                    <option value="combination">Combination</option>
+                    <option value="sensitive">Sensitive</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Blood Group</label>
+                  <input value={bloodGroup} onChange={e => setBloodGroup(e.target.value)} className="input-field bg-card-2" placeholder="e.g. O+" />
+                </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Allergies (if any)</label>
+                  <input value={allergies} onChange={e => setAllergies(e.target.value)} className="input-field bg-card-2" placeholder="e.g. Latex" />
+                </div>
+              </div>
+            </div>
+            )}
           </div>
 
           {/* Preferences */}
           <div>
-            {renderSectionHeader('App Preferences', '⚙️')}
-            <div className="bg-card p-4 rounded-2xl border border-border space-y-4">
+            {renderSectionHeader('App Preferences', '⚙️', 'prefs')}
+            {openSection === 'prefs' && (
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4 animate-fadeIn">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium text-sm">SMS & Email Alerts</p>
@@ -234,13 +332,70 @@ export default function CustomerProfileEdit() {
                   <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
                 </label>
               </div>
+
+              <div className="h-px w-full bg-border/50" />
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-sm">Push Notifications</p>
+                  <p className="text-xs text-text-dim">App alerts for queue updates</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked={pushNotifications} onChange={e => setPushNotifications(e.target.checked)} className="sr-only peer" />
+                  <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
+                </label>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-sm">WhatsApp Alerts</p>
+                  <p className="text-xs text-text-dim">Get tickets via WhatsApp</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked={whatsappAlerts} onChange={e => setWhatsappAlerts(e.target.checked)} className="sr-only peer" />
+                  <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
+                </label>
+              </div>
+
             </div>
+            )}
+          </div>
+
+          {/* Privacy Settings */}
+          <div>
+            {renderSectionHeader('Privacy & Security', '🛡️', 'privacy')}
+            {openSection === 'privacy' && (
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4 animate-fadeIn">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-sm">Public Profile</p>
+                  <p className="text-xs text-text-dim">Allow saloons to see your full name</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked={privacyPublicProfile} onChange={e => setPrivacyPublicProfile(e.target.checked)} className="sr-only peer" />
+                  <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
+                </label>
+              </div>
+              <div className="h-px w-full bg-border/50" />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-sm">Show Activity</p>
+                  <p className="text-xs text-text-dim">Share visit history with favorites</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked={privacyShowActivity} onChange={e => setPrivacyShowActivity(e.target.checked)} className="sr-only peer" />
+                  <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
+                </label>
+              </div>
+            </div>
+            )}
           </div>
 
           {/* Theme & Language */}
           <div>
-            {renderSectionHeader('Display & Language', '🌍')}
-            <div className="grid grid-cols-2 gap-3">
+            {renderSectionHeader('Display & Language', '🌍', 'display')}
+            {openSection === 'display' && (
+            <div className="grid grid-cols-2 gap-3 animate-fadeIn">
               <button onClick={toggleTheme} className="p-4 rounded-2xl bg-card border border-border flex flex-col items-center justify-center gap-2 hover:border-primary/50 transition-colors">
                 <span className="text-2xl">{theme === 'dark' ? '☀️' : '🌙'}</span>
                 <span className="text-xs font-bold">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
@@ -251,6 +406,7 @@ export default function CustomerProfileEdit() {
                 <span className="text-xs font-bold">{lang === 'en' ? 'हिंदी में बदलें' : 'Switch to English'}</span>
               </button>
             </div>
+            )}
           </div>
 
         </div>
