@@ -1,0 +1,35 @@
+.profile-animation {
+  /* Example animation keyframes */
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Add 48 more animations here */
+
+@keyframes scaleUp {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+@keyframes scaleDown {
+  0% { transform: scale(1); }
+  100% { transform: scale(0); }
+}
+
+/* Add transitions for specific profile elements */
+.profile-card {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Example usage of animations */
+.profile-card:hover { animation: scaleUp 0.5s forwards; }
+.profile-card:active { animation: scaleDown 0.5s forwards; }
+/* Additional keyframe animations and transitions can be added here as needed */
