@@ -4,6 +4,8 @@ import { useApp, ServiceItem } from '../store/AppContext';
 import BottomNav from '../components/BottomNav';
 import BackButton from '../components/BackButton';
 import toast from 'react-hot-toast';
+import { QRCodeCanvas } from 'qrcode.react';
+import { downloadQR } from '../utils/qrHelpers';
 
 export default function BarberProfile() {
   const { user, barberProfile, saveBarberProfile, syncPending, signOutUser, deleteAccount, theme, toggleTheme, unreadCount, t } = useApp();
@@ -287,6 +289,31 @@ export default function BarberProfile() {
                 <label className="text-xs text-text-dim block mb-1">UPI ID (For Payments)</label>
                 <input value={upiId} onChange={e => setUpiId(e.target.value)} placeholder="yourname@upi" className="input-field bg-card-2" />
               </div>
+            </div>
+          </div>
+
+          {/* QR Code Section */}
+          <div>
+            {renderSectionHeader('Business QR Code', '🔲')}
+            <div className="bg-card p-6 rounded-2xl border border-border flex flex-col items-center">
+              <div className="bg-white p-4 rounded-xl mb-4">
+                <QRCodeCanvas
+                  id="business-qr-code"
+                  value={`${window.location.origin}/customer/salon/${barberProfile.uid}`}
+                  size={200}
+                  level="H"
+                  includeMargin={true}
+                />
+              </div>
+              <p className="text-xs text-text-dim text-center mb-4">
+                Print this QR code and display it at your shop so customers can quickly scan and join your queue.
+              </p>
+              <button
+                onClick={() => downloadQR('business-qr-code', `${salonName.replace(/\s+/g, '-').toLowerCase()}-qr-code.png`)}
+                className="w-full btn-primary py-3"
+              >
+                ⬇️ Download QR Code
+              </button>
             </div>
           </div>
         </div>
