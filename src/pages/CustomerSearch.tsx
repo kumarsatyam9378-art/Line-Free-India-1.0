@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
 import BottomNav from '../components/BottomNav';
@@ -9,13 +9,13 @@ export default function CustomerSearch() {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'all' | 'open' | 'rated' | 'favorites'>('all');
 
-  const getFiltered = () => {
-    let results = [...allSalons];
+  const results = useMemo(() => {
+    let res = [...allSalons];
 
     // Text search
     if (query.trim()) {
       const lower = query.toLowerCase();
-      results = results.filter(s =>
+      res = res.filter(s =>
         s.salonName?.toLowerCase().includes(lower) ||
         s.name?.toLowerCase().includes(lower) ||
         s.location?.toLowerCase().includes(lower) ||
@@ -25,17 +25,15 @@ export default function CustomerSearch() {
 
     // Filter
     if (filter === 'open') {
-      results = results.filter(s => s.isOpen && !s.isBreak && !s.isStopped);
+      res = res.filter(s => s.isOpen && !s.isBreak && !s.isStopped);
     } else if (filter === 'rated') {
-      results = results.filter(s => (s.rating || 0) > 0).sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      res = res.filter(s => (s.rating || 0) > 0).sort((a, b) => (b.rating || 0) - (a.rating || 0));
     } else if (filter === 'favorites') {
-      results = results.filter(s => isFavorite(s.uid));
+      res = res.filter(s => isFavorite(s.uid));
     }
 
-    return results;
-  };
-
-  const results = getFiltered();
+    return res;
+  }, [allSalons, query, filter, isFavorite]);
 
   return (
     <div className="screen-scroll pb-24 animate-fadeIn">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp, BarberProfile, TokenEntry } from '../store/AppContext';
 import { motion } from 'framer-motion';
@@ -12,10 +12,6 @@ export default function CustomerHome() {
   const nav = useNavigate();
 
   const [activeBooking, setActiveBooking] = useState<TokenEntry | null>(null);
-  const [featuredBusinesses, setFeaturedBusinesses] = useState<BarberProfile[]>([]);
-  const [topRestaurants, setTopRestaurants] = useState<BarberProfile[]>([]);
-  const [bestClinics, setBestClinics] = useState<BarberProfile[]>([]);
-  const [beautyWellness, setBeautyWellness] = useState<BarberProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [greeting, setGreeting] = useState('');
 
@@ -52,34 +48,24 @@ export default function CustomerHome() {
     return () => unsub();
   }, [user]);
 
+  // Use useMemo to compute derived lists to prevent unnecessary cascading re-renders
+  const { featuredBusinesses, topRestaurants, bestClinics, beautyWellness, nearbySalonsList } = useMemo(() => {
+    let featured = allSalons.filter(s => (s as any).isFeatured && (s as any).isActive).slice(0, 5);
+    if (featured.length === 0) {
+      featured = [...allSalons].filter(s => (s.rating || 0) >= 4 && s.isOpen).slice(0, 5);
+    }
+    const topRestaurants = allSalons.filter(s => s.businessType === 'men_salon' || s.businessType === 'beauty_parlour' || s.businessType === 'unisex_salon' || s.businessType === 'bridal_studio');
+    const bestClinics = allSalons.filter(s => s.businessType === 'spa' || s.businessType === 'ayurvedic_spa' || s.businessType === 'massage_center' || s.businessType === 'slimming_center');
+    const beautyWellness = allSalons.filter(s => s.businessType === 'skin_clinic' || s.businessType === 'hair_transplant_clinic' || s.businessType === 'laser_hair_removal' || s.businessType === 'acupuncture_clinic');
+    const nearbySalonsList = allSalons.filter((salon) => typeof salon.lat === 'number' && typeof salon.lng === 'number').slice(0, 30);
+
+    return { featuredBusinesses: featured, topRestaurants, bestClinics, beautyWellness, nearbySalonsList };
+  }, [allSalons]);
+
   useEffect(() => {
-    // We are requested to query Firestore, but AppContext syncs all salons to `allSalons`.
-    // We will use the allSalons array for these specific filterings to avoid duplicating network requests,
-    // and to match the app's architectural pattern of single state source for businesses.
-
     if (allSalons.length > 0) {
-      // Prompt asks for isFeatured=true AND isActive=true limit 5
-      // Assuming BarberProfile has isFeatured and isActive, or fallback to simple mapping
-      const featured = allSalons.filter(s => (s as any).isFeatured && (s as any).isActive).slice(0, 5);
-      // Fallback if no featured exist yet: just use top rated open
-      if (featured.length === 0) {
-          setFeaturedBusinesses([...allSalons].filter(s => (s.rating || 0) >= 4 && s.isOpen).slice(0, 5));
-      } else {
-          setFeaturedBusinesses(featured);
-      }
-
-      // Top Restaurants: category in ['restaurant', 'cafe']
-      setTopRestaurants(allSalons.filter(s => s.businessType === 'men_salon' || s.businessType === 'beauty_parlour' || s.businessType === 'unisex_salon' || s.businessType === 'bridal_studio'));
-
-      // Best Clinics: category in ['clinic', 'hospital']
-      setBestClinics(allSalons.filter(s => s.businessType === 'spa' || s.businessType === 'ayurvedic_spa' || s.businessType === 'massage_center' || s.businessType === 'slimming_center'));
-
-      // Beauty & Wellness: category in ['men_salon', 'beauty_parlour', 'unisex_salon', 'spa']
-      setBeautyWellness(allSalons.filter(s => s.businessType === 'skin_clinic' || s.businessType === 'hair_transplant_clinic' || s.businessType === 'laser_hair_removal' || s.businessType === 'acupuncture_clinic'));
-
       setLoading(false);
     } else {
-      // if allSalons is empty, perhaps it's still loading
       const timer = setTimeout(() => setLoading(false), 2000);
       return () => clearTimeout(timer);
     }
@@ -105,7 +91,6 @@ export default function CustomerHome() {
   };
 
 
-  const nearbySalons = allSalons.filter((salon) => typeof salon.lat === 'number' && typeof salon.lng === 'number').slice(0, 30);
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
@@ -322,9 +307,9 @@ export default function CustomerHome() {
             <h2 className="font-bold text-lg">Nearby Map 🗺️</h2>
             <button onClick={() => nav('/customer/search')} className="text-primary text-xs font-medium">Explore</button>
           </div>
-          {nearbySalons.length > 0 ? (
+          {nearbySalonsList.length > 0 ? (
             <NearbySalonsMap
-              salons={nearbySalons}
+              salons={nearbySalonsList}
               center={
                 customerProfile?.lat && customerProfile?.lng
                   ? [customerProfile.lat, customerProfile.lng]
