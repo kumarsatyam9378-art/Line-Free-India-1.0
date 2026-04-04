@@ -11,6 +11,10 @@ export default function BarberProfile() {
   const { user, barberProfile, saveBarberProfile, syncPending, signOutUser, deleteAccount, theme, toggleTheme, unreadCount, t } = useApp();
   const nav = useNavigate();
 
+
+  // Banner & Photo state
+  const [coverPhoto, setCoverPhoto] = useState('');
+  const [profilePhoto, setProfilePhoto] = useState(barberProfile?.photoURL || '');
   // Basic Info State
   const [name, setName] = useState(barberProfile?.name || '');
   const [salonName, setSalonName] = useState(barberProfile?.salonName || '');
@@ -26,6 +30,27 @@ export default function BarberProfile() {
 
   // Advanced Settings
   const [upiId, setUpiId] = useState(barberProfile?.upiId || '');
+
+  // New Enhanced Features State
+  const [city, setCity] = useState('');
+  const [state, setStateLoc] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [foundedYear, setFoundedYear] = useState('');
+  const [email, setEmail] = useState('');
+  const [youtube, setYoutube] = useState('');
+  const [twitter, setTwitter] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
+
+  const [tatkalToggle, setTatkalToggle] = useState(false);
+  const [advanceBookingToggle, setAdvanceBookingToggle] = useState(false);
+  const [loyaltyProgramToggle, setLoyaltyProgramToggle] = useState(false);
+  const [paymentMethods, setPaymentMethods] = useState({ cash: true, upi: false, card: false, online: false });
+  const [promoCodes, setPromoCodes] = useState<any[]>([]);
+
+  // Accordion State
+  const [openSection, setOpenSection] = useState<string | null>('basic');
+  const toggleSection = (sec: string) => setOpenSection(openSection === sec ? null : sec);
+
 
   // Services
   const [services, setServices] = useState<ServiceItem[]>(barberProfile?.services || []);
@@ -107,15 +132,23 @@ export default function BarberProfile() {
   const completion = Math.round(((fields.filter(f => f && f.trim()).length + (services.length > 0 ? 1 : 0)) / (fields.length + 1)) * 100);
   const referralCode = barberProfile?.referralCode || `LF${user?.uid.slice(0, 6).toUpperCase()}`;
 
-  const renderSectionHeader = (title: string, icon: string) => (
-    <div className="flex items-center gap-2 mb-3 mt-6">
-      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-sm">{icon}</div>
-      <h2 className="text-sm font-bold">{title}</h2>
+  const renderSectionHeader = (title: string, icon: string, sectionKey: string) => (
+    <div
+      className="flex items-center justify-between mb-3 mt-6 p-3 rounded-2xl bg-card border border-border cursor-pointer hover:border-primary/50 transition-colors"
+      onClick={() => toggleSection(sectionKey)}
+    >
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-lg">{icon}</div>
+        <h2 className="text-sm font-bold">{title}</h2>
+      </div>
+      <div className={`transform transition-transform ${openSection === sectionKey ? 'rotate-180' : ''}`}>
+        ▼
+      </div>
     </div>
   );
 
   return (
-    <div className="min-h-[100dvh] overflow-y-auto pb-24 animate-fadeIn overscroll-contain">
+    <div className="screen-scroll pb-24 animate-fadeIn overscroll-contain">
       <div className="p-6">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
@@ -128,6 +161,55 @@ export default function BarberProfile() {
           >
             👁️ Preview
           </button>
+        </div>
+
+
+        {/* Cover & Profile Picture */}
+        <div className="relative mb-8 rounded-3xl overflow-hidden bg-card border border-border shadow-lg">
+          <div className="h-32 bg-gradient-to-r from-primary/30 to-accent/30 relative flex items-center justify-center overflow-hidden group">
+            {coverPhoto ? (
+              <img src={coverPhoto} alt="Cover" className="w-full h-full object-cover opacity-80" />
+            ) : (
+              <span className="text-text-dim text-sm">Add Cover Photo</span>
+            )}
+            <button className="absolute bottom-2 right-2 p-2 bg-black/50 backdrop-blur-md rounded-lg text-white text-xs font-medium hover:bg-black/70 transition-colors">
+              📷 Edit Cover
+            </button>
+          </div>
+
+          <div className="px-4 pb-4 pt-12 relative flex flex-col items-center">
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full border-4 border-card bg-card-2 overflow-hidden shadow-xl z-10 flex items-center justify-center group">
+              {profilePhoto ? (
+                <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-4xl">💈</span>
+              )}
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                <span className="text-white text-xl">📷</span>
+              </div>
+            </div>
+
+            <h2 className="text-xl font-black mt-2 text-center">{salonName || 'Your Business Name'}</h2>
+            <p className="text-xs text-text-dim text-center">{location || 'City, State'}</p>
+
+            {/* Mini Stats */}
+            <div className="flex gap-4 mt-4 py-3 px-6 bg-card-2 rounded-2xl border border-border/50">
+              <div className="text-center">
+                <p className="text-lg font-bold text-primary">{services.length}</p>
+                <p className="text-[10px] text-text-dim uppercase tracking-wider">Services</p>
+              </div>
+              <div className="w-px bg-border/50" />
+              <div className="text-center">
+                <p className="text-lg font-bold text-accent">4.8</p>
+                <p className="text-[10px] text-text-dim uppercase tracking-wider">Rating</p>
+              </div>
+              <div className="w-px bg-border/50" />
+              <div className="text-center">
+                <p className="text-lg font-bold text-success">120+</p>
+                <p className="text-[10px] text-text-dim uppercase tracking-wider">Reviews</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Sync Status & Completion */}
@@ -178,8 +260,9 @@ export default function BarberProfile() {
         <div className="space-y-6">
           {/* Basic Info */}
           <div>
-            {renderSectionHeader('Basic Info', '📝')}
-            <div className="bg-card p-4 rounded-2xl border border-border space-y-4">
+            {renderSectionHeader('Basic Info', '📝', 'basic')}
+            {openSection === 'basic' && (
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4 animate-fadeIn">
               <div>
                 <label className="text-xs text-text-dim block mb-1">Business Name</label>
                 <input value={salonName} onChange={e => setSalonName(e.target.value)} placeholder="e.g. Royal Cuts" className="input-field bg-card-2" />
@@ -189,12 +272,14 @@ export default function BarberProfile() {
                 <input value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" className="input-field bg-card-2" />
               </div>
             </div>
+            )}
           </div>
 
           {/* Description */}
           <div>
-            {renderSectionHeader('Description & Story', '📖')}
-            <div className="bg-card p-4 rounded-2xl border border-border">
+            {renderSectionHeader('Description & Story', '📖', 'desc')}
+            {openSection === 'desc' && (
+            <div className="bg-card p-4 rounded-2xl border border-border animate-fadeIn">
               <label className="text-xs text-text-dim block mb-1">Business Bio</label>
               <textarea
                 value={bio}
@@ -203,26 +288,49 @@ export default function BarberProfile() {
                 className="input-field bg-card-2 min-h-[100px] resize-none"
               />
             </div>
+            )}
           </div>
 
           {/* Location */}
           <div>
-            {renderSectionHeader('Location Details', '📍')}
-            <div className="bg-card p-4 rounded-2xl border border-border">
-              <label className="text-xs text-text-dim block mb-1">Full Address</label>
-              <textarea
-                value={location}
-                onChange={e => setLocation(e.target.value)}
-                placeholder="Street address, City, State"
-                className="input-field bg-card-2 min-h-[80px] resize-none"
-              />
+            {renderSectionHeader('Location Details', '📍', 'loc')}
+            {openSection === 'loc' && (
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4 animate-fadeIn">
+              <div>
+                <label className="text-xs text-text-dim block mb-1">Full Address</label>
+                <textarea
+                  value={location}
+                  onChange={e => setLocation(e.target.value)}
+                  placeholder="Street address"
+                  className="input-field bg-card-2 min-h-[80px] resize-none"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">City</label>
+                  <input value={city} onChange={e => setCity(e.target.value)} placeholder="City" className="input-field bg-card-2" />
+                </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">State</label>
+                  <input value={state} onChange={e => setStateLoc(e.target.value)} placeholder="State" className="input-field bg-card-2" />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-text-dim block mb-1">Pincode</label>
+                <input value={pincode} onChange={e => setPincode(e.target.value)} placeholder="Pincode" className="input-field bg-card-2" />
+              </div>
+              <button className="w-full p-3 rounded-xl bg-primary/10 text-primary font-bold text-sm flex items-center justify-center gap-2">
+                🗺️ Google Maps Live Preview
+              </button>
             </div>
+            )}
           </div>
 
           {/* Contact & Social */}
           <div>
-            {renderSectionHeader('Contact & Social', '📞')}
-            <div className="bg-card p-4 rounded-2xl border border-border space-y-4">
+            {renderSectionHeader('Contact & Social', '📞', 'social')}
+            {openSection === 'social' && (
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-4 animate-fadeIn">
               <div>
                 <label className="text-xs text-text-dim block mb-1">Phone Number</label>
                 <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 XXXXXXXXXX" type="tel" className="input-field bg-card-2" />
@@ -236,14 +344,38 @@ export default function BarberProfile() {
                   <label className="text-xs text-text-dim block mb-1">Website (Optional)</label>
                   <input value={website} onChange={e => setWebsite(e.target.value)} placeholder="www.example.com" className="input-field bg-card-2" />
                 </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">WhatsApp Business</label>
+                  <input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="+91 XXXXXXXXXX" className="input-field bg-card-2" />
+                </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Email</label>
+                  <input value={email} onChange={e => setEmail(e.target.value)} placeholder="email@example.com" className="input-field bg-card-2" />
+                </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">YouTube Channel</label>
+                  <input value={youtube} onChange={e => setYoutube(e.target.value)} placeholder="Channel URL" className="input-field bg-card-2" />
+                </div>
+                <div>
+                  <label className="text-xs text-text-dim block mb-1">Twitter / X</label>
+                  <input value={twitter} onChange={e => setTwitter(e.target.value)} placeholder="@handle" className="input-field bg-card-2" />
+                </div>
+              </div>
+              <div className="flex justify-center gap-3 pt-3 border-t border-border">
+                <div className="w-8 h-8 rounded-full bg-card-2 flex items-center justify-center opacity-50">📘</div>
+                <div className="w-8 h-8 rounded-full bg-card-2 flex items-center justify-center opacity-50">📸</div>
+                <div className="w-8 h-8 rounded-full bg-card-2 flex items-center justify-center opacity-50">▶️</div>
+                <div className="w-8 h-8 rounded-full bg-card-2 flex items-center justify-center opacity-50">🐦</div>
               </div>
             </div>
+            )}
           </div>
 
           {/* Services Setup */}
           <div>
-            {renderSectionHeader('Services & Menu', '✂️')}
-            <div className="bg-card p-4 rounded-2xl border border-border">
+            {renderSectionHeader('Services & Menu', '✂️', 'services')}
+            {openSection === 'services' && (
+            <div className="bg-card p-4 rounded-2xl border border-border animate-fadeIn">
               <div className="flex justify-between items-center mb-4">
                 <p className="text-xs text-text-dim">{services.length} services added</p>
                 <button onClick={() => setShowAddService(v => !v)} className="text-primary text-xs font-bold">+ Add Service</button>
@@ -279,23 +411,92 @@ export default function BarberProfile() {
                 )}
               </div>
             </div>
+            )}
           </div>
 
           {/* Advanced Settings */}
           <div>
-            {renderSectionHeader('Advanced Settings', '⚙️')}
-            <div className="bg-card p-4 rounded-2xl border border-border space-y-4">
+            {renderSectionHeader('Advanced Settings', '⚙️', 'adv')}
+            {openSection === 'adv' && (
+            <div className="bg-card p-4 rounded-2xl border border-border space-y-6 animate-fadeIn">
+
+              {/* Payment Methods */}
+              <div>
+                <h3 className="text-sm font-bold mb-3">Payment Methods Accepted</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className="flex items-center gap-2 p-2 rounded-xl bg-card-2 border border-border">
+                    <input type="checkbox" checked={paymentMethods.cash} onChange={e => setPaymentMethods({...paymentMethods, cash: e.target.checked})} className="accent-primary" />
+                    <span className="text-xs">💵 Cash</span>
+                  </label>
+                  <label className="flex items-center gap-2 p-2 rounded-xl bg-card-2 border border-border">
+                    <input type="checkbox" checked={paymentMethods.upi} onChange={e => setPaymentMethods({...paymentMethods, upi: e.target.checked})} className="accent-primary" />
+                    <span className="text-xs">📱 UPI (GPay/PhonePe)</span>
+                  </label>
+                  <label className="flex items-center gap-2 p-2 rounded-xl bg-card-2 border border-border">
+                    <input type="checkbox" checked={paymentMethods.card} onChange={e => setPaymentMethods({...paymentMethods, card: e.target.checked})} className="accent-primary" />
+                    <span className="text-xs">💳 Credit/Debit Card</span>
+                  </label>
+                  <label className="flex items-center gap-2 p-2 rounded-xl bg-card-2 border border-border">
+                    <input type="checkbox" checked={paymentMethods.online} onChange={e => setPaymentMethods({...paymentMethods, online: e.target.checked})} className="accent-primary" />
+                    <span className="text-xs">🌐 Online Pre-pay</span>
+                  </label>
+                </div>
+              </div>
+
+              {paymentMethods.upi && (
               <div>
                 <label className="text-xs text-text-dim block mb-1">UPI ID (For Payments)</label>
                 <input value={upiId} onChange={e => setUpiId(e.target.value)} placeholder="yourname@upi" className="input-field bg-card-2" />
               </div>
+              )}
+
+              <div className="h-px bg-border w-full my-4" />
+
+              {/* Toggles */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-sm">Tatkal / Express Queue</p>
+                    <p className="text-[10px] text-text-dim">Allow users to skip queue for a fee</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={tatkalToggle} onChange={e => setTatkalToggle(e.target.checked)} className="sr-only peer" />
+                    <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
+                  </label>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-sm">Advance Booking</p>
+                    <p className="text-[10px] text-text-dim">Allow booking days in advance</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={advanceBookingToggle} onChange={e => setAdvanceBookingToggle(e.target.checked)} className="sr-only peer" />
+                    <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
+                  </label>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-sm">Loyalty Program</p>
+                    <p className="text-[10px] text-text-dim">Reward regular customers</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={loyaltyProgramToggle} onChange={e => setLoyaltyProgramToggle(e.target.checked)} className="sr-only peer" />
+                    <div className="w-9 h-5 bg-card-2 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
+                  </label>
+                </div>
+              </div>
+
             </div>
+            )}
           </div>
 
           {/* QR Code Section */}
           <div>
-            {renderSectionHeader('Business QR Code', '🔲')}
-            <div className="bg-card p-6 rounded-2xl border border-border flex flex-col items-center">
+            {renderSectionHeader('Business QR Code', '🔲', 'qr')}
+            {openSection === 'qr' && (
+            <div className="bg-card p-6 rounded-2xl border border-border flex flex-col items-center animate-fadeIn">
               <div className="bg-white p-4 rounded-xl mb-4">
                 <QRCodeCanvas
                   id="business-qr-code"
@@ -315,6 +516,7 @@ export default function BarberProfile() {
                 ⬇️ Download QR Code
               </button>
             </div>
+            )}
           </div>
         </div>
 
