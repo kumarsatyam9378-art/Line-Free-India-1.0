@@ -155,20 +155,20 @@ export default function BarberProfileSetup() {
             </div>
 
             <div>
-              <label className="text-sm text-text-dim mb-1 block">{t('profile.name')} {t('profile.optional')}</label>
-              <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" className="input-field" />
+              <label htmlFor="owner-name" className="text-sm text-text-dim mb-1 block">{t('profile.name')} {t('profile.optional')}</label>
+              <input id="owner-name" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" className="input-field" />
             </div>
             <div>
-              <label className="text-sm text-text-dim mb-1 block">Business Name {t('profile.optional')}</label>
-              <input value={salonName} onChange={e => setSalonName(e.target.value)} placeholder="Your business name" className="input-field" />
+              <label htmlFor="business-name" className="text-sm text-text-dim mb-1 block">Business Name {t('profile.optional')}</label>
+              <input id="business-name" value={salonName} onChange={e => setSalonName(e.target.value)} placeholder="Your business name" className="input-field" />
             </div>
             <div>
-              <label className="text-sm text-text-dim mb-1 block">{t('profile.location')} {t('profile.optional')}</label>
-              <input value={location} onChange={e => setLocation(e.target.value)} placeholder="Business location" className="input-field" />
+              <label htmlFor="business-location" className="text-sm text-text-dim mb-1 block">{t('profile.location')} {t('profile.optional')}</label>
+              <input id="business-location" value={location} onChange={e => setLocation(e.target.value)} placeholder="Business location" className="input-field" />
             </div>
             <div>
-              <label className="text-sm text-text-dim mb-1 block">{t('profile.phone')} {t('profile.optional')}</label>
-              <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 XXXXXXXXXX" className="input-field" type="tel" />
+              <label htmlFor="business-phone" className="text-sm text-text-dim mb-1 block">{t('profile.phone')} {t('profile.optional')}</label>
+              <input id="business-phone" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 XXXXXXXXXX" className="input-field" type="tel" />
             </div>
           </>
         )}
