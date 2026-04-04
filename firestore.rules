@@ -46,10 +46,14 @@ service cloud.firestore {
         request.resource.data.customerId == request.auth.uid ||
         request.resource.data.businessId == request.auth.uid
       );
-      allow read, update, delete: if isAuth() && (
+      allow read, delete: if isAuth() && (
         resource.data.businessId == request.auth.uid ||
         resource.data.customerId == request.auth.uid
       );
+      allow update: if isAuth() && (
+        resource.data.businessId == request.auth.uid ||
+        resource.data.customerId == request.auth.uid
+      ) && request.resource.data.customerId == resource.data.customerId && request.resource.data.businessId == resource.data.businessId;
     }
     match /tokens/{bookingId} {
       allow create: if isAuth() && (
@@ -57,11 +61,16 @@ service cloud.firestore {
         request.resource.data.salonId == request.auth.uid ||
         request.resource.data.businessId == request.auth.uid
       );
-      allow read, update, delete: if isAuth() && (
+      allow read, delete: if isAuth() && (
         resource.data.salonId == request.auth.uid ||
         resource.data.customerId == request.auth.uid ||
         resource.data.businessId == request.auth.uid
       );
+      allow update: if isAuth() && (
+        resource.data.salonId == request.auth.uid ||
+        resource.data.customerId == request.auth.uid ||
+        resource.data.businessId == request.auth.uid
+      ) && request.resource.data.customerId == resource.data.customerId && request.resource.data.salonId == resource.data.salonId && request.resource.data.get('businessId', null) == resource.data.get('businessId', null);
     }
 
     // Customers (Owner only)
@@ -75,7 +84,8 @@ service cloud.firestore {
       // Note: Assuming standard Firebase Auth email verified. Google Sign-In makes email_verified true.
       allow create: if isVerified() && request.resource.data.customerId == request.auth.uid;
       // Only author can update/delete
-      allow update, delete: if isAuth() && resource.data.customerId == request.auth.uid;
+      allow update: if isAuth() && resource.data.customerId == request.auth.uid && request.resource.data.customerId == request.auth.uid;
+      allow delete: if isAuth() && resource.data.customerId == request.auth.uid;
     }
 
     // Notifications
@@ -92,8 +102,9 @@ service cloud.firestore {
         resource.data.customerId == request.auth.uid ||
         resource.data.salonId == request.auth.uid
       );
-      allow create: if isAuth() && request.resource.data.senderId == request.auth.uid;
-      allow update, delete: if isAuth() && resource.data.senderId == request.auth.uid;
+      allow create: if isAuth() && request.resource.data.senderId == request.auth.uid && (request.resource.data.customerId == request.auth.uid || request.resource.data.salonId == request.auth.uid);
+      allow update: if isAuth() && resource.data.senderId == request.auth.uid && request.resource.data.senderId == request.auth.uid;
+      allow delete: if isAuth() && resource.data.senderId == request.auth.uid;
     }
 
     // Deny everything else
